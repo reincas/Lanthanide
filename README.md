@@ -2,7 +2,8 @@
 
 Python 3 package to calculate the energy levels of multi-electron systems
 populating the f-shell, which means the lanthanide or rare-earth ions from
-Ce3+ (4f1) to Yb3+ (4f13). The calculation is based on Racahs single electron
+Ce<sup>3+</sup> (4f<sup>1</sup>) to Yb<sup>3+</sup> (4f<sup>13</sup>). The
+calculation is based on Racahs single electron
 unit tensor operators. The states are transformed from determinantal product
 states to SLJM states. All six perturbation Hamiltonians known from the
 literature are included. For a given set of radial integral values, the
