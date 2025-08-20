@@ -257,6 +257,7 @@ class SingleElements:
 
 
 def single_elements(states):
+    print("Creating vault single")
     num = len(states[0])
 
     diff_states = []

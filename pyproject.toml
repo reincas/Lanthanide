@@ -3,34 +3,26 @@
 requires = [
     "setuptools",
 	"NumPy",
-	"SciPy",
-	"SciDataContainer",
-#    "OffAxisHolo", #  Currently only exists locally (https://github.com/reincas/OffAxisHolo.git)
-#    "PlotFont", # Currently only exists locally (https://github.com/reincas/PlotFont)
-#    "mvImpact", # Installation guide: https://assets.balluff.com/documents/DRF_957356_AA_000/Building_page.html
+	"h5py",
 ]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 packages = [
-    "nanofactorysystem",
+    "lanthanide",
 ]
 
 [project]
-name = "NanoFactorySystem"
-version = "0.7.0"
+name = "Lanthanide"
+version = "0.2.0"
 authors = [
     { name = "Reinhard Caspary", email = "reinhard.caspary@phoenixd.uni-hannover.de"},
 ]
-description = "Python 3 package to use the Laser Nanofactory system from Femtika as 3D printer."
+description = "Python 3 package to calculate the energy levels of lanthanide ions."
 readme = "README.md"
 dependencies = [
     'NumPy>=1.15',
-    'SciDataContainer>=1.1',
-	"Scikit-Image",
-	"tqdm",
-	"matplotlib",  # Extra?
-	"opencv-python",  # Extra?
+    'h5py',
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",

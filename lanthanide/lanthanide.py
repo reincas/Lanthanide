@@ -13,7 +13,7 @@ from .single import init_single
 from .matrix import build_hamilton, reduced_matrix, get_matrix, init_matrix
 from .state import Coupling, init_states
 
-VAULT_PATH = "C:/Dienst/pxdSeafile/pxdOffline/Lanthanide/data-f%02d.hdf5"
+VAULT_PATH = "vaults/data-f%02d.hdf5"
 NAMES = ["La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu"]
 
 CONST_e    = 1.6022e-19    # C
