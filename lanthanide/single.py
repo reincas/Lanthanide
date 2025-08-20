@@ -257,7 +257,7 @@ class SingleElements:
 
 
 def single_elements(states):
-    print("Creating vault single")
+    print("Creating vault single ... ", end="")
     num = len(states[0])
 
     diff_states = []
@@ -271,12 +271,16 @@ def single_elements(states):
         matrix[diff_num + 1].append(data)
 
     single = []
+    print("one ... ", end="")
     if num >= 1:
         single.append(single_one(matrix))
+    print("two ... ", end="")
     if num >= 2:
         single.append(single_two(matrix))
+    print("three ... ", end="")
     if num >= 3:
         single.append(single_three(matrix))
+    print("done.")
     return single
 
 

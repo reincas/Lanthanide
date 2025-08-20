@@ -504,6 +504,7 @@ def sort_states(values: np.ndarray, transform: np.ndarray, sym_order: tuple) -> 
 
 
 def build_SLJM(ion):
+    print("Create SLJM states ... ", end="")
     states = len(ion.product_states)
     eigen_vectors = np.zeros((states, states), dtype=float)
     transform = None
@@ -513,6 +514,7 @@ def build_SLJM(ion):
     for name in SYM_CHAIN_SLJM:
         if name in ("tau", "num"):
             continue
+        print(f"{name} ... ", end="")
 
         array = ion.matrix(name).array
         if transform is not None:
@@ -540,7 +542,9 @@ def build_SLJM(ion):
         else:
             transform = transform @ eigen_vectors
 
+    print("tau ... ", end="")
     symmetries["tau"] = build_tau(symmetries, states)
+    print("num ... ", end="")
     symmetries["num"] = build_num(symmetries, states)
 
     values = np.zeros((states, len(SYM_CHAIN_SLJM)), dtype=float)
@@ -549,6 +553,7 @@ def build_SLJM(ion):
         for i in range(len(eigen_values)):
             values[i, j] = eigen_values[i].value
 
+    print("phase ... ", end="")
     # Adjust phases for reduced matrix elements from SLJ states
     sym_order = ("Jz", "J2", "tau", "L2", "GG/2", "GR/7", "S2")
     values, transform = sort_states(values, transform, sym_order)
@@ -558,6 +563,7 @@ def build_SLJM(ion):
     sym_order = ("Jz", "tau", "L2", "GG/2", "GR/7", "S2", "J2")
     values, transform = sort_states(values, transform, sym_order)
 
+    print("done.")
     return values, transform
 
 
@@ -576,10 +582,11 @@ def init_states(vault, group_name, ion):
         vault.create_group(group_name)
         vault[group_name].attrs["version"] = TERM_VERSION
 
-        SLJM_values, SLJM_transform = build_SLJM(ion)
+        values, transform = build_SLJM(ion)
+
         group = vault[group_name].create_group(Coupling.SLJM.name)
-        group.create_dataset("values", data=SLJM_values, compression="gzip", compression_opts=9)
-        group.create_dataset("transform", data=SLJM_transform, compression="gzip", compression_opts=9)
+        group.create_dataset("values", data=values, compression="gzip", compression_opts=9)
+        group.create_dataset("transform", data=transform, compression="gzip", compression_opts=9)
         vault.flush()
 
     Product_States = StateListProduct(ion.product_states)

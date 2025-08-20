@@ -379,10 +379,11 @@ def unit_matrix(ion, unit_name):
 
 def get_unit(ion, name):
     if name not in ion.unit_vault:
-        print(f"Unit matrix {name}: generate")
+        print(f"Create unit matrix {name} ... ", end="")
         matrix = unit_matrix(ion, name)[0]
         ion.unit_vault.create_dataset(name, data=matrix, compression="gzip", compression_opts=9)
         ion.vault.flush()
+        print("done.")
     else:
         pass
         #print(f"Unit matrix {name}: load")

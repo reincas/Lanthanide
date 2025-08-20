@@ -457,10 +457,11 @@ def get_matrix(ion, name, coupling=None):
         if name in group:
             matrix = Matrix(ion, np.array(group[name]), name, Coupling.SLJM)
         else:
-            print(f"SLJM matrix {name}: generate")
+            print(f"Create SLJM matrix {name} ... ", end="")
             matrix = MATRIX[main](ion, *args).transform(Coupling.SLJM)
             group.create_dataset(name, data=matrix.array, compression="gzip", compression_opts=9)
             ion.vault.flush()
+            print("done.")
 
     # Get SLJ matrix from HDF5 vault
     elif coupling == Coupling.SLJ:
