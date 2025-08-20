@@ -276,8 +276,7 @@ class Matrix:
 
         self.ion = ion
         self.name = name
-        self.coupling = coupling if coupling else Coupling.Product
-        self.states = self.ion.states(coupling)
+        self.coupling = coupling or Coupling.Product
         self.array = array
         self.shape = self.array.shape
 
@@ -333,12 +332,13 @@ class Matrix:
             raise RuntimeError("Fasr diagonalization is only available for SLJM or SLJ coupling!")
 
         # Initialize eigenvalues and eigenvectors
-        num_states = len(self.states)
+        states = self.ion.states(self.coupling)
+        num_states = len(states)
         values = np.zeros(num_states, dtype=float)
         vectors = np.zeros((num_states, num_states), dtype=float)
 
         # Diagonalize hamiltonian in each J sub-space
-        for i, j in self.states.J_slices:
+        for i, j in states.J_slices:
             if j - i == 1:
                 values[i] = self.array[i, i]
                 vectors[i, i] = 1.0

@@ -4,6 +4,7 @@
 # This program is free software under the terms of the MIT license.      #
 ##########################################################################
 
+from pathlib import Path
 from functools import lru_cache
 import numpy as np
 import h5py
@@ -13,7 +14,7 @@ from .single import init_single
 from .matrix import build_hamilton, reduced_matrix, get_matrix, init_matrix
 from .state import Coupling, init_states
 
-VAULT_PATH = "vaults/data-f%02d.hdf5"
+VAULT_PATH = Path(__file__).resolve().parent / "vaults"
 NAMES = ["La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu"]
 
 CONST_e    = 1.6022e-19    # C
@@ -120,8 +121,10 @@ class Lanthanide:
         self.l = ORBITAL
         self.s = SPIN
         self.product_states = product_states(self.num)
+        self.coupling = coupling or Coupling.SLJ
 
-        self.vault = h5py.File(VAULT_PATH % num, "a")
+        VAULT_PATH.mkdir(exist_ok=True)
+        self.vault = h5py.File(VAULT_PATH / f"data-f{num:02d}.hdf5", "a")
         if "valid" not in self.vault.attrs:
             self.vault.attrs["valid"] = True
         self.single = init_single(self.vault, "single", self.num, self.product_states)
@@ -131,7 +134,6 @@ class Lanthanide:
         self.vault.attrs["valid"] = True
         self.vault.flush()
 
-        self.coupling = coupling or Coupling.SLJ
         self.set_radial(radial or RADIAL[self.name])
 
     def __enter__(self):
