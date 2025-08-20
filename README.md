@@ -14,7 +14,7 @@ for Judd-Ofelt fits. For given Judd-Ofelt parameters the radiative line strength
 of each transition can be obtained.
 
 This package is the successor of the Python package I developed for my PhD
-thesis 2002. A copy of the thesis is in the folder `docs`. 
+thesis until 2002. A copy of the thesis is in the folder `docs`. 
 
 ## Installation
 
