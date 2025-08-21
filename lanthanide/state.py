@@ -261,7 +261,7 @@ class StateListJ:
 
         term_J = np.array([state["J2"].J for state in self.slj_states])
         weight = np.power(self.transform, 2)
-        self.J = np.array([term_J[i] for i in np.argmax(weight, axis=0)], dtype=int)
+        self.J = [term_J[i] for i in np.argmax(weight, axis=0)]
         self.states = []
         for i in range(len(self.J)):
             indices = np.array(np.argwhere(term_J == self.J[i]).flat)

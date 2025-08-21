@@ -182,6 +182,35 @@ class Lanthanide:
             }
         return self._reduced_
 
+    def Sed(self, judd_ofelt: dict):
+        # Multiply each matrix column with factor with J of the initial state
+        reduced = self.reduced()
+        result = (judd_ofelt["JO2"] * reduced["U2"] +
+                  judd_ofelt["JO4"] * reduced["U4"] +
+                  judd_ofelt["JO6"] * reduced["U6"])
+        Ji = np.array([1/(3*(2*j+1)) for j in self.intermediate.J])
+        result *= Ji
+
+        # Remove diagonal elements
+        np.fill_diagonal(result, 0.0)
+
+        # Apply scaling factor
+        factor = CONST_e * CONST_e / (4 * np.pi * CONST_eps0)
+        return factor * result
+
+    def Smd(self):
+        # Multiply each matrix column with factor with J of the initial state
+        reduced = self.reduced()
+        Ji = np.array([1/(3*(2*j+1)) for j in self.intermediate.J])
+        result = reduced["LS"] * Ji
+
+        # Remove diagonal elements
+        np.fill_diagonal(result, 0.0)
+
+        # Apply scaling factor
+        factor = CONST_e * CONST_e / (4 * np.pi * CONST_eps0 * 4 * CONST_me * CONST_me)
+        return factor * result
+
     def str_levels(self, min_weight=0.0):
         for state in self.intermediate:
             yield f"  {state.energy:7.0f} cm-1 | {state.long(min_weight)} >"

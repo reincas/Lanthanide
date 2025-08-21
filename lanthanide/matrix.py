@@ -376,13 +376,25 @@ class Matrix:
         return Matrix(self.ion, array, self.name, coupling)
 
 
-def reduced_matrix(ion, k: int, J: np.ndarray, transform: np.ndarray) -> np.ndarray:
+def build_hamilton(ion, radial, coupling):
+    assert coupling in (Coupling.SLJM, Coupling.SLJ)
+    assert isinstance(radial, dict)
+
+    num_states = len(ion.states(coupling))
+    array = np.zeros((num_states, num_states), dtype=float)
+    for name in radial:
+        if name == "base":
+            continue
+        array += radial[name] * ion.cached_matrix(name, coupling).array
+    return Matrix(ion, array, "H", coupling)
+
+
+def reduced_matrix(ion, k: int, J: list, transform: np.ndarray) -> np.ndarray:
     assert k is None or (0 <= k <= 2 * ion.l)
-    assert isinstance(J, np.ndarray)
+    assert isinstance(J, list)
     assert isinstance(transform, np.ndarray)
-    assert len(J.shape) == 1
     assert len(transform.shape) == 2
-    assert transform.shape[0] == transform.shape[1] == J.shape[0]
+    assert transform.shape[0] == transform.shape[1] == len(J)
 
     if k is None:
         k = 1
@@ -406,19 +418,6 @@ def reduced_matrix(ion, k: int, J: np.ndarray, transform: np.ndarray) -> np.ndar
         return hyper[q + k, i, j] / factor
 
     return np.array([[value(i, j) for j in range(num_states)] for i in range(num_states)], dtype=float)
-
-
-def build_hamilton(ion, radial, coupling):
-    assert coupling in (Coupling.SLJM, Coupling.SLJ)
-    assert isinstance(radial, dict)
-
-    num_states = len(ion.states(coupling))
-    array = np.zeros((num_states, num_states), dtype=float)
-    for name in radial:
-        if name == "base":
-            continue
-        array += radial[name] * ion.cached_matrix(name, coupling).array
-    return Matrix(ion, array, "H", coupling)
 
 
 ##################################################
