@@ -7,7 +7,7 @@
 import time
 import numpy as np
 
-from lanthanide import Lanthanide, Coupling
+from lanthanide import Lanthanide, Coupling, RADIAL
 
 def show_ion(ion, t):
     print()
@@ -62,15 +62,34 @@ def show_hamiltonians(ion):
     print(f"  / hamiltonians duration: {t:.1f} s /")
 
 
+def show_levels(ion, min_weight=0.0):
+    print("Energy levels:")
+    for state in ion.intermediate.states:
+        print(f"  {state.energy:6.0f} cm-1  | {state.long(min_weight)} >")
+
+def show_reduced(ion):
+    print("Reduced states:")
+    states = ion.intermediate.states
+    initial = f"{states[0].short():10s}"
+    print(f"  {initial} |  <U2>^2  |  <U4>^2  |  <U6>^2  |  <MD>^2")
+    print(57 * "-")
+    reduced = np.array([ion.reduced()[key][:,0] for key in ("U2", "U4", "U6", "LS")], dtype=float).T
+    for i in range(1, reduced.shape[0]):
+        u2, u4, u6, ls = reduced[i, :]
+        print(f"  {states[i].short():10s} | {u2:7.4f}  | {u4:7.4f}  | {u6:7.4f}  | {ls:7.4f}")
+
+
 if __name__ == "__main__":
     t = time.time()
-    with Lanthanide(2) as ion:
+    with Lanthanide(2, radial=RADIAL["Pr3+/ZBLAN"]) as ion:
         t = time.time() - t
         #print(ion)
 
         show_ion(ion, t)
         #show_symmetry(ion)
         #show_states(ion, Coupling.SLJ)
-        show_hamiltonians(ion)
+        #show_hamiltonians(ion)
+        show_levels(ion)
+        show_reduced(ion)
 
     print("Done.")
