@@ -2,6 +2,8 @@
 .test/
 .venv/
 attic/
+.test.py
+vaults/
 
 logs
 *.log

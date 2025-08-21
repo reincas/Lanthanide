@@ -123,7 +123,8 @@ class Lanthanide:
         self.product_states = product_states(self.num)
         self.coupling = coupling or Coupling.SLJ
 
-        VAULT_PATH.mkdir(exist_ok=True)
+        if not VAULT_PATH.exists():
+            VAULT_PATH.mkdir()
         self.vault = h5py.File(VAULT_PATH / f"data-f{num:02d}.hdf5", "a")
         if "valid" not in self.vault.attrs:
             self.vault.attrs["valid"] = True
