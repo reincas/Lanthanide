@@ -131,7 +131,7 @@ $\langle J'\parallel \mathbf{U}^{(6)}\parallel J \rangle$ for electric and
 $\langle J'\parallel \mathbf{M}\parallel J \rangle$
 for magnetic dipole transitions.
 The method `Lanthanide.reduced()` delivers a dictionary, which contains all four matrices with the keys
-`U2`, `U4`, `U6`, and `LS` containing squared reduced matrix elements as required for the calculation of
+`"U2"`, `"U4"`, `"U6"`, and `"LS"` containing squared reduced matrix elements as required for the calculation of
 transition strengths.
 The matrix element for a transition from an initial state `i` to a final element `f` is addressed by `array[f,i]`. 
 This command shows the squared elements
