@@ -1,7 +1,7 @@
 # Lanthanide
 
 This is Python 3 package to calculate the energy levels of multi-electron systems
-populating the f-shell, which means the lanthanide or rare-earth ions from
+populating the 4f configuration, which means the lanthanide or rare-earth ions from
 Ce<sup>3+</sup> (4f<sup>1</sup>) to Yb<sup>3+</sup> (4f<sup>13</sup>). The
 calculation is based on Racahs single electron unit tensor operators as developed
 in my PhD thesis [1]. You find a copy of the thesis and corrections in the
@@ -17,12 +17,32 @@ All six perturbation Hamiltonians known from the literature are used to calculat
 the energy levels of a given Lathanide ion. In the order of their relative magnitude,
 they are:
 
-1. Electrostatic coulomb interaction between the electrons (1st order):
-$\mathbf{H}_1 = F^2 \mathbf{f}_2 + F^4 \mathbf{f}_4 + F^6 \mathbf{f}_6$, with the radial integrals $F^2$,
-$F^4$, and $F^6$ and the respective angular two-electron operators $\mathbf{f}_2$, $\mathbf{f}_4$, and
-$\mathbf{f}_6$.
+1. Coulomb interaction between the electrons (1st order): $\mathbf{H}_1 = F^2 \mathbf{f}_2 + F^4 \mathbf{f}_4
++ F^6 \mathbf{f}_6$, with the radial integrals $F^2$, $F^4$, and $F^6$ and the respective angular two-electron
+operators $\mathbf{f}_2$, $\mathbf{f}_4$, and $\mathbf{f}_6$.
 2. Magnetic spin-orbit interaction of each electron (1st order): $\mathbf{H}_2 = \zeta \mathbf{z}$, with
 the radial integral $\zeta$ and the angular one-electron operator $\mathbf{z}$.
+3. Coulomb interaction between the 4f configuration and all other configurations (2nd order): $\mathbf{H}_3 =
+\alpha \mathbf{L}^2 + \beta \mathbf{G}(G_2) + \gamma \mathbf{G}(R_7)$, with the radial integrals $\alpha$,
+$\beta$, and $\gamma$. The respective effective angular two-electron operators $\mathbf{L}^2$,
+$\mathbf{G}(G_2)$, and $\mathbf{G}(R_7)$, which are the operator of the squared total orbital angular momentum
+and Casimir operators of the symmetry groups $R_7$ and $G_2$.
+4. More Coulomb interactions between the 4f configuration and all other configurations (2nd order):
+$\mathbf{H}_4 = \sum_c T^c \mathbf{t}_c$, with $c = 2, 3, 4, 6, 7, 8$. The radial integrals are $T^c$
+and the respective effective angular three-electron operators $\mathbf{t}_c$,
+$\mathbf{G}(G_2)$, and $\mathbf{G}(R_7)$.
+5. Magnetic interactions on the spin of one electron with the spin (ss) or the orbital angular momentum (soo)
+of another electron (1st order): $\mathbf{H}_5 = M^0 \mathbf{m}_0 + M^2 \mathbf{m}_2 + M^4 \mathbf{m}_4$, with 
+the Marvin integrals $M^0$, $M^2$, and $M^4$ and the respective angular two-electron operators $\mathbf{m}_0$,
+$\mathbf{m}_2$, and $\mathbf{m}_4$. 
+6. Magnetic spin-orbit interactions between the 4f configuration and all other configurations (2nd order):
+$\mathbf{H}_6 = P^2 \mathbf{p}_2 + P^4 \mathbf{p}_4 + P^6 \mathbf{p}_6$, with the radial integrals $P^2$,
+$P^4$, and $P^6$ and the respective angular two-electron operators $\mathbf{p}_2$, $\mathbf{p}_4$,
+and $\mathbf{p}_6$. 
+
+The first order perturbations are interactions inside the 4f configuration, while second order perturbations
+take interactions with all other configuration into account. They are treated by effective operators 
+mathematically operating inside the 4f configuration.
 
 For a given set of radial integral values, the
 total perturbation Hamiltonian can be diagonalised to intermediate coupling
