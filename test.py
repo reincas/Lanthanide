@@ -7,7 +7,7 @@
 import time
 import numpy as np
 
-from lanthanide import Lanthanide, Coupling, RADIAL, reduced_matrix
+from lanthanide import Lanthanide, Coupling, RADIAL, JUDD_OFELT
 
 
 def show_ion(ion):
@@ -75,18 +75,19 @@ def show_reduced(ion):
     initial = f"{states[0].short():10s}"
     print(f"  {initial} |  <U2>^2  |  <U4>^2  |  <U6>^2  |  <MD>^2")
     print(57 * "-")
-    reduced = np.array([ion.reduced()[key][:, 0] for key in ("U2", "U4", "U6", "LS")], dtype=float).T
+    reduced = np.array([getattr(ion.reduced(), key)[:, 0] for key in ("U2", "U4", "U6", "LS")], dtype=float).T
     for i in range(1, reduced.shape[0]):
         u2, u4, u6, ls = reduced[i, :]
         print(f"  {states[i].short():10s} | {u2:7.4f}  | {u4:7.4f}  | {u6:7.4f}  | {ls:7.4f}")
 
 
 if __name__ == "__main__":
-    with Lanthanide(12, radial=RADIAL["Tm3+/ZBLAN"]) as ion:
+    name = "Pr3+/ZBLAN"
+    with Lanthanide(2, radial=RADIAL[name]) as ion:
         show_ion(ion)
         # show_symmetry(ion)
         # show_states(ion, Coupling.SLJ)
         # show_hamiltonians(ion)
         show_levels(ion, 0.05)
-        # show_reduced(ion)
+        show_reduced(ion)
     print("Done.")

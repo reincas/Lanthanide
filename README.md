@@ -130,21 +130,45 @@ $\langle J'\parallel \mathbf{U}^{(4)}\parallel J \rangle$, and
 $\langle J'\parallel \mathbf{U}^{(6)}\parallel J \rangle$ for electric and
 $\langle J'\parallel \mathbf{M}\parallel J \rangle$
 for magnetic dipole transitions.
-The method `Lanthanide.reduced()` delivers a dictionary, which contains all four matrices with the keys
-`"U2"`, `"U4"`, `"U6"`, and `"LS"` containing squared reduced matrix elements as required for the calculation of
-transition strengths.
-The matrix element for a transition from an initial state `i` to a final state `f` is addressed by `array[f,i]`. 
+The method `Lanthanide.reduced()` delivers a `Reduced` object, which contains all four squared reduced matrices 
+as attributes `U2`, `U4`, `U6`, and `LS` as required for the calculation of transition strengths.
+The matrix element for a transition from an initial state `i` to a final state `j` is addressed by `array[j,i]`. 
 This command shows the squared elements
-$|\langle J_f\parallel \mathbf{U}^{(4)}\parallel J_0 \rangle|^2$ for transitions from the ground state 0
+$|\langle J_j\parallel \mathbf{U}^{(4)}\parallel J_0 \rangle|^2$ for transitions from the ground state
 to all excited states:
 
 ```
 reduced = ion.reduced()
-print(reduced["U4"][1:,0])
+print(reduced.U4[1:, 0])
 ```
 
-For given Judd-Ofelt parameters the radiative line strength
-of each transition can be obtained.
+There is no universally accepted definition of the line strength of a transition. For electric dipole transitions,
+the Lanthanide package uses the definition
+
+$$ S_{ed} = \frac{e^2}{4\pi\varepsilon_0} \frac{1}{3(2J_i+1)} \sum\limits_{\lambda=2,4,6} 
+\Omega_\lambda |\langle J_j\parallel \mathbf{U}^{(\lambda)\parallel J_i\rangle|^2$$
+
+with the Judd-Ofelt parameters $\Omega_2$, $\Omega_4$, and $\Omega_6$. For magnetic dipole transitions we use  
+
+$$ S_{md} = \frac{e^2}{16\pi\varepsilon_0 m_e^2} \frac{1}{3(2J_i+1)} 
+\Omega_\lambda |\langle J_j\parallel \mathbf{L}+g_s\mathbf{S}\parallel J_i\rangle|^2$$
+
+For a given set of Judd-Ofelt parameters you can also get the radiative line strength of each transition using
+the method `line_strengths(judd_ofelt)`:
+
+```
+judd_ofelt = { "JO/2": 1.981, "JO/4": 4.645, "JO/6": 6.972 }
+strength = ion.line_strengths(judd_ofelt)
+print(strength.Sed[1:, 0])
+print(strength.Smd[1:, 0])
+```
+
+The line strengths are often used to calculate the oscillator strength of a transition $i\to j$:
+
+$$
+f_{ij} = \frac{4\pi\varepsilon_0}{e^2} \frac{8\pi^2m_e\bar{\nu}}{h}[\chi'_{ed}S_{ed} + \chi'_{md}S_{md}]
+$$
+
 
 ## Usage examples
 

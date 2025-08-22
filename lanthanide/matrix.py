@@ -327,9 +327,9 @@ class Matrix:
         return values, vectors
 
     def fast_diagonalize(self):
-        """ Fast diagonalization algorithm acting inside J spaces. """
+        """ Fast diagonalisation algorithm acting inside J spaces. """
         if self.coupling not in (Coupling.SLJM, Coupling.SLJ):
-            raise RuntimeError("Fasr diagonalization is only available for SLJM or SLJ coupling!")
+            raise RuntimeError("Fast diagonalisation is only available for SLJM or SLJ coupling!")
 
         # Initialize eigenvalues and eigenvectors
         states = self.ion.states(self.coupling)
@@ -384,6 +384,8 @@ def build_hamilton(ion, radial, coupling):
     array = np.zeros((num_states, num_states), dtype=float)
     for name in radial:
         if name == "base":
+            continue
+        if name[:1] != "H":
             continue
         array += radial[name] * ion.cached_matrix(name, coupling).array
     return Matrix(ion, array, "H", coupling)
@@ -458,11 +460,11 @@ def get_matrix(ion, name, coupling=None):
         if name in group:
             matrix = Matrix(ion, np.array(group[name]), name, Coupling.SLJM)
         else:
-            print(f"Create SLJM matrix {name} ... ", end="")
+            print(f"Create SLJM matrix {name} ...")
             matrix = MATRIX[main](ion, *args).transform(Coupling.SLJM)
             group.create_dataset(name, data=matrix.array, compression="gzip", compression_opts=9)
             ion.vault.flush()
-            print("done.")
+            print(f"SLJM matrix {name} done.")
 
     # Get SLJ matrix from HDF5 vault
     elif coupling == Coupling.SLJ:
