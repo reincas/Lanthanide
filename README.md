@@ -144,7 +144,7 @@ for magnetic dipole transitions.
 The method `Lanthanide.reduced()` delivers a `Reduced` object, which contains all four squared reduced matrices 
 as attributes `U2`, `U4`, `U6`, and `LS` as required for the calculation of transition strengths.
 The matrix element for a transition from an initial state `i` to a final state `j` is addressed by `array[j,i]`. 
-This command shows the squared elements
+This code shows the squared elements
 $|\langle J_j\parallel \mathbf{U}^{(4)}\parallel J_0 \rangle|^2$ for transitions from the ground state
 to all excited states:
 
