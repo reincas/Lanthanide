@@ -68,9 +68,9 @@ the command
 python -m pip install .
 ```
 
-## Usage
+## Lanthanide class
 
-You start by importing the most important symbols:
+You always start using the Lanthanide package by importing the most important symbols:
 
 ```
 from lanthanide import Lanthanide, Coupling
@@ -201,7 +201,15 @@ $$
 $$
 
 Please be aware that due to dispersion the refractive index $n(\Delta k)$ in general is a function of the
-transition wavenumber $\Delta k$.
+wavenumber $\Delta k$ of the transition.
+
+## Matrix class
+
+... to be added ...
+
+## State classes
+
+... to be added ...
 
 ## Caching
 

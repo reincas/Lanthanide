@@ -203,6 +203,7 @@ class Lanthanide:
         if "base" in self.radial:
             self.energies += self.radial["base"]
         self.intermediate = self.states().to_J(self.energies, transform)
+        self._state_dict_[Coupling.J] = self.intermediate
         self._reduced_ = None
 
     def reduced(self):
