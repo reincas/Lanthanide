@@ -9,7 +9,7 @@ import numpy as np
 from lanthanide import Lanthanide, Coupling, RADIAL
 
 if __name__ == "__main__":
-    for num in range(1, 4):
+    for num in (1, 13, 2, 12, 3, 11, 4, 10, 5, 9, 6, 8, 7):
         with Lanthanide(num) as ion:
             print(ion)
             ion.reduced()

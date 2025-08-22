@@ -82,7 +82,7 @@ def show_reduced(ion):
 
 
 if __name__ == "__main__":
-    with Lanthanide(11, radial=RADIAL["Er3+/ZBLAN"]) as ion:
+    with Lanthanide(12, radial=RADIAL["Tm3+/ZBLAN"]) as ion:
         show_ion(ion)
         # show_symmetry(ion)
         # show_states(ion, Coupling.SLJ)

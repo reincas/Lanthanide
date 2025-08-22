@@ -4,6 +4,7 @@
 attic/
 .test.py
 vaults/
+private/
 
 logs
 *.log

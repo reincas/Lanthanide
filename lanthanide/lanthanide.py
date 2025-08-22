@@ -175,10 +175,10 @@ class Lanthanide:
             J = self.intermediate.J
             transform = self.intermediate.transform
             self._reduced_ = {
-                "U2": np.power(reduced_matrix(self, 2, J, transform), 2),
-                "U4": np.power(reduced_matrix(self, 4, J, transform), 2),
-                "U6": np.power(reduced_matrix(self, 6, J, transform), 2),
-                "LS": np.power(reduced_matrix(self, None, J, transform), 2),
+                "U2": np.power(reduced_matrix(self, "ED/2,{q}", 2, J, transform), 2),
+                "U4": np.power(reduced_matrix(self, "ED/4,{q}", 4, J, transform), 2),
+                "U6": np.power(reduced_matrix(self, "ED/6,{q}", 6, J, transform), 2),
+                "LS": np.power(reduced_matrix(self, "MD/{q}", 1, J, transform), 2),
             }
         return self._reduced_
 

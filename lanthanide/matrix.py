@@ -11,7 +11,7 @@ from .wigner import wigner3j
 from .unit import get_unit
 from .state import Coupling
 
-MATRIX_VERSION = 1
+MATRIX_VERSION = 2
 JUDD_TABLE = [[
     (2, 2, 2, 1),
     -math.sqrt(11 / 1134), math.sqrt(605 / 5292), math.sqrt(32761 / 889056),
@@ -149,8 +149,8 @@ def matrix_H1(ion, k: int):
     assert 0 <= k <= 2 * l
     assert k % 2 == 0
 
-    factor = (2 * l - 1) * wigner3j(l, k, l, 0, 0, 0)
-    return factor * factor * ion.matrix(f"UU/{k}")
+    factor = (2 * l + 1) * wigner3j(l, k, l, 0, 0, 0)
+    return factor * factor * ion.matrix(f"UU/b/{k}")
 
 
 def matrix_H2(ion):
@@ -199,17 +199,17 @@ def matrix_soo(ion, k: int):
 
     ck0 = -(2 * l + 1) * wigner3j(l, k, l, 0, 0, 0)
     factor0 = -ck0 * ck0 * math.sqrt((2 * l + k + 2) * (2 * l - k) * (k + 1) * (2 * k + 1) * (2 * k + 3))
-    matrix0 = factor0 * (ion.matrix(f"UUTT/b/{k},{k + 1},1,0,1") + 2 * ion.matrix(f"UUTT/b/{k + 1},{k},0,1,1"))
+    matrix0 = factor0 * (ion.matrix(f"UUTT/b/{k},{k + 1},0,1,1") + 2 * ion.matrix(f"UUTT/b/{k + 1},{k},0,1,1"))
 
     ck2 = -(2 * l + 1) * wigner3j(l, k + 2, l, 0, 0, 0)
     factor2 = -ck2 * ck2 * math.sqrt((2 * l + k + 3) * (2 * l - k - 1) * (k + 2) * (2 * k + 3) * (2 * k + 5))
-    matrix2 = factor2 * (ion.matrix(f"UUTT/b/{k + 1},{k + 2},1,0,1") + 2 * ion.matrix(f"UUTT/b/{k + 1},{k + 2},0,1,1"))
+    matrix2 = factor2 * (ion.matrix(f"UUTT/b/{k + 2},{k + 1},0,1,1") + 2 * ion.matrix(f"UUTT/b/{k + 1},{k + 2},0,1,1"))
 
     return 2 * (matrix0 + matrix2)
 
 
 def matrix_H5(ion, k: int):
-    return ion.matrix(f"ss/{k}") + ion.matrix(f"soo/{k}")
+    return ion.matrix(f"hss/{k}") + ion.matrix(f"hsoo/{k}")
 
 
 def matrix_H5fix(ion):
@@ -259,8 +259,8 @@ MATRIX = {
     "H2": matrix_H2,
     "H3": matrix_H3,
     "H4": matrix_H4,
-    "ss": matrix_ss,
-    "soo": matrix_soo,
+    "hss": matrix_ss,
+    "hsoo": matrix_soo,
     "H5": matrix_H5,
     "H5fix": matrix_H5fix,
     "H6": matrix_H6,
@@ -389,22 +389,24 @@ def build_hamilton(ion, radial, coupling):
     return Matrix(ion, array, "H", coupling)
 
 
-def reduced_matrix(ion, k: int, J: list, transform: np.ndarray) -> np.ndarray:
-    assert k is None or (0 <= k <= 2 * ion.l)
+def reduced_matrix(ion, name: str, k: int, J: list, transform=None) -> np.ndarray:
+    assert 0 <= k <= 2 * ion.l
     assert isinstance(J, list)
-    assert isinstance(transform, np.ndarray)
-    assert len(transform.shape) == 2
-    assert transform.shape[0] == transform.shape[1] == len(J)
+    if transform is not None:
+        assert isinstance(transform, np.ndarray)
+        assert len(transform.shape) == 2
+        assert transform.shape[0] == transform.shape[1] == len(J)
 
-    if k is None:
-        k = 1
-        name = "MD/%d"
-    else:
-        name = f"ED/{k},%d"
     num_states = len(J)
-    hyper = np.zeros((2 * k + 1, num_states, num_states), dtype=float)
-    for q in range(-k, k + 1):
-        hyper[q + k, :, :] = transform.T @ ion.cached_matrix(name % q, Coupling.SLJ).array @ transform
+    if k == 0:
+        array = ion.cached_matrix(name, Coupling.SLJ).array
+    else:
+        array = np.zeros((num_states, num_states), dtype=float)
+        for q in range(-k, k + 1):
+            array += ion.cached_matrix(name.format(q=q), Coupling.SLJ).array
+
+    if transform is not None:
+        array = transform.T @ array @ transform
 
     def value(i: int, j: int):
         Ja = J[i]
@@ -415,7 +417,7 @@ def reduced_matrix(ion, k: int, J: list, transform: np.ndarray) -> np.ndarray:
         factor = wigner3j(Ja, k, Jb, -Ja, q, Jb)
         if factor == 0.0:
             return 0.0
-        return hyper[q + k, i, j] / factor
+        return array[i, j] / factor
 
     return np.array([[value(i, j) for j in range(num_states)] for i in range(num_states)], dtype=float)
 

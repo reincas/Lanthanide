@@ -10,10 +10,10 @@ import numpy as np
 from .halfint import HalfInt
 from .wigner import wigner3j
 
-UNIT_VERSION = 0
+UNIT_VERSION = 1
 ORBITAL = 3
 SPIN = HalfInt(1)
-MAGNETIC = [(ml, ms) for ml in range(-ORBITAL, ORBITAL + 1) for ms in (-SPIN, SPIN)]
+MAGNETIC = [(ml, ms) for ml in range(ORBITAL, -ORBITAL - 1, -1) for ms in (SPIN, -SPIN)]
 LEN_SHELL = len(MAGNETIC)
 
 

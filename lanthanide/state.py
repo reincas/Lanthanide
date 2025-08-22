@@ -23,6 +23,27 @@ class Coupling(Enum):
     J = 3
 
 
+class StateList:
+
+    states = []
+
+    def __len__(self):
+        return len(self.states)
+
+    def __iter__(self):
+        for state in self.states:
+            yield state
+
+    def __getitem__(self, item):
+        return self.states[item]
+
+    def short(self):
+        return [state.short() for state in self.states]
+
+    def long(self):
+        return [state.long() for state in self.states]
+
+
 ##################################################
 # Product states
 ##################################################
@@ -50,23 +71,13 @@ class StateProduct:
         return self.long()
 
 
-class StateListProduct:
+class StateListProduct(StateList):
     def __init__(self, values):
         assert len(set(len(state) for state in values)) == 1
 
         self.values = np.array(values)
         self.transform = None
         self.states = [StateProduct(v) for v in values]
-
-    def __len__(self):
-        return len(self.states)
-
-    def __iter__(self):
-        for state in self.states:
-            yield state
-
-    def __getitem__(self, item):
-        return self.states[item]
 
     def __str__(self):
         return f"<List of {len(self)} product states>"
@@ -106,7 +117,7 @@ class StateSLJM:
         return self.long()
 
 
-class StateListSLJM:
+class StateListSLJM(StateList):
     def __init__(self, values, transform):
         assert len(values.shape) == 2 and values.shape[1] == len(SYM_CHAIN_SLJM)
         assert len(transform.shape) == 2 and transform.shape[0] == transform.shape[1]
@@ -130,19 +141,6 @@ class StateListSLJM:
         values = self.values[state_indices, :][:, sym_indices]
         transform = self.transform[:, state_indices]
         return StateListSLJ(values, transform)
-
-    def __len__(self):
-        return len(self.states)
-
-    def __iter__(self):
-        for state in self.states:
-            yield state
-
-    def __getitem__(self, item):
-        if isinstance(item, int):
-            return self.states[item]
-        values = self.values[:, SYM_CHAIN_SLJM.index(item)]
-        return SymmetryList(values, item)
 
     def __str__(self):
         return f"<List of {len(self)} SLJM states>"
@@ -188,7 +186,7 @@ class StateSLJ:
         return self.long()
 
 
-class StateListSLJ:
+class StateListSLJ(StateList):
     def __init__(self, values, transform):
         self.sym_chain = SYM_CHAIN_SLJ
         assert len(values.shape) == 2 and values.shape[1] == len(self.sym_chain)
@@ -208,16 +206,6 @@ class StateListSLJ:
 
     def to_J(self, energies, transform):
         return StateListJ(self, energies, transform)
-
-    def __len__(self):
-        return len(self.states)
-
-    def __iter__(self):
-        for state in self.states:
-            yield state
-
-    def __getitem__(self, item):
-        return self.states[item]
 
     def __str__(self):
         return f"<List of {len(self)} SLJ states>"
@@ -249,7 +237,7 @@ class StateJ:
     def __str__(self):
         return self.long()
 
-class StateListJ:
+class StateListJ(StateList):
     def __init__(self, slj_states, energies, transform):
         assert isinstance(slj_states, StateListSLJ)
         assert len(transform.shape) == 2 and transform.shape[0] == transform.shape[1]
@@ -268,16 +256,6 @@ class StateListJ:
             values = self.transform[indices, i]
             slj_states = [self.slj_states[i] for i in indices]
             self.states.append(StateJ(energies[i], values, slj_states))
-
-    def __len__(self):
-        return len(self.states)
-
-    def __iter__(self):
-        for state in self.states:
-            yield state
-
-    def __getitem__(self, item):
-        return self.states[item]
 
     def __str__(self):
         return f"<List of {len(self)} intermediate states>"

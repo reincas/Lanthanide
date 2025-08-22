@@ -7,4 +7,5 @@
 from .halfint import HalfInt
 from .wigner import wigner3j
 from .state import Coupling
+from .matrix import reduced_matrix
 from .lanthanide import RADIAL, Lanthanide
