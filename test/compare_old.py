@@ -199,6 +199,6 @@ def compare_old(ion, fn, show=False):
 
 if __name__ == "__main__":
 
-    with Lanthanide(4) as ion:
+    with Lanthanide(10) as ion:
         compare_old(ion, f"../../Lanthanide-0.3/test/extract/f{ion.num:02d}.data", show=False)
     print("Done.")
