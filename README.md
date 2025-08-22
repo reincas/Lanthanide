@@ -20,14 +20,15 @@ they are:
 1. Coulomb interaction between the electrons (1st order):
 $\mathbf{H}_1 = F^2 \mathbf{f}_2 + F^4 \mathbf{f}_4 + F^6 \mathbf{f}_6$, with the radial integrals
 $F^2$, $F^4$, and $F^6$ and the respective angular two-electron  operators $\mathbf{f}_2$, $\mathbf{f}_4$,
-and $\mathbf{f}_6$.
+and $\mathbf{f}_6$. The keys for radial parameters (integrals) and angular matrices (operators) are
+`H1/2`, `H1/4`, and `H1/6`.
 2. Magnetic spin-orbit interaction of each electron (1st order): $\mathbf{H}_2 = \zeta \mathbf{z}$, with
 the radial integral $\zeta$ and the angular one-electron operator $\mathbf{z}$.
 3. Coulomb interaction between the 4f configuration and all other configurations (2nd order): $\mathbf{H}_3 =
 \alpha \mathbf{L}^2 + \beta \mathbf{G}(G_2) + \gamma \mathbf{G}(R_7)$, with the radial integrals $\alpha$,
 $\beta$, and $\gamma$. The respective effective angular two-electron operators $\mathbf{L}^2$,
 $\mathbf{G}(G_2)$, and $\mathbf{G}(R_7)$, which are the operator of the squared total orbital angular momentum
-and Casimir operators of the symmetry groups $R_7$ and $G_2$.
+and the Casimir operators of the symmetry groups $R_7$ and $G_2$.
 4. More Coulomb interactions between the 4f configuration and all other configurations (2nd order):
 $\mathbf{H}_4 = \sum_c T^c \mathbf{t}_c$, with $c = 2, 3, 4, 6, 7, 8$. The radial integrals are $T^c$
 and the respective effective angular three-electron operators $\mathbf{t}_c$,
@@ -43,7 +44,7 @@ and $\mathbf{p}_6$.
 
 The first order perturbations are interactions inside the 4f configuration, while second order perturbations
 take interactions with all other configuration into account. They are treated by effective operators 
-mathematically operating inside the 4f configuration.
+mathematically operating inside the 4f configuration. Radial integr
 
 For a given set of radial integral values, the
 total perturbation Hamiltonian can be diagonalised to intermediate coupling
