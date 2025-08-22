@@ -121,6 +121,13 @@ This allows to show the most important components only.
 A shortcut to the list of energies is the attribute `ion.energies`.
 The method `ion.str_levels(min_weight=0.0)` provides a convenient way to display the energy level spectrum.
 
+At any time, the calculation of a new energy level spectrum can be triggered by providing a new set of
+radial parameters:
+
+```
+ion.set_radial(radial)
+```
+
 For radiative transitions inside the 4f configuration of Lanthanides only electric and magnetic
 dipole moments are relevant.
 The calculation of the respective transition strengths according to the Judd-Ofelt theory is based on
@@ -181,8 +188,43 @@ with the local field correction factors
 
 $$ \chi_{ed} = \frac{n(n^2+2)^2}{9} \qquad \chi_{md} = n^3 $$
 
-Please be aware that due to dispersion the refractive index $n(\bar{\nu})$ in general is function of the
-transition frequency.  
+Please be aware that due to dispersion the refractive index $n(\bar{\nu})$ in general is a function of the
+transition frequency $\bar{\nu}$.
+
+## Caching
+
+Matrix elements of angular tensors are physical constants for a given electron configuration.
+Therefore, the Lanthanide package stores them after their first calculation in the sub-directory
+
+```
+.../Lib/site-packages/lathanide/vaults
+```
+
+of the package installation folder.
+The calculation can be very time consuming especially for configurations with 4-10 electrons.
+You should therefore consider running the script `create_all.py` in the folder `test`.
+It will trigger the calculation of all perturbation hamiltonians and reduced transition matrix elements
+for all lanthanide ions.
+Expect it to run for more than 24 hours.
+It will generate about 9 GB of data in the folder `vaults`.
+
+It is recommended to close the cache file gracefully by calling `Lanthanide.close()` when the work on the
+object is finished.
+As an alternative, the Lanthanide class also supports the context management protocol.
+You can thus use it to start a `with` block.
+The cache file will be closed automatically when the program leaves the block and no manual closing is required:
+
+```
+with Lanthanide(2) as ion:
+    print(ion)
+    reduced = ion.reduced()
+```
+
+The Lanthanide package uses an additional cache for perturbation hamiltonians.
+They are kept in the memory to accelerate energy level fits of radial parameters.
+There is also a cache for the reduced transition matrix elements.
+Consecutive calls of `Lanthanide.reduced()` will deliver the same object until a new set of radial parameters
+is applied via `Lanthanide.set_radial()`.
 
 ## Usage examples
 
