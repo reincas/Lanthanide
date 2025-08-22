@@ -86,7 +86,7 @@ radial = { "base": 327.39, "H1/2": 68576.05, "H1/4": 49972.76, "H1/6": 32415.29,
 where `"base"` fixes the energy of the ground state and the special parameters `"H5fix"` and `"H6fix"` are
 abbreviations for the common choices $M^2 = 0.56 M^0$, $M^4 = 0.38 M^0$ and $P^4 = 0.75 P^2$, $P^6 = 0.50 P^2$. 
 
-You may choose operation in either the SLJM or the SLJ space (default). The latter is of special importance for
+You may choose operation in either the SLJM or the SLJ space. The latter is of special importance for
 Lanthanides in glasses where the Stark splitting cannot be resolved and thus the magnetic quantum number
 M of the total angular momentum does not matter. Operation in the SLJ space is much faster. Select your choice by
 
@@ -100,6 +100,9 @@ and initialize the Lanthanide ion by giving the number of 4f electrons in the ra
 ion = Lanthanide(2, coupling, radial)
 print(ion)
 ```
+
+If not specified, the default coupling is SLJ and the default radial parameters are those given by Carnall
+for LaF<sub>3</sub>.
 
 The Lanthanide object builds the matrix of the total perturbation Hamiltonian and diagonalises it, which results 
 in the energy level and the SLJ composition of each state in intermediate coupling.
