@@ -1,6 +1,6 @@
 # Lanthanide
 
-This is Python 3 package to calculate the energy levels of multi-electron systems
+This is a Python 3 package to calculate the energy levels of multi-electron systems
 populating the 4f configuration, which means the lanthanide or rare-earth ions from
 Ce<sup>3+</sup> (4f<sup>1</sup>) to Yb<sup>3+</sup> (4f<sup>13</sup>). The
 calculation is based on Racahs single electron unit tensor operators as developed
