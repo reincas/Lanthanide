@@ -124,15 +124,19 @@ The method `ion.str_levels(min_weight=0.0)` provides a convenient way to display
 For radiative transitions inside the 4f configuration of Lanthanides only electric and magnetic
 dipole moments are relevant.
 The calculation of the respective transition strengths according to the Judd-Ofelt theory is based on
-the reduced matrix elements $\langle J'||\mathbf{U}^(2)||J \rangle$, $\langle J'||\mathbf{U}^(4)||J \rangle$,
-and $\langle J'||\mathbf{U}^(6)||J \rangle$ for electric and $\langle J'||\mathbf{M}||J \rangle$
+the reduced matrix elements
+$\langle J'\parallel \mathbf{U}^(2)\parallel J \rangle$,
+$\langle J'\parallel \mathbf{U}^(4)\parallel J \rangle$, and
+$\langle J'\parallel \mathbf{U}^(6)\parallel J \rangle$ for electric and
+$\langle J'\parallel \mathbf{M}\parallel J \rangle$
 for magnetic dipole transitions.
 The method `Lanthanide.reduced()` delivers a dictionary, which contains all four matrices with the keys
 `U2`, `U4`, `U6`, and `LS` containing squared reduced matrix elements as required for the calculation of
 transition strengths.
 The matrix element for a transition from an initial state `i` to a final element `f` is addressed by `array[f,i]`. 
-This command shows the squared elements $|\langle J_i||\mathbf{U}^(4)||J_0 \rangle|^2$ for transitions from the
-ground state 0 to all excited states i:
+This command shows the squared elements
+$|\langle J_i\parallel \mathbf{U}^(4)\parallel J_0 \rangle|^2$ for transitions from the ground state 0
+to all excited states i:
 
 ```
 reduced = ion.reduced()
