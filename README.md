@@ -174,7 +174,7 @@ print(strength.Sed[1:, 0])
 print(strength.Smd[1:, 0])
 ```
 
-The line strengths are often used to calculate the oscillator strength of a transition $i\to j$:
+The line strengths are often used to calculate the dimensionless oscillator strength of a transition $i\to j$:
 
 $$
 f_{ij} = \frac{4\pi\varepsilon_0}{e^2} \frac{8 \pi^2 m_e c \Delta k}{h}
@@ -187,7 +187,7 @@ $$
 \chi^\prime_{ed} = \frac{(n^2+2)^2}{9n} \qquad \chi^\prime_{md} = n
 $$
 
-Another useful quantity is the radiative emission rate of a transition:
+Another useful quantity is the radiative emission rate (in s<sup>-1</sup>) of a transition:
 
 $$
 A_{ij} = \frac{64 \pi^4 \Delta k^3}{h}
