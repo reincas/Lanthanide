@@ -1,4 +1,4 @@
-# Lanthanide
+# Lanthanide 0.9.0
 
 This is a Python 3 package to calculate the energy levels of multi-electron systems
 populating the 4f configuration, which means the lanthanide or rare-earth ions from
