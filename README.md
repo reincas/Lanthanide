@@ -146,12 +146,12 @@ There is no universally accepted definition of the line strength of a transition
 the Lanthanide package uses the definition
 
 $$ S_{ed} = \frac{e^2}{4\pi\varepsilon_0} \frac{1}{3(2J_i+1)} \sum\limits_{\lambda=2,4,6} 
-\Omega_\lambda |\langle J_j\parallel \mathbf{U}^{(\lambda)}\parallel J_i\rangle|^2$$
+\Omega_\lambda |\langle J_j\parallel \mathbf{U}^{(\lambda)}\parallel J_i\rangle|^2 $$
 
 with the Judd-Ofelt parameters $\Omega_2$, $\Omega_4$, and $\Omega_6$. For magnetic dipole transitions we use  
 
 $$ S_{md} = \frac{e^2}{16\pi\varepsilon_0 m_e^2} \frac{1}{3(2J_i+1)} 
-|\langle J_j\parallel \mathbf{L}+g_s\mathbf{S}\parallel J_i\rangle|^2$$
+|\langle J_j\parallel \mathbf{L}+g_s\mathbf{S}\parallel J_i\rangle|^2 $$
 
 For a given set of Judd-Ofelt parameters you can also get the radiative line strength of each transition using
 the method `line_strengths(judd_ofelt)`:
@@ -165,9 +165,9 @@ print(strength.Smd[1:, 0])
 
 The line strengths are often used to calculate the oscillator strength of a transition $i\to j$:
 
-$$ f_{ij} = \frac{4\pi\varepsilon_0}{e^2} \frac{8\pi^2m_e\bar{\nu}}{h}
-\[\chi'_{ed}S_{ed} + \chi'_{md}S_{md}\]$$
+$$ f_{ij} = \frac{4\pi\varepsilon_0}{e^2} \frac{8\pi^2m_e\bar{\nu}}{h}\[\chi'_{ed}S_{ed} + \chi'_{md}S_{md}\] $$
 
+with...
 
 ## Usage examples
 
