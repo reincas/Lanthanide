@@ -195,10 +195,10 @@ def compare_old(ion, fn, show=False):
                     print(f"New matrix {name_new} [{coupling.name}]")
                     print(np.rint(res * array_new[f, i]) / res)
         else:
-            print(f"{ion}: matrix {name_new} [{coupling.name}] is identical")
+            print(f"{ion} matrix {name_new} [{coupling.name}] is identical")
 
 if __name__ == "__main__":
 
-    with Lanthanide(11) as ion:
-        compare_old(ion, f"../Lanthanide-0.3/test/extract/f{ion.num:02d}.data", show=False)
+    with Lanthanide(4) as ion:
+        compare_old(ion, f"../../Lanthanide-0.3/test/extract/f{ion.num:02d}.data", show=False)
     print("Done.")
