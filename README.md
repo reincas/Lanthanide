@@ -38,7 +38,7 @@ The Lanthanide package uses the keys `H3/0`, `H3/1`, and `H3/2` for radial param
 $\mathbf{H}_4 = \sum_c T^c \mathbf{t}_c$, with $c = 2, 3, 4, 6, 7, 8$.
 The radial integrals are $T^c$ and the respective effective angular three-electron operators
 $\mathbf{t}_c$.
-The Lanthanide package uses the keys `H4/2`, `H4/3`, `H4/4`, `H4/6`, `H4/7`, and `H3/8` for radial parameters
+The Lanthanide package uses the keys `H4/2`, `H4/3`, `H4/4`, `H4/6`, `H4/7`, and `H4/8` for radial parameters
 and angular matrices.
 5. Magnetic interactions on the spin of one electron with the spin (ss) or the orbital angular momentum (soo)
 of another electron (1st order):
