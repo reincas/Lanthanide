@@ -17,9 +17,10 @@ All six perturbation Hamiltonians known from the literature are used to calculat
 the energy levels of a given Lathanide ion. In the order of their relative magnitude,
 they are:
 
-1. Coulomb interaction between the electrons (1st order): $\mathbf{H}_1 = F^2 \mathbf{f}_2 + F^4 \mathbf{f}_4
-+ F^6 \mathbf{f}_6$, with the radial integrals $F^2$, $F^4$, and $F^6$ and the respective angular two-electron
-operators $\mathbf{f}_2$, $\mathbf{f}_4$, and $\mathbf{f}_6$.
+1. Coulomb interaction between the electrons (1st order):
+$\mathbf{H}_1 = F^2 \mathbf{f}_2 + F^4 \mathbf{f}_4 + F^6 \mathbf{f}_6$, with the radial integrals
+$F^2$, $F^4$, and $F^6$ and the respective angular two-electron  operators $\mathbf{f}_2$, $\mathbf{f}_4$,
+and $\mathbf{f}_6$.
 2. Magnetic spin-orbit interaction of each electron (1st order): $\mathbf{H}_2 = \zeta \mathbf{z}$, with
 the radial integral $\zeta$ and the angular one-electron operator $\mathbf{z}$.
 3. Coulomb interaction between the 4f configuration and all other configurations (2nd order): $\mathbf{H}_3 =
