@@ -109,7 +109,7 @@ in the energy level and the SLJ composition of each state in intermediate coupli
 The process is accelerated by diagonalising the much smaller J sub-spaces individually.
 Each state in intermediate coupling is a mixture of different SLJ states with the same total angular momentum J.
 You can access all state objects in the list `Lanthanide.intermediate.states` with the ground state in first position.
-These commands give you energy, weight factors and the respective SLJ components of the first excited state:
+These commands deliver energy, weight factors and the respective SLJ components of the first excited state:
 
 ```
 state = ion.intermediate.states[1]
@@ -121,10 +121,11 @@ For each state object there is a long string representation, which you can acces
 The parameter `min_weight` is useful for ions with a large number of states.
 It gives the minimum weight of a SLJ state to appear in the list.
 This allows to show the most important components only.
-A shortcut to the list of energies is the attribute `ion.energies`.
-The method `ion.str_levels(min_weight=0.0)` provides a convenient way to display the energy level spectrum.
+A shortcut to the list of energies off all states is the attribute `ion.energies`.
+The method `ion.str_levels(min_weight=0.0)` provides a convenient way to display the energy level spectrum
+on a terminal.
 
-At any time, the calculation of a new energy level spectrum can be triggered by providing a new set of
+The calculation of a new energy level spectrum can be triggered at any time by providing a new set of
 radial parameters:
 
 ```
