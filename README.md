@@ -165,9 +165,24 @@ print(strength.Smd[1:, 0])
 
 The line strengths are often used to calculate the oscillator strength of a transition $i\to j$:
 
-$$ f_{ij} = \frac{4\pi\varepsilon_0}{e^2} \frac{8\pi^2m_e\bar{\nu}}{h}\[\chi^\prime_{ed}S_{ed} + \chi^\prime_{md}S_{md}\] $$
+$$ f_{ij} = \frac{4\pi\varepsilon_0}{e^2} \frac{8\pi^2m_e\bar{\nu}}{h}
+\[\chi^\prime_{ed}S_{ed} + \chi^\prime_{md}S_{md}\] $$
 
-with...
+with the energy level difference $\bar{\nu}=E_i-E_f$ and the local field correction factors
+
+$$ \chi^\prime_{ed} = \frac{(n^2+2)^2}{9n} \qquad \chi^\prime_{md} = n $$
+
+Another useful quantity is the radiative emission rate of a transition:
+
+$$ A_{ij} = \frac{64\pi^4\bar{\nu}^3}{hc^3}
+\[\chi_{ed}S_{ed} + \chi_{md}S_{md}\] $$
+
+with the local field correction factors
+
+$$ \chi_{ed} = \frac{n(n^2+2)^2}{9} \qquad \chi_{md} = n^3 $$
+
+Please be aware that due to dispersion the refractive index $n(\bar{\nu})$ in general is function of the
+transition frequency.  
 
 ## Usage examples
 
