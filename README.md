@@ -31,7 +31,7 @@ The Lanthanide package uses the key `H2` for the radial parameter and the angula
 $\mathbf{H}_3 = \alpha \mathbf{L}^2 + \beta \mathbf{G}(G_2) + \gamma \mathbf{G}(R_7)$,
 with the radial integrals $\alpha$, $\beta$, and $\gamma$.
 The respective effective angular two-electron operators $\mathbf{L}^2$, $\mathbf{G}(G_2)$, and $\mathbf{G}(R_7)$,
-which are the operator of the squared total orbital angular momentum and
+are the operator of the squared total orbital angular momentum and
 the Casimir operators of the symmetry groups $R_7$ and $G_2$.
 The Lanthanide package uses the keys `H3/0`, `H3/1`, and `H3/2` for radial parameters and angular matrices.
 4. More Coulomb inter-configuration interactions (2nd order):
