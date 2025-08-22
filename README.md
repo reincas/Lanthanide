@@ -58,11 +58,11 @@ mathematically operating inside the 4f configuration.
 
 ## Installation
 
-This package is work-in-progress yet. Everything is available but has not
-settled to its final shape yet. Expect interfaces to be changed.
+**Note**: This package is work-in-progress now.
+Everything is available but has not settled to its final shape yet.
+Expect interfaces to be changed.
 
-To build and install the package, download the files from GitHub and run
-the command
+To build and install the package, download the files from GitHub and run the command
 
 ```
 python -m pip install .
