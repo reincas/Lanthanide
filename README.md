@@ -31,7 +31,7 @@ The Lanthanide package uses the key `H2` for the radial parameter and the angula
 $\mathbf{H}_3 = \alpha \mathbf{L}^2 + \beta \mathbf{G}(G_2) + \gamma \mathbf{G}(R_7)$,
 with the radial integrals $\alpha$, $\beta$, and $\gamma$.
 The respective effective angular two-electron operators $\mathbf{L}^2$, $\mathbf{G}(G_2)$, and $\mathbf{G}(R_7)$
-are the operator of the squared total orbital angular momentum and
+are the squared operator of the total orbital angular momentum and
 the Casimir operators of the symmetry groups $R_7$ and $G_2$.
 The Lanthanide package uses the keys `H3/0`, `H3/1`, and `H3/2` for radial parameters and angular matrices.
 4. More Coulomb inter-configuration interactions (2nd order):
@@ -54,18 +54,7 @@ The Lanthanide package uses the keys `H6/2`, `H6/4`, and `H6/6` for radial param
 
 The first order perturbations are interactions inside the 4f configuration, while second order perturbations
 take interactions with all other configuration into account. They are treated by effective operators 
-mathematically operating inside the 4f configuration. Radial integr
-
-For a given set of radial integral values, the
-total perturbation Hamiltonian can be diagonalised to intermediate coupling
-to get the energy levels. For lanthanides in glasses the calculation speed
-is improved by using reduced SLJ states. All reduced matrix elements of the
-electric and magnetic dipole operators in intermediate coupling are provided
-for Judd-Ofelt fits. For given Judd-Ofelt parameters the radiative line strength
-of each transition can be obtained.
-
-This package is the successor of the Python package I developed for my PhD
-thesis until 2002. A copy of the thesis is in the folder `docs`. 
+mathematically operating inside the 4f configuration.
 
 ## Installation
 
@@ -78,6 +67,60 @@ the command
 ```
 python -m pip install .
 ```
+
+## Usage
+
+You start by importing the most important symbols:
+
+```
+from lanthanide import Lanthanide, Coupling
+```
+
+A dictionary of radial radial parameters (integrals) looks like this:
+
+```
+radial = { "base": 327.39, "H1/2": 68576.05, "H1/4": 49972.76, "H1/6": 32415.29, "H2": 728.18,
+    "H3/0": 16.99, "H3/1": -417.98, "H3/2": 1371, "H5fix": 0.19, "H6fix": 1.67 }
+```
+
+where `"base"` fixes the energy of the ground state and the special parameters `"H5fix"` and `"H6fix"` are
+abbreviations for the common choices $M^2 = 0.56 M^0$, $M^4 = 0.38 M^0$ and $P^4 = 0.75 P^2$, $P^6 = 0.50 P^2$. 
+
+You may choose operation in either the SLJM or the SLJ space. The latter is of special importance for
+Lanthanides in glasses where the Stark splitting cannot be resolved and thus the magnetic quantum number
+M of the total angular momentum does not matter. Operation in the SLJ space is much faster.
+
+```
+coupling = Coupling.SLJ
+```
+
+and initialize the Lanthanide ion by giving the number of 4f electrons in the range from 1 to 13:
+
+```
+ion = Lanthanide(2, coupling, radial)
+print(ion)
+```
+
+The Lanthanide object builds the matrix of the total perturbation Hamiltonian and diagonalises it, which results 
+in the energy level and the LSJ composition of each state in intermediate coupling.
+The process is accelerated by diagonalising the much smaller J sub-spaces individually.
+Each state in intermediate coupling is a mixture of different LSJ states with the same total angular momentum J.
+You can access all state objects in a list with the ground state in first position.
+These commands gives you the energy, weight factors and the respective SLJ components of the first excited state:
+
+```
+state = ion.intermediate.states[1]
+print(state.energy, state.weights, state.states)
+```
+
+For each state object there is a long string representation, which you can access by `str(state)` or `state.long()`
+and a short version `state.short()`. A shortcut to the list of energies is the attribute `ion.energies`.
+
+
+All reduced matrix elements of the
+electric and magnetic dipole operators in intermediate coupling are provided
+for Judd-Ofelt fits. For given Judd-Ofelt parameters the radiative line strength
+of each transition can be obtained.
 
 ## Usage examples
 
