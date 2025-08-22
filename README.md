@@ -106,20 +106,40 @@ in the energy level and the SLJ composition of each state in intermediate coupli
 The process is accelerated by diagonalising the much smaller J sub-spaces individually.
 Each state in intermediate coupling is a mixture of different SLJ states with the same total angular momentum J.
 You can access all state objects in a list with the ground state in first position.
-These commands gives you the energy, weight factors and the respective SLJ components of the first excited state:
+These commands give you energy, weight factors and the respective SLJ components of the first excited state:
 
 ```
 state = ion.intermediate.states[1]
 print(state.energy, state.weights, state.states)
 ```
 
-For each state object there is a long string representation, which you can access by `str(state)` or `state.long()`
-and a short version `state.short()`. A shortcut to the list of energies is the attribute `ion.energies`.
+For each state object there is a long string representation, which you can access by `str(state)` or
+`state.long(min_weight=0.0)` and a short version by `state.short()`.
+The parameter `min_weight` is useful for ions with a large number of states.
+It gives the minimum weight of a SLJ state to appear in the list.
+This allows to show the most important components only.
+A shortcut to the list of energies is the attribute `ion.energies`.
+The method `ion.str_levels(min_weight=0.0)` provides a convenient way to display the energy level spectrum.
 
+For radiative transitions inside the 4f configuration of Lanthanides only electric and magnetic
+dipole moments are relevant.
+The calculation of the respective transition strengths according to the Judd-Ofelt theory is based on
+the reduced matrix elements $\langle J'||\mathbf{U}^(2)||J \rangle$, $\langle J'||\mathbf{U}^(4)||J \rangle$,
+and $\langle J'||\mathbf{U}^(6)||J \rangle$ for electric and $\langle J'||\mathbf{M}||J \rangle$
+for magnetic dipole transitions.
+The method `Lanthanide.reduced()` delivers a dictionary, which contains all four matrices with the keys
+`U2`, `U4`, `U6`, and `LS` containing squared reduced matrix elements as required for the calculation of
+transition strengths.
+The matrix element for a transition from an initial state `i` to a final element `f` is addressed by `array[f,i]`. 
+This command shows the squared elements $|\langle J_i||\mathbf{U}^(4)||J_0 \rangle|^2$ for transitions from the
+ground state 0 to all excited states i:
 
-All reduced matrix elements of the
-electric and magnetic dipole operators in intermediate coupling are provided
-for Judd-Ofelt fits. For given Judd-Ofelt parameters the radiative line strength
+```
+reduced = ion.reduced()
+print(reduced["U4"][1:,0])
+```
+
+For given Judd-Ofelt parameters the radiative line strength
 of each transition can be obtained.
 
 ## Usage examples

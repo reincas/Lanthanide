@@ -213,7 +213,7 @@ class Lanthanide:
 
     def str_levels(self, min_weight=0.0):
         for state in self.intermediate:
-            yield f"  {state.energy:7.0f} cm-1 | {state.long(min_weight)} >"
+            yield f"  {state.energy:7.0f} | {state.long(min_weight)} >"
 
     def __str__(self):
         return f"{self.name} ({self.config})"
