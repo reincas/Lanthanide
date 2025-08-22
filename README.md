@@ -108,7 +108,7 @@ The Lanthanide object builds the matrix of the total perturbation Hamiltonian an
 in the energy level and the SLJ composition of each state in intermediate coupling.
 The process is accelerated by diagonalising the much smaller J sub-spaces individually.
 Each state in intermediate coupling is a mixture of different SLJ states with the same total angular momentum J.
-You can access all state objects in a list with the ground state in first position.
+You can access all state objects in the list `Lanthanide.intermediate.states` with the ground state in first position.
 These commands give you energy, weight factors and the respective SLJ components of the first excited state:
 
 ```
