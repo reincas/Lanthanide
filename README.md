@@ -165,9 +165,8 @@ print(strength.Smd[1:, 0])
 
 The line strengths are often used to calculate the oscillator strength of a transition $i\to j$:
 
-$$
-f_{ij} = \frac{4\pi\varepsilon_0}{e^2} \frac{8\pi^2m_e\bar{\nu}}{h}[\chi'_{ed}S_{ed} + \chi'_{md}S_{md}]
-$$
+$$ f_{ij} = \frac{4\pi\varepsilon_0}{e^2} \frac{8\pi^2m_e\bar{\nu}}{h}
+\[\chi'_{ed}S_{ed} + \chi'_{md}S_{md}\]$$
 
 
 ## Usage examples
