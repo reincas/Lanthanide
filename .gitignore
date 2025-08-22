@@ -3,8 +3,9 @@
 .venv/
 attic/
 .test.py
-vaults/
 private/
+.lanthanide/vaults/
+
 
 logs
 *.log
