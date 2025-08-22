@@ -11,7 +11,7 @@ The matrix elements are calculated in the space of determinantal product
 states and then transformed to the SLJM space using the chain of operators:
 
 $$ \mathbf{S}^2 \to \mathbf{G}(R_7) \to \math{G}(G_2)
-\to \mathbf(L)^2 \to \mathbf(J)^2 \to \mathrm{J}_z 
+\to \mathbf(L)^2 \to \mathbf(J)^2 \to \mathrm{J}_z $$
 
 All six perturbation Hamiltonians known from the literature are used to calculate
 the energy levels of a given Lathanide ion.
