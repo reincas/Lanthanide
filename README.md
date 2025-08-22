@@ -172,24 +172,24 @@ print(strength.Smd[1:, 0])
 
 The line strengths are often used to calculate the oscillator strength of a transition $i\to j$:
 
-$$ f_{ij} = \frac{4\pi\varepsilon_0}{e^2} \frac{8\pi^2m_e\bar{\nu}}{h}
+$$ f_{ij} = \frac{4\pi\varepsilon_0}{e^2} \frac{8 \pi^2 m_e c \Delta k}{h}
 \[\chi^\prime_{ed}S_{ed} + \chi^\prime_{md}S_{md}\] $$
 
-with the energy level difference $\bar{\nu}=E_i-E_f$ and the local field correction factors
+with the energy level difference $\Delta k=k_i-k_f$ (in wavenumbers) and the local field correction factors
 
 $$ \chi^\prime_{ed} = \frac{(n^2+2)^2}{9n} \qquad \chi^\prime_{md} = n $$
 
 Another useful quantity is the radiative emission rate of a transition:
 
-$$ A_{ij} = \frac{64\pi^4\bar{\nu}^3}{hc^3}
+$$ A_{ij} = \frac{64 \pi^4 \Delta k^3}{h}
 \[\chi_{ed}S_{ed} + \chi_{md}S_{md}\] $$
 
 with the local field correction factors
 
 $$ \chi_{ed} = \frac{n(n^2+2)^2}{9} \qquad \chi_{md} = n^3 $$
 
-Please be aware that due to dispersion the refractive index $n(\bar{\nu})$ in general is a function of the
-transition frequency $\bar{\nu}$.
+Please be aware that due to dispersion the refractive index $n(\Delta k)$ in general is a function of the
+transition wavenumber $\Delta k$.
 
 ## Caching
 
