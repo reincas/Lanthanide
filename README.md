@@ -207,7 +207,7 @@ print(strength.Smd[1:, 0])
 The line strengths are often used to calculate the dimensionless oscillator strength of a transition $i\to j$:
 
 $$
-f_{ij} = \frac{4\pi\varepsilon_0}{e^2} \frac{8 \pi^2 m_e c k_{ij}}{h}
+f_{ij} = \frac{4\pi\varepsilon_0}{e^2} \frac{4 \pi m_e c k_{ij}}{\hbar}
 \[\chi^\prime_{ed}S_{ed} + \chi^\prime_{md}S_{md}\]
 $$
 
@@ -220,7 +220,7 @@ $$
 Another useful quantity is the radiative emission rate (in s<sup>-1</sup>) of a transition:
 
 $$
-A_{ij} = \frac{64 \pi^4 k_{ij}^3}{h}
+A_{ij} = \frac{32 \pi^3 k_{ij}^3}{\hbar}
 \[\chi_{ed}S_{ed} + \chi_{md}S_{md}\]
 $$
 
