@@ -3,6 +3,13 @@
 # <reinhard.caspary@phoenixd.uni-hannover.de>                            #
 # This program is free software under the terms of the MIT license.      #
 ##########################################################################
+#
+# This Module provides the class HalfInt which represents half-integer
+# values as needed for angular momentum quantum numbers. Basic mathematical
+# operations and comparisons are supported.
+#
+##########################################################################
+
 
 class HalfInt:
     def __init__(self, numerator: int):
