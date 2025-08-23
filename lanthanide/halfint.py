@@ -10,7 +10,6 @@
 #
 ##########################################################################
 
-
 class HalfInt:
     def __init__(self, numerator: int):
         assert isinstance(numerator, int)
@@ -113,20 +112,3 @@ class HalfInt:
 
     def __str__(self):
         return f"{self.numerator}/2"
-
-
-if __name__ == "__main__":
-    a = HalfInt(1)
-    b = HalfInt(3)
-    print(f"-({a}) = {-a}")
-    print(f"{a} + {b} = {a + b}")
-    print(f"{a} - {b} = {a - b}")
-    print(f"{a} + 2 = {a + 2}")
-    print(f"2 - {b} = {2 - b}")
-    print(f"2 * {b} = {2 * b}")
-    print(f"{a} * 3 = {a * 3}")
-    print(f"{a} < {b} = {a < b}")
-    print(f"{a} >= 2 = {a >= 2}")
-    print(f"-1 <= {b} = {-1 <= b}")
-    print(f"{a} != {b} = {a != b}")
-    print(f"3 * {a} == {b} = {3 * a == b}")
