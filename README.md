@@ -112,6 +112,11 @@ print(ion)
 If not specified, the default coupling is SLJ and the default radial parameters are those given by Carnall
 for LaF<sub>3</sub>.
 
+**Note**: Although the following examples should also work in SLJM coupling, this mode is not thoroughly tested
+in this early state of the software.
+I've also not implemented the crystal field operator yet, but it is a very simple one.
+The same operator is used to calculate the response of the Stark level splitting on an external magnetic field.
+
 The Lanthanide object builds the matrix of the total perturbation Hamiltonian and diagonalises it, which results 
 in the energy level and the SLJ composition of each state in intermediate coupling.
 The process is accelerated by diagonalising the much smaller J sub-spaces individually.
