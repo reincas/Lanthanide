@@ -134,9 +134,14 @@ For each state object there is a long string representation, which you can acces
 The parameter `min_weight` is useful for ions with a large number of states.
 It gives the minimum weight of a SLJ state to appear in the list.
 This allows to show the most important components only.
-A shortcut to the list of energies off all states is the attribute `ion.energies`.
+A shortcut to the list of energies of all states is the attribute `ion.energies`.
 The method `ion.str_levels(min_weight=0.0)` provides a convenient way to display the energy level spectrum
-on a terminal.
+on a terminal:
+
+```
+for line in ion.str_levels(0.05):
+    print(line)
+```
 
 The calculation of a new energy level spectrum can be triggered at any time by providing a new set of
 radial parameters:
