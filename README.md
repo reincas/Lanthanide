@@ -58,9 +58,9 @@ mathematically operating inside the 4f configuration.
 
 ## Installation
 
-**Note**: This package is work-in-progress now.
+**Note**: _This package is work-in-progress now.
 Everything is available but has not settled to its final shape yet.
-Expect interfaces to be changed.
+Expect interfaces to be changed._
 
 To build and install the package, download the files from GitHub and run the command
 
