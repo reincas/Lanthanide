@@ -40,7 +40,7 @@ The radial integrals are $T^c$ and the respective effective angular three-electr
 $\mathbf{t}_c$.
 The Lanthanide package uses the keys `"H4/2"`, `"H4/3"`, `"H4/4"`, `"H4/6"`, `"H4/7"`, and `"H4/8"` for
 radial parameters and angular matrices.
-5. Magnetic interactions on the spin of one electron with the spin (ss) or the orbital angular momentum (soo)
+5. Magnetic interactions of the spin of one electron with the spin (ss) or the orbital angular momentum (soo)
 of another electron (1st order):
 $\mathbf{H}_5 = M^0 \mathbf{m}_0 + M^2 \mathbf{m}_2 + M^4 \mathbf{m}_4$,
 with the Marvin integrals $M^0$, $M^2$, and $M^4$ and the respective angular two-electron operators
@@ -84,7 +84,11 @@ radial = { "base": 327.39, "H1/2": 68576.05, "H1/4": 49972.76, "H1/6": 32415.29,
 ```
 
 where `"base"` fixes the energy of the ground state and the special parameters `"H5fix"` and `"H6fix"` are
-abbreviations for the common choices $M^2 = 0.56 M^0$, $M^4 = 0.38 M^0$ and $P^4 = 0.75 P^2$, $P^6 = 0.50 P^2$. 
+abbreviations for the common choices $M^2 = 0.56 M^0$, $M^4 = 0.38 M^0$ and $P^4 = 0.75 P^2$, $P^6 = 0.50 P^2$.
+The unit of the parameters is that of an energy.
+The code does not depend on your choice of the unit, but it is advisable to stay with standard,
+which means using wavenumbers in cm<sup>-1</sup>.
+Wavenumber is the inverse of a radiation wavelength in vacuum: $k=1/\lambda$. 
 
 You may choose operation in either the SLJM or the SLJ space. The latter is of special importance for
 Lanthanides in glasses where the Stark splitting cannot be resolved and thus the magnetic quantum number
@@ -109,7 +113,7 @@ in the energy level and the SLJ composition of each state in intermediate coupli
 The process is accelerated by diagonalising the much smaller J sub-spaces individually.
 Each state in intermediate coupling is a mixture of different SLJ states with the same total angular momentum J.
 You can access all state objects in the list `Lanthanide.intermediate.states` with the ground state in first position.
-These commands deliver energy, weight factors and the respective SLJ components of the first excited state:
+This code delivers energy, weight factors and the respective SLJ components of the first excited state:
 
 ```
 state = ion.intermediate.states[1]
