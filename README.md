@@ -259,7 +259,7 @@ create_all()
 
 It will trigger the calculation of all perturbation hamiltonians and reduced transition matrix elements
 for all lanthanide ions.
-Expect it to run for more than 24 hours.
+Expect it to run for more than 24 hours on a typical office PC.
 It will generate about 9 GB of data in the folder `vaults`.
 
 It is recommended to close the cache file gracefully by calling `Lanthanide.close()` when the work on the
