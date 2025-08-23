@@ -153,7 +153,8 @@ The calculation of a new energy level spectrum can be triggered at any time by p
 radial parameters:
 
 ```
-ion.set_radial(radial)
+from lanthanide import RADIAL
+ion.set_radial(RADIAL["Pr3+/ZBLAN"])
 ```
 
 For radiative transitions inside the 4f configuration of Lanthanides only electric and magnetic

@@ -6,7 +6,8 @@
 
 from .halfint import HalfInt
 from .wigner import wigner3j
-from .state import Coupling
+from .state import Coupling, StateListProduct, StateListSLJM, StateListSLJ, StateListJ, \
+    StateProduct, StateSLJM, StateSLJ, StateJ
 from .matrix import MATRIX, reduced_matrix
 from .lanthanide import RADIAL, JUDD_OFELT, Lanthanide
 
