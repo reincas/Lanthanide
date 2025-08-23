@@ -164,7 +164,7 @@ the reduced matrix elements
 $\langle J_j\parallel \mathbf{U}^{(2)}\parallel J_i \rangle$,
 $\langle J_j\parallel \mathbf{U}^{(4)}\parallel J_i \rangle$, and
 $\langle J_j\parallel \mathbf{U}^{(6)}\parallel J_i \rangle$ for electric and
-$\frac{1}{\hbar} \langle J_j\parallel (\mathbf{L} + g_s \mathbf{S})\parallel J_i \rangle$
+$\frac{1}{\hbar} \langle J_j\parallel \mathbf{L} + g_s \mathbf{S}\parallel J_i \rangle$
 for magnetic dipole transitions.
 The method `Lanthanide.reduced()` delivers a `Reduced` object, which contains all four squared reduced matrices 
 as attributes `U2`, `U4`, `U6`, and `LS` as required for the calculation of transition strengths.
