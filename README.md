@@ -13,9 +13,9 @@ states and then transformed to the SLJM space using the chain of operators:
 $$ \mathbf{S}^2 \to \mathbf{G}(R_7) \to \mathbf{G}(G_2)
 \to \mathbf{L}^2 \to \mathbf{J}^2 \to \mathrm{J}_z $$
 
-All six perturbation Hamiltonians known from the literature are used to calculate
-the energy levels of a given Lathanide ion. In the order of their relative magnitude,
-they are:
+All six perturbation Hamiltonians with a total of 19 radial integrals known from the literature are used
+to calculate the energy levels of a given Lathanide ion.
+In the order of their relative magnitude they are:
 
 1. Coulomb interaction between the electrons (1st order):
 $\mathbf{H}_1 = F^2 \mathbf{f}_2 + F^4 \mathbf{f}_4 + F^6 \mathbf{f}_6$,
