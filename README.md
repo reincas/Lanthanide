@@ -239,7 +239,16 @@ Expect it to run for more than 24 hours.
 It will generate about 9 GB of data in the folder `vaults`.
 
 It is recommended to close the cache file gracefully by calling `Lanthanide.close()` when the work on the
-object is finished.
+object is finished:
+
+```
+ion = Lanthanide(2):
+print(ion)
+energies = ion.energies
+reduced = ion.reduced()
+ion.close()
+```
+
 As an alternative, the Lanthanide class also supports the context management protocol.
 You can thus use it to start a `with` block.
 The cache file will be closed automatically when the program leaves the block and no manual closing is required:
@@ -247,6 +256,7 @@ The cache file will be closed automatically when the program leaves the block an
 ```
 with Lanthanide(2) as ion:
     print(ion)
+    energies = ion.energies
     reduced = ion.reduced()
 ```
 
