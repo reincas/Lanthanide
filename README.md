@@ -226,7 +226,13 @@ Therefore, the Lanthanide package stores them after their first calculation in t
 
 of the package installation folder.
 The calculation can be very time consuming especially for configurations with 4-10 electrons.
-You should therefore consider running the script `create_all.py` in the folder `test`.
+You should therefore consider running the the function `create_all()`:
+
+```
+from lanthanide import create_all
+create_all()
+```
+
 It will trigger the calculation of all perturbation hamiltonians and reduced transition matrix elements
 for all lanthanide ions.
 Expect it to run for more than 24 hours.
