@@ -189,7 +189,7 @@ $$
 with the Judd-Ofelt parameters $\Omega_2$, $\Omega_4$, and $\Omega_6$. For magnetic dipole transitions we use  
 
 $$
-S_{md} = \frac{1}{4\pi\varepsilon_0} \frac{1}{3(2J_i+1)} \frac{\beta_m^2}{\hbar^2 c^2} 
+S_{md} = \frac{1}{4\pi\varepsilon_0} \frac{1}{3(2J_i+1)} \frac{\beta_m^2}{c^2 \hbar^2} 
 |\langle J_j\parallel \mathbf{L}+g_s\mathbf{S}\parallel J_i\rangle|^2
 $$
 
