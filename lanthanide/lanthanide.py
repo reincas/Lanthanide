@@ -234,8 +234,8 @@ class Lanthanide:
         np.fill_diagonal(result_md, 0.0)
 
         # Apply scaling factors
-        result_ed *= CONST_e * CONST_e / (4 * np.pi * CONST_eps0)
-        result_md *= CONST_e * CONST_e / (4 * np.pi * CONST_eps0 * 4 * CONST_me * CONST_me * CONST_c * CONST_c )
+        result_ed *= CONST_e**2 / (4 * np.pi * CONST_eps0)
+        result_md *= CONST_e**2 / (4 * np.pi * CONST_eps0) * CONST_h**2 / (8 * np.pi**2 * CONST_me**2 * CONST_c**2 )
         return LineStrength(Sed=result_ed, Smd=result_md)
 
     def str_levels(self, min_weight=0.0):
