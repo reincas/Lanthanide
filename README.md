@@ -194,6 +194,7 @@ S_{md} = \frac{1}{3(2J_i+1)} \frac{1}{4\pi\varepsilon_0} \frac{\beta_m^2}{c^2 \h
 $$
 
 with the Bohr magneton $\beta_m = \frac{e\hbar}{2m_e}$.
+The physical unit of the line strength values is Jm<sup>3</sup>.
 For a given set of Judd-Ofelt parameters in pm<sup>2</sup> you can also get the radiative line strength of
 each transition using the method `line_strengths()`:
 
