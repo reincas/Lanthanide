@@ -242,7 +242,7 @@ It is recommended to close the cache file gracefully by calling `Lanthanide.clos
 object is finished:
 
 ```
-ion = Lanthanide(2):
+ion = Lanthanide(2)
 print(ion)
 energies = ion.energies
 reduced = ion.reduced()
