@@ -205,6 +205,8 @@ print(strength.Sed[1:, 0])
 print(strength.Smd[1:, 0])
 ```
 
+## Spectroscopic parameters
+
 The line strengths are often used to calculate the dimensionless oscillator strength of a transition $i\to j$
 in absorption or emission:
 
