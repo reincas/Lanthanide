@@ -203,7 +203,7 @@ f_{ij} = \frac{4\pi\varepsilon_0}{e^2} \frac{8 \pi^2 m_e c k_{ij}}{h}
 \[\chi^\prime_{ed}S_{ed} + \chi^\prime_{md}S_{md}\]
 $$
 
-with the energy level difference $k_{ij}=\abs(k_i-k_j)$ (in wavenumbers) and the local field correction factors
+with the energy level difference $k_{ij}=\text{abs}(k_i-k_j)$ (in wavenumbers) and the local field correction factors
 
 $$
 \chi^\prime_{ed} = \frac{(n^2+2)^2}{9n} \qquad \chi^\prime_{md} = n
