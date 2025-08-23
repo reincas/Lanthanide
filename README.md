@@ -261,6 +261,7 @@ It will trigger the calculation of all perturbation hamiltonians and reduced tra
 for all lanthanide ions.
 Expect it to run for more than 24 hours on a typical office PC.
 It will generate about 9 GB of data in the folder `vaults`.
+There is one cache file for each of the 13 lanthanide configurations.
 
 It is recommended to close the cache file gracefully by calling `Lanthanide.close()` when the work on the
 object is finished:
