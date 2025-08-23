@@ -88,10 +88,16 @@ abbreviations for the common choices $M^2 = 0.56 M^0$, $M^4 = 0.38 M^0$ and $P^4
 The unit of the parameters is that of an energy.
 The code does not depend on your choice of the unit, but it is advisable to stay with the literature standard,
 which means using wavenumbers in cm<sup>-1</sup>.
-Wavenumbers are defined as the inverse of radiation wavelengths in vacuum:
+As the inverse of radiation wavelengths in vacuum
 
 $$
 k = \frac{1}{\lambda}
+$$
+
+wavenumbers are proportional to the photon energy of the radiation:
+
+$$
+E = h c k
 $$
 
 You may choose operation in either the SLJM or the SLJ space. The latter is of special importance for
@@ -212,7 +218,7 @@ $$
 Another useful quantity is the radiative emission rate (in s<sup>-1</sup>) of a transition:
 
 $$
-A_{ij} = \frac{64 \pi^4 \Delta k^3}{h}
+A_{ij} = \frac{64 \pi^4 k_{ij}^3}{h}
 \[\chi_{ed}S_{ed} + \chi_{md}S_{md}\]
 $$
 
@@ -222,8 +228,8 @@ $$
 \chi_{ed} = \frac{n(n^2+2)^2}{9} \qquad \chi_{md} = n^3
 $$
 
-Please be aware that due to dispersion the refractive index $n(\Delta k)$ in general is a function of the
-wavenumber $\Delta k$ of the transition.
+Please be aware that due to dispersion the refractive index $n(k_{ij})$ in general is a function of the
+wavenumber $k_{ij}$ of the transition.
 
 ## Matrix class
 
