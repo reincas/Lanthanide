@@ -194,8 +194,8 @@ S_{md} = \frac{1}{3(2J_i+1)} \frac{1}{4\pi\varepsilon_0} \frac{\beta_m^2}{c^2 \h
 $$
 
 with the Bohr magneton $\beta_m = \frac{e\hbar}{2m_e}$.
-For a given set of Judd-Ofelt parameters you can also get the radiative line strength of each transition using
-the method `line_strengths()`:
+For a given set of Judd-Ofelt parameters in pm<sup>2</sup> you can also get the radiative line strength of
+each transition using the method `line_strengths()`:
 
 ```
 judd_ofelt = { "JO/2": 1.981, "JO/4": 4.645, "JO/6": 6.972 }

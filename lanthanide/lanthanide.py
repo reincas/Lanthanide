@@ -21,8 +21,8 @@ NAMES = ["La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er",
 CONST_e = 1.6022e-19  # C
 CONST_eps0 = 8.8542e-12  # C / V m
 CONST_me = 9.1095e-31  # kg
-CONST_h    = 6.6262e-34    # J s
-CONST_c    = 2.99792458e8  # m / s
+CONST_h = 6.6262e-34  # J s
+CONST_c = 2.99792458e8  # m / s
 
 ##########################################################################
 #
@@ -123,12 +123,13 @@ RADIAL = {
 
 JUDD_OFELT = {
     "Pr3+/ZBLAN":  # from [RC]
-        { "JO/2": 1.981, "JO/4": 4.645, "JO/6": 6.972 },
+        {"JO/2": 1.981, "JO/4": 4.645, "JO/6": 6.972},
     "Er3+/ZBLAN":  # from [RC]
-        { "JO/2": 2.915, "JO/4": 1.464, "JO/6": 1.184 },
+        {"JO/2": 2.915, "JO/4": 1.464, "JO/6": 1.184},
     "Tm3+/ZBLAN":  # from [RC]
-        { "JO/2": 2.920, "JO/4": 1.856, "JO/6": 0.670 },
+        {"JO/2": 2.920, "JO/4": 1.856, "JO/6": 0.670},
 }
+
 
 @dataclass
 class Reduced:
@@ -234,8 +235,8 @@ class Lanthanide:
         np.fill_diagonal(result_md, 0.0)
 
         # Apply scaling factors
-        result_ed *= CONST_e**2 / (4 * np.pi * CONST_eps0)
-        result_md *= CONST_e**2 / (4 * np.pi * CONST_eps0) * CONST_h**2 / (8 * np.pi**2 * CONST_me**2 * CONST_c**2 )
+        result_ed *= CONST_e ** 2 / (4 * np.pi * CONST_eps0) * 1e-24
+        result_md *= 1 / (4 * np.pi * CONST_eps0) * (CONST_e * CONST_h / (2 * np.pi * 2 * CONST_me * CONST_c)) ** 2
         return LineStrength(Sed=result_ed, Smd=result_md)
 
     def str_levels(self, min_weight=0.0):
