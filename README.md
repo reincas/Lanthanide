@@ -86,7 +86,7 @@ radial = { "base": 327.39, "H1/2": 68576.05, "H1/4": 49972.76, "H1/6": 32415.29,
 where `"base"` fixes the energy of the ground state and the special parameters `"H5fix"` and `"H6fix"` are
 abbreviations for the common choices $M^2 = 0.56 M^0$, $M^4 = 0.38 M^0$ and $P^4 = 0.75 P^2$, $P^6 = 0.50 P^2$.
 The unit of the parameters is that of an energy.
-The code does not depend on your choice of the unit, but it is advisable to stay with standard,
+The code does not depend on your choice of the unit, but it is advisable to stay with the literature standard,
 which means using wavenumbers in cm<sup>-1</sup>.
 Wavenumbers are defined as the inverse of radiation wavelengths in vacuum:
 
