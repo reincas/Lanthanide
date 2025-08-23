@@ -88,7 +88,11 @@ abbreviations for the common choices $M^2 = 0.56 M^0$, $M^4 = 0.38 M^0$ and $P^4
 The unit of the parameters is that of an energy.
 The code does not depend on your choice of the unit, but it is advisable to stay with standard,
 which means using wavenumbers in cm<sup>-1</sup>.
-Wavenumber is the inverse of a radiation wavelength in vacuum: $k=1/\lambda$. 
+Wavenumber is the inverse of a radiation wavelength in vacuum:
+
+$$
+k = \frac{1}{\lambda}
+$$
 
 You may choose operation in either the SLJM or the SLJ space. The latter is of special importance for
 Lanthanides in glasses where the Stark splitting cannot be resolved and thus the magnetic quantum number
