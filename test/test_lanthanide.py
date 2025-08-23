@@ -8,10 +8,15 @@ import numpy as np
 
 from lanthanide import Lanthanide, RADIAL, Coupling, StateListJ, StateJ
 
-F02_ENERGIES = [205.0, 2305.84812, 4482.86283, 5113.96719, 6507.57988, 6935.88967, 9949.42237,
-                17040.04537, 20881.93048, 21514.06056, 21516.9519, 22660.35176, 46901.03677]
+F02_ENERGIES = [327.39, 2363.85298, 4498.00172, 5106.88044, 6463.20358, 6954.38691, 9882.96568,
+                17022.73705, 20856.47111, 21471.52564, 21510.80436, 22646.25844, 46461.4324]
+F02_REDUCED = [0.20208, 0.03274, 0.40418, 0.34733, 0.05105, 0.00609,
+               0.0162, 0.17265, 0.17099, 0.0499, 0.03641, 0.00663]
 
 with Lanthanide(2) as ion:
+    ion.set_radial(RADIAL["Pr3+/ZBLAN"])
+    reduced = ion.reduced().U4[1:, 0]
+    assert list(np.round(reduced, 5)) == F02_REDUCED
     assert str(ion) == "Pr3+ (4f2)"
     assert list(np.round(ion.energies, 5)) == F02_ENERGIES
     assert isinstance(ion.coupling, Coupling)
@@ -19,9 +24,16 @@ with Lanthanide(2) as ion:
     assert isinstance(ion.intermediate, StateListJ)
     assert all(isinstance(state, StateJ) for state in ion.intermediate.states)
     state = ion.intermediate.states[7]
-    assert round(state.energy, 5) == 17040.04537
-    assert list(np.round(state.weights, 5)) ==[0.89133, 0.02248, 0.08618]
+    assert round(state.energy, 5) == 17022.73705
+    assert list(np.round(state.weights, 5)) ==[0.8986, 0.02108, 0.08032]
 
-    #print(", ".join(map(str, np.round(state.weights, 5))))
-    print(state.weights)
+    judd_ofelt = {"JO/2": 1.981, "JO/4": 4.645, "JO/6": 6.972}
+    strength = ion.line_strengths(judd_ofelt)
+    sed = strength.Sed[1:, 0]
+    smd = strength.Smd[1:, 0]
+
+    print(np.min(strength.Sed), np.max(strength.Sed))
+    print(np.min(strength.Smd), np.max(strength.Smd))
+    print(", ".join(map(str, np.round(sed, 5))))
+    print(", ".join(map(str, np.round(smd, 5))))
 

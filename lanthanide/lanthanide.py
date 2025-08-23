@@ -21,6 +21,8 @@ NAMES = ["La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er",
 CONST_e = 1.6022e-19  # C
 CONST_eps0 = 8.8542e-12  # C / V m
 CONST_me = 9.1095e-31  # kg
+CONST_h    = 6.6262e-34    # J s
+CONST_c    = 2.99792458e8  # m / s
 
 ##########################################################################
 #
@@ -220,12 +222,12 @@ class Lanthanide:
     def line_strengths(self, judd_ofelt: dict):
         # Multiply each matrix column with factor with J of the initial state
         reduced = self.reduced()
-        Ji = np.array([1 / (3 * (2 * j + 1)) for j in self.intermediate.J])
+        invJi = np.array([1 / (3 * (2 * j + 1)) for j in self.intermediate.J])
 
         result_ed = (judd_ofelt["JO/2"] * reduced.U2 +
                      judd_ofelt["JO/4"] * reduced.U4 +
-                     judd_ofelt["JO/6"] * reduced.U6) * Ji
-        result_md = reduced.LS * Ji
+                     judd_ofelt["JO/6"] * reduced.U6) * invJi
+        result_md = reduced.LS * invJi
 
         # Remove diagonal elements
         np.fill_diagonal(result_ed, 0.0)
@@ -233,7 +235,7 @@ class Lanthanide:
 
         # Apply scaling factors
         result_ed *= CONST_e * CONST_e / (4 * np.pi * CONST_eps0)
-        result_md *= CONST_e * CONST_e / (4 * np.pi * CONST_eps0 * 4 * CONST_me * CONST_me)
+        result_md *= CONST_e * CONST_e / (4 * np.pi * CONST_eps0 * 4 * CONST_me * CONST_me * CONST_c * CONST_c )
         return LineStrength(Sed=result_ed, Smd=result_md)
 
     def str_levels(self, min_weight=0.0):

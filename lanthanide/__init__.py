@@ -9,7 +9,8 @@ from .wigner import wigner3j
 from .state import Coupling, StateListProduct, StateListSLJM, StateListSLJ, StateListJ, \
     StateProduct, StateSLJM, StateSLJ, StateJ
 from .matrix import MATRIX, reduced_matrix
-from .lanthanide import RADIAL, JUDD_OFELT, Lanthanide
+from .lanthanide import RADIAL, JUDD_OFELT, Lanthanide, \
+    CONST_e, CONST_eps0, CONST_me, CONST_h, CONST_c
 
 
 def create_all():

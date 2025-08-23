@@ -164,7 +164,7 @@ the reduced matrix elements
 $\langle J_j\parallel \mathbf{U}^{(2)}\parallel J_i \rangle$,
 $\langle J_j\parallel \mathbf{U}^{(4)}\parallel J_i \rangle$, and
 $\langle J_j\parallel \mathbf{U}^{(6)}\parallel J_i \rangle$ for electric and
-$\langle J_j\parallel \mathbf{M}\parallel J_i \rangle$
+$\langle J_j\parallel (\mathbf{L} + g_s \mathbf{S}) / \hbar\parallel J_i \rangle$
 for magnetic dipole transitions.
 The method `Lanthanide.reduced()` delivers a `Reduced` object, which contains all four squared reduced matrices 
 as attributes `U2`, `U4`, `U6`, and `LS` as required for the calculation of transition strengths.
@@ -189,7 +189,7 @@ $$
 with the Judd-Ofelt parameters $\Omega_2$, $\Omega_4$, and $\Omega_6$. For magnetic dipole transitions we use  
 
 $$
-S_{md} = \frac{e^2}{4\pi\varepsilon_0} \frac{1}{3(2J_i+1)} \frac{1}{4 m_e^2} 
+S_{md} = \frac{e^2}{4\pi\varepsilon_0} \frac{1}{3(2J_i+1)} \frac{1}{4 m_e^2 c^2} 
 |\langle J_j\parallel \mathbf{L}+g_s\mathbf{S}\parallel J_i\rangle|^2
 $$
 
