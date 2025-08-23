@@ -179,7 +179,7 @@ print(reduced.U4[1:, 0])
 ```
 
 There is no universally accepted definition of the line strength of a transition. For electric dipole transitions,
-the Lanthanide package uses a definition, which gives line strength values in Jm<sup>3</sup>:
+the Lanthanide package uses the definition
 
 $$
 S_{ed} = \frac{1}{3(2J_i+1)} \frac{e^2}{4\pi\varepsilon_0} \sum\limits_{\lambda=2,4,6} 
@@ -194,6 +194,7 @@ S_{md} = \frac{1}{3(2J_i+1)} \frac{1}{4\pi\varepsilon_0} \frac{\beta_m^2}{c^2 \h
 $$
 
 with the Bohr magneton $\beta_m = \frac{e\hbar}{2m_e}$.
+The physical unit of these line strength values is Jm<sup>3</sup>.
 For a given set of Judd-Ofelt parameters in pm<sup>2</sup> you can also get the radiative line strength of
 each transition using the method `line_strengths()`:
 
