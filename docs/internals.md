@@ -12,6 +12,7 @@ objects. Results with even numerator are converted into ìnt`objects:
 
 ```
 from lanthanide import HalfInt
+
 print(HalfInt(1) + 2 == HalfInt(5))
 print(4 * HalfInt(3) == 6)
 print(5 * HalfInt(1) == HalfInt(5))
