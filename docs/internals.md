@@ -66,6 +66,10 @@ from lanthanide import wigner6j
 factor = wigner6j(1, 2, 3, 2, 1, 2)
 ```
 
+The calculation of Wigner symbols can be costly. Therefore, the Lanthanide package is caching calls of the
+functions `wigner3j` and `wigner6j`. Subsequent function calls with the same parameters take their result from the
+cache.
+
 ## Matrix class
 
 ... to be added ...
