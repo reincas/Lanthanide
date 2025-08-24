@@ -295,8 +295,8 @@ See Python scripts in the directory `test`.
 
 ## Internal structures
 
-If you want to dig deeper into the package and use internal classes and functions, there is
-some [documentation](docs/internals.md) in the folder `docs`.
+If you want to dig deeper into the package and use internal classes and functions, you might find some additional
+[documentation](docs/internals.md) in the folder `docs` useful.
 
 ## License
 
