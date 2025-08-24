@@ -7,7 +7,7 @@ calculation is based on Racahs single electron unit tensor operators as develope
 in my PhD thesis [1]. You find a copy of the [thesis](docs/Dissertation.pdf) and
 [corrections](docs/errata5.pdf) in the folder `docs`.
 
-The matrix elements are calculated in the space of determinantal product 
+The matrix elements are calculated in the space of determinantal product
 states and then transformed to the SLJM space using the chain of operators:
 
 $$ \mathbf{S}^2 \to \mathbf{G}(R_7) \to \mathbf{G}(G_2)
@@ -18,42 +18,42 @@ to calculate the energy levels of a given Lathanide ion.
 In the order of their relative magnitude they are:
 
 1. Coulomb interaction between the electrons (1st order):
-$\mathbf{H}_1 = F^2 \mathbf{f}_2 + F^4 \mathbf{f}_4 + F^6 \mathbf{f}_6$,
-with the radial integrals $F^2$, $F^4$, and $F^6$
-and the respective angular two-electron operators $\mathbf{f}_2$, $\mathbf{f}_4$, and $\mathbf{f}_6$.
-The Lanthanide package uses the keys `"H1/2"`, `"H1/4"`, and `"H1/6"` for radial parameters (integrals)
-and angular matrices (operators).
+   $\mathbf{H}_1 = F^2 \mathbf{f}_2 + F^4 \mathbf{f}_4 + F^6 \mathbf{f}_6$,
+   with the radial integrals $F^2$, $F^4$, and $F^6$
+   and the respective angular two-electron operators $\mathbf{f}_2$, $\mathbf{f}_4$, and $\mathbf{f}_6$.
+   The Lanthanide package uses the keys `"H1/2"`, `"H1/4"`, and `"H1/6"` for radial parameters (integrals)
+   and angular matrices (operators).
 2. Magnetic spin-orbit interaction of each electron (1st order):
-$\mathbf{H}_2 = \zeta \mathbf{z}$,
-with the radial integral $\zeta$ and the angular one-electron operator $\mathbf{z}$.
-The Lanthanide package uses the key `"H2"` for the radial parameter and the angular matrix.
+   $\mathbf{H}_2 = \zeta \mathbf{z}$,
+   with the radial integral $\zeta$ and the angular one-electron operator $\mathbf{z}$.
+   The Lanthanide package uses the key `"H2"` for the radial parameter and the angular matrix.
 3. Coulomb inter-configuration interactions (2nd order):
-$\mathbf{H}_3 = \alpha \mathbf{L}^2 + \beta \mathbf{G}(G_2) + \gamma \mathbf{G}(R_7)$,
-with the radial integrals $\alpha$, $\beta$, and $\gamma$.
-The respective effective angular two-electron operators $\mathbf{L}^2$, $\mathbf{G}(G_2)$, and $\mathbf{G}(R_7)$
-are the squared operator of the total orbital angular momentum and
-the Casimir operators of the symmetry groups $R_7$ and $G_2$.
-The Lanthanide package uses the keys `"H3/0"`, `"H3/1"`, and `"H3/2"` for radial parameters and angular matrices.
+   $\mathbf{H}_3 = \alpha \mathbf{L}^2 + \beta \mathbf{G}(G_2) + \gamma \mathbf{G}(R_7)$,
+   with the radial integrals $\alpha$, $\beta$, and $\gamma$.
+   The respective effective angular two-electron operators $\mathbf{L}^2$, $\mathbf{G}(G_2)$, and $\mathbf{G}(R_7)$
+   are the squared operator of the total orbital angular momentum and
+   the Casimir operators of the symmetry groups $R_7$ and $G_2$.
+   The Lanthanide package uses the keys `"H3/0"`, `"H3/1"`, and `"H3/2"` for radial parameters and angular matrices.
 4. More Coulomb inter-configuration interactions (2nd order):
-$\mathbf{H}_4 = \sum_c T^c \mathbf{t}_c$, with $c = 2, 3, 4, 6, 7, 8$.
-The radial integrals are $T^c$ and the respective effective angular three-electron operators
-$\mathbf{t}_c$.
-The Lanthanide package uses the keys `"H4/2"`, `"H4/3"`, `"H4/4"`, `"H4/6"`, `"H4/7"`, and `"H4/8"` for
-radial parameters and angular matrices.
+   $\mathbf{H}_4 = \sum_c T^c \mathbf{t}_c$, with $c = 2, 3, 4, 6, 7, 8$.
+   The radial integrals are $T^c$ and the respective effective angular three-electron operators
+   $\mathbf{t}_c$.
+   The Lanthanide package uses the keys `"H4/2"`, `"H4/3"`, `"H4/4"`, `"H4/6"`, `"H4/7"`, and `"H4/8"` for
+   radial parameters and angular matrices.
 5. Magnetic interactions of the spin of one electron with the spin (ss) or the orbital angular momentum (soo)
-of another electron (1st order):
-$\mathbf{H}_5 = M^0 \mathbf{m}_0 + M^2 \mathbf{m}_2 + M^4 \mathbf{m}_4$,
-with the Marvin integrals $M^0$, $M^2$, and $M^4$ and the respective angular two-electron operators
-$\mathbf{m}_0$, $\mathbf{m}_2$, and $\mathbf{m}_4$.
-The Lanthanide package uses the keys `"H5/0"`, `"H5/2"`, and `"H5/4"` for radial parameters and angular matrices.
+   of another electron (1st order):
+   $\mathbf{H}_5 = M^0 \mathbf{m}_0 + M^2 \mathbf{m}_2 + M^4 \mathbf{m}_4$,
+   with the Marvin integrals $M^0$, $M^2$, and $M^4$ and the respective angular two-electron operators
+   $\mathbf{m}_0$, $\mathbf{m}_2$, and $\mathbf{m}_4$.
+   The Lanthanide package uses the keys `"H5/0"`, `"H5/2"`, and `"H5/4"` for radial parameters and angular matrices.
 6. Magnetic inter-configuration spin-orbit interactions (2nd order):
-$\mathbf{H}_6 = P^2 \mathbf{p}_2 + P^4 \mathbf{p}_4 + P^6 \mathbf{p}_6$,
-with the radial integrals $P^2$, $P^4$, and $P^6$ and the respective angular two-electron operators
-$\mathbf{p}_2$, $\mathbf{p}_4$, and $\mathbf{p}_6$.
-The Lanthanide package uses the keys `"H6/2"`, `"H6/4"`, and `"H6/6"` for radial parameters and angular matrices. 
+   $\mathbf{H}_6 = P^2 \mathbf{p}_2 + P^4 \mathbf{p}_4 + P^6 \mathbf{p}_6$,
+   with the radial integrals $P^2$, $P^4$, and $P^6$ and the respective angular two-electron operators
+   $\mathbf{p}_2$, $\mathbf{p}_4$, and $\mathbf{p}_6$.
+   The Lanthanide package uses the keys `"H6/2"`, `"H6/4"`, and `"H6/6"` for radial parameters and angular matrices.
 
 The first order perturbations are interactions inside the 4f configuration, while second order perturbations
-take interactions with all other configuration into account. They are treated by effective operators 
+take interactions with all other configuration into account. They are treated by effective operators
 mathematically operating inside the 4f configuration.
 
 ## Installation
@@ -122,7 +122,7 @@ for LaF<sub>3</sub>.
 in this early state of the software.
 I've also not implemented the crystal field operator yet, which will require SLJM coupling._
 
-The Lanthanide object builds the matrix of the total perturbation Hamiltonian and diagonalises it, which results 
+The Lanthanide object builds the matrix of the total perturbation Hamiltonian and diagonalises it, which results
 in the energy level and the SLJ composition of each state in intermediate coupling.
 The process is accelerated by diagonalising the much smaller J sub-spaces individually.
 Each state in intermediate coupling is a mixture of different SLJ states with the same total angular momentum J.
@@ -165,9 +165,9 @@ $\langle J_j\parallel \mathbf{U}^{(4)}\parallel J_i \rangle$, and
 $\langle J_j\parallel \mathbf{U}^{(6)}\parallel J_i \rangle$ for electric and
 $\frac{1}{\hbar} \langle J_j\parallel \mathbf{L} + g_s \mathbf{S}\parallel J_i \rangle$
 for magnetic dipole transitions.
-The method `Lanthanide.reduced()` delivers a `Reduced` object, which contains all four squared reduced matrices 
+The method `Lanthanide.reduced()` delivers a `Reduced` object, which contains all four squared reduced matrices
 as attributes `U2`, `U4`, `U6`, and `LS` as required for the calculation of transition strengths.
-The matrix element for a transition from an initial state `i` to a final state `j` is addressed by `array[j,i]`. 
+The matrix element for a transition from an initial state `i` to a final state `j` is addressed by `array[j,i]`.
 This code shows the squared elements
 $|\langle J_j\parallel \mathbf{U}^{(4)}\parallel J_0 \rangle|^2$ for transitions from the ground state
 to all excited states:
@@ -181,14 +181,14 @@ There is no universally accepted definition of the line strength of a transition
 the Lanthanide package uses the definition
 
 $$
-S_{ed} = \frac{1}{3(2J_i+1)} \frac{e^2}{4\pi\varepsilon_0} \sum\limits_{\lambda=2,4,6} 
+S_{ed} = \frac{1}{3(2J_i+1)} \frac{e^2}{4\pi\varepsilon_0} \sum\limits_{\lambda=2,4,6}
 \Omega_\lambda |\langle J_j\parallel \mathbf{U}^{(\lambda)}\parallel J_i\rangle|^2
 $$
 
-with the Judd-Ofelt parameters $\Omega_2$, $\Omega_4$, and $\Omega_6$. For magnetic dipole transitions we use  
+with the Judd-Ofelt parameters $\Omega_2$, $\Omega_4$, and $\Omega_6$. For magnetic dipole transitions we use
 
 $$
-S_{md} = \frac{1}{3(2J_i+1)} \frac{1}{4\pi\varepsilon_0} \frac{\beta_m^2}{c^2 \hbar^2} 
+S_{md} = \frac{1}{3(2J_i+1)} \frac{1}{4\pi\varepsilon_0} \frac{\beta_m^2}{c^2 \hbar^2}
 |\langle J_j\parallel \mathbf{L}+g_s\mathbf{S}\parallel J_i\rangle|^2
 $$
 
@@ -235,14 +235,6 @@ $$
 
 Please be aware that due to dispersion the refractive index $n(k_{ij})$ in general is a function of the
 wavenumber $k_{ij}$ of the transition.
-
-## Matrix class
-
-... to be added ...
-
-## State classes
-
-... to be added ...
 
 ## Caching
 
@@ -300,6 +292,11 @@ is applied via `Lanthanide.set_radial()`.
 ## Usage examples
 
 See Python scripts in the directory `test`.
+
+## Internal structures
+
+If you want to dig deeper into the package and use internal classes and functions, there is
+some [documentation](docs/internals.md) in the folder `docs`.
 
 ## License
 
