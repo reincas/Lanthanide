@@ -40,7 +40,7 @@ from lanthanide import wigner3j
 factor = wigner3j(2, HalfInt(3), HalfInt(3), 0, -HalfInt(1), HalfInt(1))
 ```
 
-The Lanthanide package does not require Wigner 6-j symbols, because it builds tensor matrices in the space of
+The Lanthanide package does not require Wigner 6-j symbols internally, because it builds tensor matrices in the space of
 determinantal product states. However, if you want to process the matrices in higher-order coupling, you might be
 interested in Wigner 6-j symbols
 
