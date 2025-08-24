@@ -19,6 +19,13 @@ print(5 * HalfInt(1) == HalfInt(5))
 print(HalfInt(5) >= 1)
 print(HalfInt(1) - HalfInt(5) == -2)
 print(HalfInt(3) - HalfInt(2) == HalfInt(1))
+print(HalfInt(-3).numerator == -3)
+```
+
+The class has one attribute `numerator`:
+
+```
+print(HalfInt(-3).numerator == -3)
 ```
 
 ## Wigner symbols
