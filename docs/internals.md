@@ -44,12 +44,12 @@ The Lanthanide package does not require Wigner 6-j symbols, because it builds te
 determinantal product states. However, if you want to process the matrices in higher-order coupling, you might be
 interested in Wigner 6-j symbols
 
-```
+$$
 \begin{Bmatrix}
 j_1 & j_2 & j_3 \\
 l_1 & l_2 & l_3
 \end{Bmatrix}
-```
+$$
 
 as well. For that purpose, the package provides the function `wigner6j(j1, j2, j3, l1, l2, l3)`. The arguments may be
 either `int` or `HalfInt` objects again:
