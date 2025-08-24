@@ -8,7 +8,7 @@ but might be interesting, if you want to dig deeper. You can import each of them
 The value of quantum numbers of angular momenta in quantum mechanics in general may be integer or half-integer. The
 class `HalfInt` is a lean solution for the representation of half-integer values. To create a `HalfInt` object, provide
 its numerator as a parameter. The class supports basic mathematical operations involving other `HalfInt` of `int`
-objects. Results with even numerator are converted into ìnt`objects:
+objects. Results with even numerator are converted into `ìnt` objects:
 
 ```
 from lanthanide import HalfInt
