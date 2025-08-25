@@ -514,6 +514,8 @@ class SingleElements:
         if self.num_electrons >= 3:
             yield self.group["three"]
 
+    def __str__(self):
+        return f"SingleElements support object for a {self.num_electrons} electron configuration"
 
 def init_single(vault, group_name, states):
     """ Initialize the cache for the support structure for the calculation of tensor operator matrix elements for
