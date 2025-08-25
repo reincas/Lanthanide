@@ -117,8 +117,8 @@ with Lanthanide(2) as ion:
             print(f"Matrix element ({final_index}, {initial_index}) = {value}"=
 ```
 
-For a more optimized application you may investigate the module `unit`. An important feature of this implementation is
-the caching of the value of evaluated elementary operators.
+For a more optimized application you may investigate the module `unit`. An important feature of the implementation
+in `unit` is caching of the value of evaluated elementary operators.
 
 ## Matrix class
 
