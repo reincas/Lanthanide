@@ -17,6 +17,10 @@ from functools import lru_cache
 from .halfint import HalfInt
 
 
+##########################################################################
+# Wigner 3-j symbol
+##########################################################################
+
 def wigner3j(j1: Union[int, HalfInt], j2: Union[int, HalfInt], j3: Union[int, HalfInt],
              m1: Union[int, HalfInt], m2: Union[int, HalfInt], m3: Union[int, HalfInt]) -> float:
     """ Calculate Wigner 3-j symbol for integer or half-integer (HalfInt) parameters. """
@@ -157,6 +161,10 @@ def wigner3j_double(dj1: int, dj2: int, dj3: int, dm1: int, dm2: int, dm3: int) 
         result = -result
     return result
 
+
+##########################################################################
+# Wigner 6-j symbol
+##########################################################################
 
 def wigner6j(j1: Union[int, HalfInt], j2: Union[int, HalfInt], j3: Union[int, HalfInt],
              l1: Union[int, HalfInt], l2: Union[int, HalfInt], l3: Union[int, HalfInt]) -> float:
