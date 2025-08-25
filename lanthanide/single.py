@@ -4,7 +4,21 @@
 # This program is free software under the terms of the MIT license.      #
 ##########################################################################
 #
-# Sparse matrices, bra-ket keys for reduced space and increased speed.
+# This module provides an interface supporting the calculation of the
+# matrices of tensor operators in the determinantal product space of a
+# given configuration. It exploits the fact that these matrices are
+# necessarily sparse because all matrix elements between states which
+# differ in more electrons than the respective tensor operator is acting
+# on, must be zero.
+#
+# The data structure of the interface contains a list of potential
+# non-zero matrix elements and a list of binary bra-ket keys for one-,
+# two, or three-electron tensor operators. The list of bra-ket keys
+# contains the tuples of final and initial electrons for each elementary
+# operator to be evaluated for the calculation of a matrix element.
+#
+# Conversion of electron tuples to binary keys reduces the disk space
+# significantly and increases the calculation speed.
 #
 ##########################################################################
 
