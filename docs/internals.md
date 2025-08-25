@@ -70,6 +70,11 @@ The calculation of Wigner symbols can be costly. Therefore, the Lanthanide packa
 the functions `wigner3j` and `wigner6j`. Subsequent function calls with the same parameters take their result from the
 cache.
 
+## SingleElements class
+
+The class `SingleElements` provides a support structure, which allows you to calculate matrices of your own one-,
+two- or three-electron tensor operators
+
 ## Matrix class
 
 ... to be added ...
