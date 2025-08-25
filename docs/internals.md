@@ -118,7 +118,8 @@ with Lanthanide(2) as ion:
 ```
 
 For a more optimized application you may investigate the module `unit`. An important feature of the implementation
-in `unit` is caching of the value of evaluated elementary operators.
+in `unit` is caching of the value of evaluated elementary operators. For each set of initial and final elements the
+elementary operator is thus evaluated only once.
 
 ## Matrix class
 
