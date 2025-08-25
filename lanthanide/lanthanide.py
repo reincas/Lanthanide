@@ -166,7 +166,7 @@ class Lanthanide:
         self.vault = h5py.File(VAULT_PATH / f"data-f{num:02d}.hdf5", "a")
         if "valid" not in self.vault.attrs:
             self.vault.attrs["valid"] = True
-        self.single = init_single(self.vault, "single", self.num, self.product_states)
+        self.single = init_single(self.vault, "single", self.product_states)
         self.unit_vault = init_unit(self.vault, "unit")
         self._state_dict_ = init_states(self.vault, "states", self)
         self.matrix_vault = init_matrix(self.vault, "matrix")
