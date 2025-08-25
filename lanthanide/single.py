@@ -12,11 +12,8 @@
 # on, must be zero.
 #
 # The data structure of the interface contains a list of potential
-# non-zero matrix elements and a list of binary bra-ket keys for one-,
-# two, or three-electron tensor operators. The list of bra-ket keys
-# contains the tuples of final and initial electrons for each elementary
-# operator to be evaluated for the calculation of a matrix element.
-#
+# non-zero matrix elements and a list of binary bra-ket keys for the
+# evaluation of one-, two, or three-electron elementary tensor operators.
 # Conversion of electron tuples to binary keys reduces the disk space
 # significantly and increases the calculation speed.
 #
