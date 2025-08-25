@@ -72,8 +72,19 @@ cache.
 
 ## SingleElements class
 
-The class `SingleElements` provides a support structure, which allows you to calculate matrices of your own one-,
-two- or three-electron tensor operators
+The class `SingleElements` supports you with the calculation of matrices of your own one-, two- or three-electron
+tensor operators in the determinantal product space. It exploits the fact that these matrices are necessarily
+sparse because all matrix elements between states which differ in more electrons than the respective tensor operator
+is acting on, must be zero.
+
+The `SingleElements` object for the current configuration is available in the attribute `single` of a `Lanthanide`
+object:
+
+```
+with Lanthanide(2) as ion:
+    single = ion.single
+```
+
 
 ## Matrix class
 
