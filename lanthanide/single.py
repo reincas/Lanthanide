@@ -505,34 +505,50 @@ class SingleElements:
 
 
 def init_single(vault, group_name, states):
+    """ Initialize the cache for the support structure for the calculation of tensor operator matrix elements for
+    the given determinantal product states in the HDF5 group with given name in the given HDF5 file vault. """
+
+    # Delete the group in the HDF5 file, if the cache is marked as invalid or its version number does not match
     if group_name in vault:
         if not vault.attrs["valid"] or "version" not in vault[group_name].attrs or \
                 vault[group_name].attrs["version"] != SINGLE_VERSION:
             del vault[group_name]
             vault.flush()
 
+    # Generate all data, if the HDF5 group is missing
     if group_name not in vault:
+
+        # Render all cache structures following in the dependence chain as invalid
         vault.attrs["valid"] = False
+
+        # Create new HDF5 group and store the current version number
         vault.create_group(group_name)
         vault[group_name].attrs["version"] = SINGLE_VERSION
 
+        # Calculate the lists of matrix indices and bra-ket keys for one-, two-, and three-electron operators
         single = single_elements(states)
 
+        # Store the lists of matrix indices and bra-ket keys for one-electron operators as HDF5 datasets
         if len(states) >= 1:
             group = vault[group_name].create_group("one")
             group.create_dataset("indices", data=single[0][0], compression="gzip", compression_opts=9)
             group.create_dataset("elements", data=single[0][1], compression="gzip", compression_opts=9)
 
+        # Store the lists of matrix indices and bra-ket keys for two-electron operators as HDF5 datasets
         if len(states) >= 2:
             group = vault[group_name].create_group("two")
             group.create_dataset("indices", data=single[1][0], compression="gzip", compression_opts=9)
             group.create_dataset("elements", data=single[1][1], compression="gzip", compression_opts=9)
 
+        # Store the lists of matrix indices and bra-ket keys for three-electron operators as HDF5 datasets
         if len(states) >= 3:
             group = vault[group_name].create_group("three")
             group.create_dataset("indices", data=single[2][0], compression="gzip", compression_opts=9)
             group.create_dataset("elements", data=single[2][1], compression="gzip", compression_opts=9)
 
+        # Flush the cache file
         vault.flush()
 
+    # Return an interface object supporting the calculation of the matrices of tensor operators in the determinantal
+    # product space of the given configuration
     return SingleElements(vault[group_name], states)
