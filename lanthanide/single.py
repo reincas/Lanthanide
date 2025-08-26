@@ -6,8 +6,8 @@
 #
 # This module provides an interface supporting the calculation of the
 # matrices of tensor operators in the determinantal product space of a
-# given configuration. It exploits the fact that these matrices are
-# necessarily sparse because all matrix elements between states which
+# given electron configuration. It exploits the fact that these matrices
+# are necessarily sparse because all matrix elements between states which
 # differ in more electrons than the respective tensor operator is acting
 # on, must be zero.
 #
