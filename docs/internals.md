@@ -139,6 +139,19 @@ with Lanthanide(2) as ion:
     matrix_2 = get_matrix(ion, f"UU/b/{k}")
 ```
 
+The following table lists all unit tensor operators provided by the Lanthanide package with their respective names:
+
+| name          | tensor operator                             |
+|---------------|---------------------------------------------|
+| `U/a/{k},{q}` | $\mathrm{U}_{q}^{(k)}$                      |
+| `T/a/{k},{q}` | $\mathrm{T}_{q}^{(k)}$                      |
+| `UU/a/{k}`    | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$ |
+| `TT/a/{k}`    | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$ |
+| `UT/a/{k}`    | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$ |
+| `UU/b/{k}`    | $(\mathbf{U}_1^{(k)}\cdot\mathbf{U}_2^{(k)})$ |
+| `TT/b/{k}`    | $(\mathbf{T}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$ |
+| `UT/b/{k}`    | $(\mathbf{U}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$ |
+
 ## Matrix class
 
 ... to be added ...
