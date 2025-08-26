@@ -30,7 +30,8 @@ from functools import reduce
 
 # Version of the algorithm. If the precomputed lists of indices in the file cache comes with another version number,
 # it will be recomputed. Since this is the first element in the chain of dependent cache elements, changing this
-# number will effectively render all file caches invalid.
+# number will effectively render all file caches invalid. These elements are the modules 'unit', 'states', and
+# 'matrix', see the init function of the Lanthanide class.
 SINGLE_VERSION = 0
 
 
