@@ -10,15 +10,30 @@ import numpy as np
 from .halfint import HalfInt
 from .wigner import wigner3j
 
+# Version of the elementary unit tensor algorithms. If the precomputed unit tensor matrices in the file cache come
+# with another version number, they will be recomputed. This will also render all other elements following in the
+# chain of dependent cache elements invalid. These elements are the modules 'states' and 'matrix', see the init
+# function of the Lanthanide class.
 UNIT_VERSION = 1
+
+# Orbital angular momentum quantum number of electrons in the f shell
 ORBITAL = 3
+
+# Spin quantum number of an electron
 SPIN = HalfInt(1)
+
+# Magnetic quantum numbers ml and ms of electrons in the f shell in standard order
 MAGNETIC = [(ml, ms) for ml in range(ORBITAL, -ORBITAL - 1, -1) for ms in (SPIN, -SPIN)]
+
+# Number of different electrons in 14 for the f configurations of lanthanide ions
 LEN_SHELL = len(MAGNETIC)
 
 
 def product_states(num):
-    """ Use own combinations algorithm instead of itertools.combinations to a defined fixed order. """
+    """ The electron product states in a configuration with num electrons is given by all num-combinations of the
+    available electrons. We could thus use itertools.combinations(range(LEN_SHELL), num) to get the list of states.
+    However, the Lanthanide package uses its own algorithm for the calculation of these combinations to ensure a
+    defined and fixed order of the states. This keeps consistency within the file cache. """
 
     def build(start, current_state):
         if len(current_state) == num:
@@ -37,12 +52,16 @@ def product_states(num):
 ##########################################################################
 
 class UnitUa():
+    """ This class provides the evaluation of the q component u(k)_q of the elementary one-electron unit tensor
+    operator of rank k in the orbital angular momentum space for the final electron a and initial electron b.
+    Note: For q != 0 this operator is *not* symmetric with respect to the exchange of the two electrons. """
 
     def __init__(self, k: int, q: int):
-        assert isinstance(k, int)
-        assert isinstance(q, int)
-        assert 0 <= k <= 2 * ORBITAL
-        assert -k <= q <= k
+        # assert isinstance(k, int)
+        # assert isinstance(q, int)
+        # assert 0 <= k <= 2 * ORBITAL
+        # assert -k <= q <= k
+
         self.order = 1
         self.symmetric = False
         self.k = k
@@ -61,6 +80,9 @@ class UnitUa():
 
 
 class UnitTa():
+    """ This class provides the evaluation of the q component t(k)_q of the elementary one-electron unit tensor
+    operator of rank k in the spin angular momentum space for the final electron a and initial electron b.
+    Note: For q != 0 this operator is *not* symmetric with respect to the exchange of the two electrons. """
 
     def __init__(self, k: int, q: int):
         assert isinstance(k, int)
@@ -85,6 +107,9 @@ class UnitTa():
 
 
 class UnitUUa():
+    """ This class provides the evaluation of the scalar product u(k)·u(k) of the elementary one-electron unit tensor
+    operator of rank k in the orbital angular momentum space for the final electron a and initial electron b. This
+    scalar one-electron operator is symmetric with respect to the exchange of the two electrons. """
 
     def __init__(self, k: int):
         assert isinstance(k, int)
@@ -102,6 +127,9 @@ class UnitUUa():
 
 
 class UnitTTa():
+    """ This class provides the evaluation of the scalar product t(k)·t(k) of the elementary one-electron unit tensor
+    operator of rank k in the spin angular momentum space for the final electron a and initial electron b. This
+    scalar one-electron operator is symmetric with respect to the exchange of the two electrons. """
 
     def __init__(self, k: int):
         assert isinstance(k, int)
@@ -119,6 +147,10 @@ class UnitTTa():
 
 
 class UnitUTa():
+    """ This class provides the evaluation of the scalar product u(k)·t(k) of the elementary one-electron unit tensor
+    operators of rank k in the orbital (u) and the spin (t) angular momentum space for the final electron a and
+    initial electron b. This scalar one-electron operator is symmetric with respect to the exchange of the two
+    electrons. """
 
     def __init__(self, k: int):
         assert isinstance(k, int)
@@ -145,6 +177,10 @@ class UnitUTa():
 ##########################################################################
 
 class UnitUUb():
+    """ This class provides the evaluation of the scalar product u1(k)·u2(k) of the elementary one-electron unit
+    tensor operators u1(k) and u2(k) of rank k in the orbital angular momentum space for the final electrons a, b
+    and initial electrons c, d. This scalar two-electron operator is symmetric with respect to the exchange of the
+    two electron pairs a, b and c, d. """
 
     def __init__(self, k: int):
         assert isinstance(k, int)
@@ -167,6 +203,10 @@ class UnitUUb():
 
 
 class UnitTTb():
+    """ This class provides the evaluation of the scalar product t1(k)·t2(k) of the elementary one-electron unit
+    tensor operators t1(k) and t2(k) of rank k in the spin angular momentum space for the final electrons a, b
+    and initial electrons c, d. This scalar two-electron operator is symmetric with respect to the exchange of the
+    two electron pairs a, b and c, d. """
 
     def __init__(self, k: int):
         assert isinstance(k, int)
@@ -189,6 +229,10 @@ class UnitTTb():
 
 
 class UnitUTb():
+    """ This class provides the evaluation of the scalar product u1(k)·t2(k) of the elementary one-electron unit
+    tensor operators u1(k) and t2(k) of rank k in the orbital (u1) and the spin (t2) angular momentum space for the
+    final electrons a, b and initial electrons c, d. This scalar two-electron operator is symmetric with respect to
+    the exchange of the two electron pairs a, b and c, d. """
 
     def __init__(self, k: int):
         assert isinstance(k, int)
@@ -211,6 +255,11 @@ class UnitUTb():
 
 
 class UnitUUTTb():
+    """ This class provides the evaluation of the scalar product {u1(ku1) x u2(ku2)}(k)·{t1(kt1) x t2(kt2)}(k) of the
+    elementary one-electron mixed unit tensor operators {u1(ku1) x u2(ku2)}(k) and {t1(kt1) x t2(kt2)}(k) of rank k
+    in the orbital (u1u2) and the spin (t1t2) angular momentum space for the final electrons a, b and initial
+    electrons c, d. This scalar two-electron operator is symmetric with respect to the exchange of the two electron
+    pairs a, b and c, d. """
 
     def __init__(self, ku1: int, ku2: int, kt1: int, kt2: int, k: int):
         assert isinstance(k, int)
@@ -255,6 +304,10 @@ class UnitUUTTb():
 ##########################################################################
 
 class UnitUUUc():
+    """ This class provides the evaluation of the triple scalar product u1(k1)·u2(k2)·u2(k3) of the elementary
+    one-electron unit tensor operators u1(k1), u2(k2), and u3(k3) of rank k1, k2, and k3 in the orbital angular
+    momentum space for the final electrons a, b, c and initial electrons d, e, f. This scalar three-electron
+    operator is symmetric with respect to the exchange of the two electron triples a, b, c and d, e, f. """
 
     def __init__(self, k1: int, k2: int, k3: int):
         assert isinstance(k1, int)
@@ -288,7 +341,68 @@ class UnitUUUc():
 # Matrix elements of unit tensor operators in product space
 ##########################################################################
 
-UNITS = {
+def matrix_element(ion, operator, keys, cache):
+    """ Calculate the matrix element of a unit tensor operator using the given elementary tensor operator object and
+    the list of binary bra-ket keys (see module single) for which the elementary operator must be evaluated.
+    The values of elementary tensor operators are cached. """
+
+    # Calculate sum of elementary tensor operator values with parity
+    value = 0.0
+    for key, parity in keys:
+
+        # Take the value of the elementary tensor operator from the cache
+        if key in cache:
+            single_value = cache[key]
+
+        # Calculate the value of the elementary tensor operator and store in the cache
+        else:
+            initial, final = ion.single.index_pair(key, operator.order)
+            quant = sum([MAGNETIC[i] for i in final + initial], (ORBITAL, SPIN))
+            single_value = operator.element(*quant)
+            cache[key] = single_value
+
+        # Add to sum with parity
+        if parity:
+            value -= single_value
+        else:
+            value += single_value
+
+    # Return value of the matrix element
+    return value
+
+
+def matrix_elements(ion, operator, cache):
+    """ Generate all non-zero matrix elements of a unit tensor operator using the given elementary tensor
+    operator object. """
+
+    # Matrix element must be divided by the factorial of the number of electrons, the operator is acting on
+    div = math.factorial(operator.order)
+
+    # Calculate matrix elements based on the list of potentially non-zero matrix elements (see module single)
+    for initial_index, final_index, key_slice in ion.single.elements(operator.order):
+
+        # Calculate lower triangle matrix element and yield if non-zero
+        keys = ion.single.lower_keys(key_slice, operator.order)
+        value = matrix_element(ion, operator, keys, cache) / div
+        if value:
+            yield initial_index, final_index, value
+
+        # Calculate only lower triangle matrix of symmetric tensor operators. Diagonal elements also require no
+        # additional calculation
+        if operator.symmetric or initial_index == final_index:
+            continue
+
+        # Calculate upper triangle matrix element and yield if non-zero
+        keys = ion.single.upper_keys(key_slice, operator.order)
+        value = matrix_element(ion, operator, keys, cache) / div
+        if value:
+            yield final_index, initial_index, value
+
+
+# This dictionary is used to determine the respective elementary tensor operator class required for the calculation
+# of a unit tensor operator with given name. The final letter in the name indicates if the operator should act on
+# one ("a"), two ("b"), or three ("c") electrons.
+OPERATORS = {
     "Ua": UnitUa,
     "Ta": UnitTa,
     "UUa": UnitUUa,
@@ -302,79 +416,25 @@ UNITS = {
 }
 
 
-def matrix_element(ion, unit, single, stats, keys):
-    value = 0.0
-    for key, parity in keys:
-        # initial, final = ion.single.index_pair(key, unit.order)
-        # quant = sum([MAGNETIC[i] for i in final + initial], (ORBITAL, SPIN))
-        # single_value = unit.element(*quant)
-        # stats["single"] += 1
-        # if single_value:
-        #     stats["nz_single"] += 1
-
-        if key in single:
-            single_value = single[key]
-        else:
-            initial, final = ion.single.index_pair(key, unit.order)
-            quant = sum([MAGNETIC[i] for i in final + initial], (ORBITAL, SPIN))
-            single_value = unit.element(*quant)
-            single[key] = single_value
-            stats["single"] += 1
-            if single_value:
-                stats["nz_single"] += 1
-
-        if parity:
-            value -= single_value
-        else:
-            value += single_value
-    return value
-
-
-def matrix_elements(ion, unit, single, stats):
-    div = math.factorial(unit.order)
-    stats["elements"] = 0
-    stats["nz_elements"] = 0
-    stats["single"] = 0
-    stats["nz_single"] = 0
-    for initial_index, final_index, key_slice in ion.single.elements(unit.order):
-        keys = ion.single.lower_keys(key_slice, unit.order)
-        value = matrix_element(ion, unit, single, stats, keys) / div
-        stats["elements"] += 1
-        if value:
-            stats["nz_elements"] += 1
-            yield initial_index, final_index, value
-        if unit.symmetric or initial_index == final_index:
-            continue
-        keys = ion.single.upper_keys(key_slice, unit.order)
-        value = matrix_element(ion, unit, single, stats, keys) / div
-        stats["elements"] += 1
-        if value:
-            stats["nz_elements"] += 1
-            yield final_index, initial_index, value
-
-
-def unit_matrix(ion, unit_name):
-    unit, order, params = unit_name.split("/")
-    unit = UNITS[unit + order]
+def unit_matrix(ion, operator_name):
+    operator, num, params = operator_name.split("/")
+    operator = OPERATORS[operator + num]
     params = map(int, params.split(","))
-    unit = unit(*params)
+    operator = operator(*params)
 
     N = len(ion.product_states)
     matrix = np.zeros((N, N), dtype=float)
-    single = {}
-    stats = {}
-    if ion.num >= unit.order:
-        for i, f, value in matrix_elements(ion, unit, single, stats):
+    cache = {}
+    if ion.num >= operator.order:
+        for i, f, value in matrix_elements(ion, operator, cache):
             matrix[f, i] = value
 
-    if unit.symmetric:
+    if operator.symmetric:
         lower_tri_indices = np.tril_indices_from(matrix, k=-1)
         upper_tri_indices = (lower_tri_indices[1], lower_tri_indices[0])
         matrix[upper_tri_indices] = matrix[lower_tri_indices]
 
-    stats["name"] = unit.name
-    stats["unique"] = len(single)
-    return matrix, stats
+    return matrix
 
 
 ##########################################################################
@@ -384,19 +444,20 @@ def unit_matrix(ion, unit_name):
 def get_unit(ion, name):
     if name not in ion.unit_vault:
         print(f"Create unit matrix {name} ... ", end="")
-        matrix = unit_matrix(ion, name)[0]
+        matrix = unit_matrix(ion, name)
         ion.unit_vault.create_dataset(name, data=matrix, compression="gzip", compression_opts=9)
         ion.vault.flush()
         print("done.")
     else:
         pass
-        #print(f"Unit matrix {name}: load")
+        # print(f"Unit matrix {name}: load")
     return np.array(ion.unit_vault[name])
 
 
 def init_unit(vault, group_name: str):
     if group_name in vault:
-        if not vault.attrs["valid"] or "version" not in vault[group_name].attrs or vault[group_name].attrs["version"] != UNIT_VERSION:
+        if not vault.attrs["valid"] or "version" not in vault[group_name].attrs or vault[group_name].attrs[
+            "version"] != UNIT_VERSION:
             del vault[group_name]
         vault.flush()
 
