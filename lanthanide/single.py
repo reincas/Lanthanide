@@ -17,7 +17,7 @@
 # Conversion of electron tuples to binary keys reduces the disk space
 # significantly and increases the calculation speed.
 #
-# No quantum numbers are used in this modules. Electrons are
+# No quantum numbers are used in this module. Electrons are
 # characterised by their index into a list of indistinguishable
 # electrons in standard order. In case of the 4f electron configurations
 # of the lanthanides this means that the electron index my range
