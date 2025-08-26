@@ -141,18 +141,18 @@ with Lanthanide(2) as ion:
 
 The following table lists all unit tensor operators provided by the Lanthanide package with their respective names:
 
-| name                                 | electrons   | tensor operator                                                                                                             |
-|--------------------------------------|-------------|-----------------------------------------------------------------------------------------------------------------------------|
-| `U/a/{k},{q}`                        | 1           | $\mathrm{U}_{q}^{(k)}$                                                                                                      |
-| `T/a/{k},{q}`                        | 1           | $\mathrm{T}_{q}^{(k)}$                                                                                                      |
-| `UU/a/{k}`                           | 1           | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$                                                                                   |
-| `TT/a/{k}`                           | 1           | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$                                                                                   |
-| `UT/a/{k}`                           | 1           | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$                                                                                   |
-| `UU/b/{k}`                           | 2           | $(\mathbf{U}_1^{(k)}\cdot\mathbf{U}_2^{(k)})$                                                                               |
-| `TT/b/{k}`                           | 2           | $(\mathbf{T}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                               |
-| `UT/b/{k}`                           | 2           | $(\mathbf{U}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                               |
-| `UUTT/b/{ku1},{ku2},{kt1},{kt2},{k}` | 2           | $(\{\mathbf{U}_1^{(ku1)}\times\mathbf{U}_2^{(ku2)}\}^{(k)} \cdot \{\mathbf{T}_1^{(kt1)}\times\mathbf{T}_2^{(kt2)}\}^{(k)})$ |
-| `UUU/c/{k1},{k2},{k3}`               | 3           | $(\mathbf{U}_1^{(k1)}\cdot\mathbf{U}_2^{(k2)}\cdot\mathbf{U}_2^{(k3)})$                                                     |
+| name                                 | electrons | tensor operator                                                                                                             |
+|--------------------------------------|-----------|-----------------------------------------------------------------------------------------------------------------------------|
+| `U/a/{k},{q}`                        | 1         | $\mathrm{U}_{q}^{(k)}$                                                                                                      |
+| `T/a/{k},{q}`                        | 1         | $\mathrm{T}_{q}^{(k)}$                                                                                                      |
+| `UU/a/{k}`                           | 1         | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$                                                                                   |
+| `TT/a/{k}`                           | 1         | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$                                                                                   |
+| `UT/a/{k}`                           | 1         | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$                                                                                   |
+| `UU/b/{k}`                           | 2         | $(\mathbf{U}_1^{(k)}\cdot\mathbf{U}_2^{(k)})$                                                                               |
+| `TT/b/{k}`                           | 2         | $(\mathbf{T}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                               |
+| `UT/b/{k}`                           | 2         | $(\mathbf{U}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                               |
+| `UUTT/b/{ku1},{ku2},{kt1},{kt2},{k}` | 2         | $(\{\mathbf{U}_1^{(ku1)}\times\mathbf{U}_2^{(ku2)}\}^{(k)} \cdot \{\mathbf{T}_1^{(kt1)}\times\mathbf{T}_2^{(kt2)}\}^{(k)})$ |
+| `UUU/c/{k1},{k2},{k3}`               | 3         | $(\mathbf{U}_1^{(k1)}\cdot\mathbf{U}_2^{(k2)}\cdot\mathbf{U}_2^{(k3)})$                                                     |
 
 ## Matrix class
 
