@@ -125,7 +125,7 @@ elementary operator is thus evaluated only once.
 
 Unit tensor matrices in the determinantal product state space are provided ad 2D numpy arrays via the functions
 `calc_unit(ion, name)` without file cache and `get_unit(ion, name)` with file cache. This example with calculate
-the component -1 of the unit tensor operator $\math{U}^{(2)}$:
+the component -1 of the unit tensor operator $\mathbf{U}^{(2)}$:
 
 ```
 from lanthanide import Lanthanide, get_matrix
