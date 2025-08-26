@@ -34,7 +34,6 @@ from functools import reduce
 # 'matrix', see the init function of the Lanthanide class.
 SINGLE_VERSION = 0
 
-
 ##########################################################################
 # Binary state keys
 ##########################################################################
@@ -448,7 +447,6 @@ def single_elements(states):
 ##########################################################################
 
 class SingleElements:
-
     """ This class uses the precalculated lists of non-zero matrix elements and the respective lists of binary
     bra-ket keys from single_elements() to provide support for the calculation of the matrix of a tensor operator
     in the determinantal product space. """
@@ -524,6 +522,7 @@ class SingleElements:
     def __str__(self):
         return f"SingleElements support object for a {self.num_electrons} electron configuration"
 
+
 def init_single(vault, group_name, states):
     """ Initialize the cache for the support structure for the calculation of tensor operator matrix elements for
     the given determinantal product states in the HDF5 group with given name in the given HDF5 file vault. """
@@ -549,19 +548,19 @@ def init_single(vault, group_name, states):
         single = single_elements(states)
 
         # Store the lists of matrix indices and bra-ket keys for one-electron operators as HDF5 datasets
-        if len(states) >= 1:
+        if len(states[0]) >= 1:
             group = vault[group_name].create_group("one")
             group.create_dataset("indices", data=single[0][0], compression="gzip", compression_opts=9)
             group.create_dataset("elements", data=single[0][1], compression="gzip", compression_opts=9)
 
         # Store the lists of matrix indices and bra-ket keys for two-electron operators as HDF5 datasets
-        if len(states) >= 2:
+        if len(states[0]) >= 2:
             group = vault[group_name].create_group("two")
             group.create_dataset("indices", data=single[1][0], compression="gzip", compression_opts=9)
             group.create_dataset("elements", data=single[1][1], compression="gzip", compression_opts=9)
 
         # Store the lists of matrix indices and bra-ket keys for three-electron operators as HDF5 datasets
-        if len(states) >= 3:
+        if len(states[0]) >= 3:
             group = vault[group_name].create_group("three")
             group.create_dataset("indices", data=single[2][0], compression="gzip", compression_opts=9)
             group.create_dataset("elements", data=single[2][1], compression="gzip", compression_opts=9)
