@@ -3,6 +3,18 @@
 # <reinhard.caspary@phoenixd.uni-hannover.de>                            #
 # This program is free software under the terms of the MIT license.      #
 ##########################################################################
+#
+# This module provides the calculation of matrices of unit tensor operators
+# in the determinantal product space of a given electron configuration
+# utilizing the support of an SingleElements object (see module single)
+# which is provided by the Lanthanide object.
+#
+# Each matrix requested via the function get_unit() will be calculated
+# only if it is not already contained in the file cache. Storage of every
+# unit tensor matrix in the cache takes only a very small amount of file
+# space, because tensor matrices are highly sparse in the product space.
+#
+##########################################################################
 
 import math
 import numpy as np
