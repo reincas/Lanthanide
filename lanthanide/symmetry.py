@@ -12,6 +12,7 @@ CHR_ORBITAL = "SPDFGHIKLMNOQRTUVWXYZ"
 
 
 def casimir_Rk(w):
+    """ """
     sum = 0
     for i in range(len(w)):
         sum += w[i] * (w[i] - 1 + 2 * len(w) - 2 * i)
@@ -272,7 +273,3 @@ class SymmetryList:
     def __str__(self):
         count = self.count()
         return ", ".join(f"{self.find(key)}: {count[key]}" for key in sorted(count.keys()))
-
-
-if __name__ == "__main__":
-    pass
