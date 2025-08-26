@@ -88,9 +88,9 @@ generators need to be be converted into tuples of final and initial electrons by
 
 The following code provides an example of how to use `SingleElements` with your elementary tensor operator evaluation
 function `operator()` of your own `num`-electron tensor operator. Note that the actual quantum numbers
-$m_l$ and $m_s$ of the initial and final electrons are only required for the final evaluation of the `operator()`
+$m_l$ and $m_s$ of the initial and final electrons are not required before the final evaluation of the `operator()`
 function. They are extracted from the constant tuple `MAGNETIC` of all f electrons in standard order. We calculate
-only elements in the lower triangle of the matrix. This would be suitable for a symmetric operator.
+only elements in the lower triangle of the matrix here. This would be suitable for a symmetric operator.
 
 ```
 from lanthanide import Lanthanide, MAGNETIC
