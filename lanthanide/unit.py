@@ -437,7 +437,7 @@ OPERATORS = {
 }
 
 
-def unit_matrix(ion, operator_name: str) -> np.ndarray:
+def calc_unit(ion, operator_name: str) -> np.ndarray:
     """ Calculate and return the full matrix of the unit tensor operator with given name in the determinantal
     product state space of the given ion. """
 
@@ -482,7 +482,7 @@ def get_unit(ion, operator_name: str) -> np.ndarray:
     # Calculate the matrix and store it in the HDF5 file cache
     if operator_name not in ion.unit_vault:
         print(f"Create unit matrix {operator_name} ... ", end="")
-        matrix = unit_matrix(ion, operator_name)
+        matrix = calc_unit(ion, operator_name)
         ion.unit_vault.create_dataset(operator_name, data=matrix, compression="gzip", compression_opts=9)
         ion.vault.flush()
         print("done.")
