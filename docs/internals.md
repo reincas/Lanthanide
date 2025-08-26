@@ -126,7 +126,7 @@ elementary operator is thus evaluated only once.
 Unit tensor matrices in the determinantal product state space are provided ad 2D numpy arrays via the function
 `get_unit(ion, name)`.
 If you want to force the calculation without using the file cache, you can also use `calc_unit(ion, name)`.
-Here is a sample code segment to calculate the  component $\mathrm{U}_{-1}^{(2)}$ of the unit tensor operator of
+Here is a sample code segment to calculate the component $\mathrm{U}_{-1}^{(2)}$ of the unit tensor operator of
 rank 2 in the orbital angular momentum space and the matrix of the two-electron scalar product
 $(\mathbf{U}_1^{(2)}\cdot\mathbf{U}_2^{(2)})$:
 
@@ -141,16 +141,19 @@ with Lanthanide(2) as ion:
 
 The following table lists all unit tensor operators provided by the Lanthanide package with their respective names:
 
-| name          | tensor operator                             |
-|---------------|---------------------------------------------|
-| `U/a/{k},{q}` | $\mathrm{U}_{q}^{(k)}$                      |
-| `T/a/{k},{q}` | $\mathrm{T}_{q}^{(k)}$                      |
-| `UU/a/{k}`    | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$ |
-| `TT/a/{k}`    | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$ |
-| `UT/a/{k}`    | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$ |
-| `UU/b/{k}`    | $(\mathbf{U}_1^{(k)}\cdot\mathbf{U}_2^{(k)})$ |
-| `TT/b/{k}`    | $(\mathbf{T}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$ |
-| `UT/b/{k}`    | $(\mathbf{U}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$ |
+| name                   | electrons   | tensor operator                                                         |
+|------------------------|-------------|-------------------------------------------------------------------------|
+| `U/a/{k},{q}`          | 1           | $\mathrm{U}_{q}^{(k)}$                                                  |
+| `T/a/{k},{q}`          | 1           | $\mathrm{T}_{q}^{(k)}$                                                  |
+| `UU/a/{k}`             | 1           | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$                               |
+| `TT/a/{k}`             | 1           | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$                               |
+| `UT/a/{k}`             | 1           | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$                               |
+| ---------------        | ----------- | ------------------------                                                |
+| `UU/b/{k}`             | 2           | $(\mathbf{U}_1^{(k)}\cdot\mathbf{U}_2^{(k)})$                           |
+| `TT/b/{k}`             | 2           | $(\mathbf{T}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                           |
+| `UT/b/{k}`             | 2           | $(\mathbf{U}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                           |
+| ---------------        | ----------- | ------------------------                                                |
+| `UUU/c/{k1},{k2},{k3}` | 3           | $(\mathbf{U}_1^{(k1)}\cdot\mathbf{U}_2^{(k2)}\cdot\mathbf{U}_2^{(k3)})$ |
 
 ## Matrix class
 
