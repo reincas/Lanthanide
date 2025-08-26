@@ -85,10 +85,11 @@ class UnitTa():
     Note: For q != 0 this operator is *not* symmetric with respect to the exchange of the two electrons. """
 
     def __init__(self, k: int, q: int):
-        assert isinstance(k, int)
-        assert isinstance(q, int)
-        assert 0 <= k <= 1
-        assert -k <= q <= k
+        # assert isinstance(k, int)
+        # assert isinstance(q, int)
+        # assert 0 <= k <= 1
+        # assert -k <= q <= k
+
         self.order = 1
         self.symmetric = False
         self.k = k
@@ -112,8 +113,9 @@ class UnitUUa():
     scalar one-electron operator is symmetric with respect to the exchange of the two electrons. """
 
     def __init__(self, k: int):
-        assert isinstance(k, int)
-        assert 0 <= k <= 2 * ORBITAL
+        # assert isinstance(k, int)
+        # assert 0 <= k <= 2 * ORBITAL
+
         self.order = 1
         self.symmetric = True
         self.k = k
@@ -132,8 +134,9 @@ class UnitTTa():
     scalar one-electron operator is symmetric with respect to the exchange of the two electrons. """
 
     def __init__(self, k: int):
-        assert isinstance(k, int)
-        assert 0 <= k <= 1
+        # assert isinstance(k, int)
+        # assert 0 <= k <= 1
+
         self.order = 1
         self.symmetric = True
         self.k = k
@@ -153,8 +156,9 @@ class UnitUTa():
     electrons. """
 
     def __init__(self, k: int):
-        assert isinstance(k, int)
-        assert 0 <= k <= 1
+        # assert isinstance(k, int)
+        # assert 0 <= k <= 1
+
         self.order = 1
         self.symmetric = True
         self.k = k
@@ -183,8 +187,9 @@ class UnitUUb():
     two electron pairs a, b and c, d. """
 
     def __init__(self, k: int):
-        assert isinstance(k, int)
-        assert 0 <= k <= 2 * ORBITAL
+        # assert isinstance(k, int)
+        # assert 0 <= k <= 2 * ORBITAL
+
         self.order = 2
         self.symmetric = True
         self.k = k
@@ -209,8 +214,9 @@ class UnitTTb():
     two electron pairs a, b and c, d. """
 
     def __init__(self, k: int):
-        assert isinstance(k, int)
-        assert 0 <= k <= 1
+        # assert isinstance(k, int)
+        # assert 0 <= k <= 1
+
         self.order = 2
         self.symmetric = True
         self.k = k
@@ -235,8 +241,9 @@ class UnitUTb():
     the exchange of the two electron pairs a, b and c, d. """
 
     def __init__(self, k: int):
-        assert isinstance(k, int)
-        assert 0 <= k <= 1
+        # assert isinstance(k, int)
+        # assert 0 <= k <= 1
+
         self.order = 2
         self.symmetric = True
         self.k = k
@@ -262,17 +269,18 @@ class UnitUUTTb():
     pairs a, b and c, d. """
 
     def __init__(self, ku1: int, ku2: int, kt1: int, kt2: int, k: int):
-        assert isinstance(k, int)
-        assert isinstance(ku1, int)
-        assert isinstance(ku2, int)
-        assert isinstance(kt1, int)
-        assert isinstance(kt2, int)
-        assert abs(ku1 - ku2) <= k <= ku1 + ku2
-        assert abs(kt1 - kt2) <= k <= kt1 + kt2
-        assert 0 <= ku1 <= 2 * ORBITAL
-        assert 0 <= ku2 <= 2 * ORBITAL
-        assert 0 <= kt1 <= 1
-        assert 0 <= kt2 <= 1
+        # assert isinstance(k, int)
+        # assert isinstance(ku1, int)
+        # assert isinstance(ku2, int)
+        # assert isinstance(kt1, int)
+        # assert isinstance(kt2, int)
+        # assert abs(ku1 - ku2) <= k <= ku1 + ku2
+        # assert abs(kt1 - kt2) <= k <= kt1 + kt2
+        # assert 0 <= ku1 <= 2 * ORBITAL
+        # assert 0 <= ku2 <= 2 * ORBITAL
+        # assert 0 <= kt1 <= 1
+        # assert 0 <= kt2 <= 1
+
         self.order = 2
         self.symmetric = True
         self.k = k
@@ -310,12 +318,13 @@ class UnitUUUc():
     operator is symmetric with respect to the exchange of the two electron triples a, b, c and d, e, f. """
 
     def __init__(self, k1: int, k2: int, k3: int):
-        assert isinstance(k1, int)
-        assert isinstance(k2, int)
-        assert isinstance(k3, int)
-        assert 0 <= k1 <= 2 * ORBITAL
-        assert 0 <= k2 <= 2 * ORBITAL
-        assert 0 <= k3 <= 2 * ORBITAL
+        # assert isinstance(k1, int)
+        # assert isinstance(k2, int)
+        # assert isinstance(k3, int)
+        # assert 0 <= k1 <= 2 * ORBITAL
+        # assert 0 <= k2 <= 2 * ORBITAL
+        # assert 0 <= k3 <= 2 * ORBITAL
+
         self.order = 3
         self.symmetric = True
         self.k1 = k1
@@ -341,7 +350,7 @@ class UnitUUUc():
 # Matrix elements of unit tensor operators in product space
 ##########################################################################
 
-def matrix_element(ion, operator, keys, cache):
+def matrix_element(ion, operator, keys, cache: dict):
     """ Calculate the matrix element of a unit tensor operator using the given elementary tensor operator object and
     the list of binary bra-ket keys (see module single) for which the elementary operator must be evaluated.
     The values of elementary tensor operators are cached. """
@@ -371,7 +380,7 @@ def matrix_element(ion, operator, keys, cache):
     return value
 
 
-def matrix_elements(ion, operator, cache):
+def matrix_elements(ion, operator, cache: dict):
     """ Generate all non-zero matrix elements of a unit tensor operator using the given elementary tensor
     operator object. """
 
@@ -416,7 +425,7 @@ OPERATORS = {
 }
 
 
-def unit_matrix(ion, operator_name):
+def unit_matrix(ion, operator_name: str) -> np.ndarray:
     operator, num, params = operator_name.split("/")
     operator = OPERATORS[operator + num]
     params = map(int, params.split(","))
@@ -441,7 +450,7 @@ def unit_matrix(ion, operator_name):
 # HDF5 cache interface
 ##########################################################################
 
-def get_unit(ion, name):
+def get_unit(ion, name: str) -> np.ndarray:
     if name not in ion.unit_vault:
         print(f"Create unit matrix {name} ... ", end="")
         matrix = unit_matrix(ion, name)
