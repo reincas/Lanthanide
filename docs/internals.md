@@ -121,6 +121,20 @@ For a more optimized application you may investigate the module `unit`. An impor
 in `unit` is caching of the value of evaluated elementary operators. For each set of initial and final elements the
 elementary operator is thus evaluated only once.
 
+## Unit tensor matrices
+
+Unit tensor matrices in the determinantal product state space are provided ad 2D numpy arrays via the functions
+`calc_unit(ion, name)` without file cache and `get_unit(ion, name)` with file cache. This example with calculate
+the component -1 of the unit tensor operator $\math{U}^{(2)}$:
+
+```
+from lanthanide import Lanthanide, get_matrix
+with Lanthanide(2) as ion:
+    k = 2
+    q = -1
+    matrix = get_matrix(ion, f"U/a/{k},{q}")
+```
+
 ## Matrix class
 
 ... to be added ...
