@@ -123,10 +123,12 @@ elementary operator is thus evaluated only once.
 
 ## Unit tensor matrices
 
-Unit tensor matrices in the determinantal product state space are provided ad 2D numpy arrays via the functions
-`calc_unit(ion, name)` without file cache and `get_unit(ion, name)` with file cache. This example calculates the
-component $U_{-1}^{(2)}$ of the unit tensor operator of rank 2 in the orbital angular momentum space and the matrix
-of the two-electron scalar product $(\mathbf{U}_1^{(2)}\cdot\mathbf{U}_2^{(2)})$:
+Unit tensor matrices in the determinantal product state space are provided ad 2D numpy arrays via the function
+`get_unit(ion, name)`.
+If you want to force the calculation without using the file cache, you can also use `calc_unit(ion, name)`.
+The following example calculates the  component $\mathrm{U}_{-1}^{(2)}$ of the unit tensor operator of rank 2 in
+the orbital angular momentum space and the matrix of the two-electron scalar product
+$(\mathbf{U}_1^{(2)}\cdot\mathbf{U}_2^{(2)})$:
 
 ```
 from lanthanide import Lanthanide, get_matrix
