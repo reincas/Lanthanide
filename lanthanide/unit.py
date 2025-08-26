@@ -32,9 +32,9 @@ def product_states(num):
     return states
 
 
-##################################################
-# One electron operators
-##################################################
+##########################################################################
+# One-electron elementary unit tensor operators
+##########################################################################
 
 class UnitUa():
 
@@ -140,9 +140,9 @@ class UnitUTa():
         return result
 
 
-##################################################
-# Two electron operators
-##################################################
+##########################################################################
+# Two-electron elementary unit tensor operators
+##########################################################################
 
 class UnitUUb():
 
@@ -250,9 +250,9 @@ class UnitUUTTb():
         return result
 
 
-##################################################
-# Three electron operators
-##################################################
+##########################################################################
+# Three-electron elementary unit tensor operators
+##########################################################################
 
 class UnitUUUc():
 
@@ -284,9 +284,9 @@ class UnitUUUc():
         return result
 
 
-##################################################
-# General
-##################################################
+##########################################################################
+# Matrix elements of unit tensor operators in product space
+##########################################################################
 
 UNITS = {
     "Ua": UnitUa,
@@ -377,6 +377,10 @@ def unit_matrix(ion, unit_name):
     return matrix, stats
 
 
+##########################################################################
+# HDF5 cache interface
+##########################################################################
+
 def get_unit(ion, name):
     if name not in ion.unit_vault:
         print(f"Create unit matrix {name} ... ", end="")
@@ -403,11 +407,3 @@ def init_unit(vault, group_name: str):
         vault.flush()
 
     return vault[group_name]
-
-
-if __name__ == "__main__":
-    from lanthanide import Lanthanide
-
-    ion = Lanthanide(3)
-    print(ion)
-    print(list(ion.vault["unit"]["U"]["a"].keys()))
