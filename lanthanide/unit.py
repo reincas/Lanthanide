@@ -426,23 +426,36 @@ OPERATORS = {
 
 
 def unit_matrix(ion, operator_name: str) -> np.ndarray:
+    """ Calculate and return the full matrix of the unit tensor operator with given name in the determinantal
+    product state space of the given ion. """
+
+    # Extract the parameters from the operator name and initialize the elementary unit tensor operator object which
+    # is required for the calculation of matrix elements
     operator, num, params = operator_name.split("/")
     operator = OPERATORS[operator + num]
     params = map(int, params.split(","))
     operator = operator(*params)
 
+    # Initialize empty matrix and elementary values cache
     N = len(ion.product_states)
     matrix = np.zeros((N, N), dtype=float)
     cache = {}
-    if ion.num >= operator.order:
-        for i, f, value in matrix_elements(ion, operator, cache):
-            matrix[f, i] = value
 
+    # Matrix is zero, if the electron configuration of the ion contains fewer electrons as the operator is acting on
+    if ion.num < operator.order:
+        return matrix
+
+    # Store all non-zero matrix elements
+    for i, f, value in matrix_elements(ion, operator, cache):
+        matrix[f, i] = value
+
+    # Copy elements of a symmetric matrix to the upper triangle
     if operator.symmetric:
         lower_tri_indices = np.tril_indices_from(matrix, k=-1)
         upper_tri_indices = (lower_tri_indices[1], lower_tri_indices[0])
         matrix[upper_tri_indices] = matrix[lower_tri_indices]
 
+    # Return the matrix as 2D numpy array
     return matrix
 
 
@@ -450,30 +463,39 @@ def unit_matrix(ion, operator_name: str) -> np.ndarray:
 # HDF5 cache interface
 ##########################################################################
 
-def get_unit(ion, name: str) -> np.ndarray:
-    if name not in ion.unit_vault:
-        print(f"Create unit matrix {name} ... ", end="")
-        matrix = unit_matrix(ion, name)
-        ion.unit_vault.create_dataset(name, data=matrix, compression="gzip", compression_opts=9)
+def get_unit(ion, operator_name: str) -> np.ndarray:
+    """ Return the full matrix of the unit tensor operator with given name in the determinantal product state space
+    of the given ion. This function will use the HDF5 file cache to calculate each matrix only once. """
+
+    # Calculate the matrix and store it in the HDF5 file cache
+    if operator_name not in ion.unit_vault:
+        print(f"Create unit matrix {operator_name} ... ", end="")
+        matrix = unit_matrix(ion, operator_name)
+        ion.unit_vault.create_dataset(operator_name, data=matrix, compression="gzip", compression_opts=9)
         ion.vault.flush()
         print("done.")
-    else:
-        pass
-        # print(f"Unit matrix {name}: load")
-    return np.array(ion.unit_vault[name])
+
+    # Return matrix from the HDF5 cache as numpy array
+    return np.array(ion.unit_vault[operator_name])
 
 
 def init_unit(vault, group_name: str):
+    """ Initialize the cache for the storage of unit tensor operator matrices in the determinantal product state
+    space in the HDF5 group with given name in the given HDF5 file vault. """
+
+    # Delete the group in the HDF5 file, if the cache is marked as invalid or its version number does not match
     if group_name in vault:
         if not vault.attrs["valid"] or "version" not in vault[group_name].attrs or vault[group_name].attrs[
             "version"] != UNIT_VERSION:
             del vault[group_name]
         vault.flush()
 
+    # Create a new HDF5 group with current version number if it is missing
     if group_name not in vault:
         vault.attrs["valid"] = False
         vault.create_group(group_name)
         vault[group_name].attrs["version"] = UNIT_VERSION
         vault.flush()
 
+    # Return the HDF5 group of the unit tensor cache
     return vault[group_name]
