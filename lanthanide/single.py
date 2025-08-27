@@ -346,8 +346,8 @@ def matrix_elements(states):
                     parity = (initial_swaps + final_swaps) % 2
 
                     # Return indices of the matrix element, same and different electrons and parity
-                    yield (num + 1, initial_index, final_index, same_electrons,
-                           initial_electrons, final_electrons, parity)
+                    data = initial_index, final_index, same_electrons, initial_electrons, final_electrons, parity
+                    yield num + 1, data
 
                     # Deliver only the match with the smallest number of different electrons
                     break
@@ -414,7 +414,7 @@ def single_elements(states):
     elements = [states, [], [], []]
 
     # Collect all matrix elements with a minimum diff of 1, 2, or 3 electrons. All other elements are discarded.
-    for diff_num, *data in matrix_elements(diff_states):
+    for diff_num, data in matrix_elements(diff_states):
         elements[diff_num].append(data)
 
     # Number of electrons in the configuration
