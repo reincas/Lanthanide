@@ -3,6 +3,15 @@
 # <reinhard.caspary@phoenixd.uni-hannover.de>                            #
 # This program is free software under the terms of the MIT license.      #
 ##########################################################################
+#
+# This module provides classes for the representation of single states
+# and lists of all states of a configuration in the determinantal product
+# state space and in SLJM, SLJ and intermediate coupling. The main tasks
+# of these objects is the generation of short and long string
+# representations of the states and the provision of transformation
+# matrices between the different coupling schemes.
+#
+##########################################################################
 
 import numpy as np
 from enum import Enum
@@ -329,16 +338,29 @@ class StateListSLJ(StateList):
 ##########################################################################
 
 class StateJ:
+    """ Class for an electron state in an intermediate coupling of SLJ states. """
+
     def __init__(self, energy, values, states):
+        """ Store the energy level of the state and the vector (values) for the linear combination of the given
+        SLJ states. """
+
         assert isinstance(energy, float)
         assert isinstance(values, np.ndarray)
         assert isinstance(states, list)
         assert len(states) == len(values)
+        assert all(state["J2"].J == states[0]["J2"].J for state in states[1:])
 
+        # Energy level of the state
         self.energy = energy
+
+        # Linear combination vector and weight factor vector
         self.values = values
         self.weights = values * values
+
+        # The state in intermediate coupling is a linear combination of this list of related SLJ states
         self.states = states
+
+        # Common quantum number J of the total angular momentum of all related SLJ states
         self.J = self.states[0]["J2"].J
 
     def short(self):
@@ -354,30 +376,54 @@ class StateJ:
             [f"{self.weights[i]:.2f} {self.states[i].short()}" for i in indices if self.weights[i] > min_weight])
 
     def __str__(self):
+        """ Return a long string representation of the state. """
+
         return self.long()
 
 
 class StateListJ(StateList):
+    """ Class containing a list of StateJ objects representing an electron state in an intermediate coupling
+    of SLJ states. """
+
     def __init__(self, slj_states, energies, transform):
+        """ Store the given StateListSLJ object with the list of related SLJ states, the energies of all states and
+        the transformation matrix representing the linear combination of the SLJ states. """
+
         assert isinstance(slj_states, StateListSLJ)
         assert len(transform.shape) == 2 and transform.shape[0] == transform.shape[1]
         assert len(energies) == len(slj_states) == transform.shape[0]
 
+        # Store the SLJ states, energy levels and the transformation matrix from SLJ to intermediate coupling
         self.slj_states = slj_states
         self.energies = energies
         self.transform = transform
 
+        # J quantum numbers of all SLJ states
         term_J = np.array([state["J2"].J for state in self.slj_states])
+
+        # Matrix of weight factors for the SLJ components or each state in intermediate coupling
         weight = np.power(self.transform, 2)
+
+        # J quantum number of each state in intermediate coupling is taken from its main SLJ component
         self.J = [term_J[i] for i in np.argmax(weight, axis=0)]
+
+        # Build the list of StateJ objects
         self.states = []
         for i in range(len(self.J)):
+
+            # Indices of all SLJ states with the same quantum number J as the current state
             indices = np.array(np.argwhere(term_J == self.J[i]).flat)
+
+            # Combination vector and SLJ states for the linear combination of the current state
             values = self.transform[indices, i]
             slj_states = [self.slj_states[i] for i in indices]
+
+            # Add StateJ object representing the current state in intermediate coupling
             self.states.append(StateJ(energies[i], values, slj_states))
 
     def __str__(self):
+        """ Return a string representation of the list of states. """
+
         return f"<List of {len(self)} intermediate states>"
 
 
