@@ -11,20 +11,42 @@ from .wigner import wigner3j
 from .unit import ORBITAL, SPIN, MAGNETIC
 from .symmetry import CHR_ORBITAL, SYMMETRY, SymmetryList
 
+# Version of the algorithms for coupled electron states in this module. If the precomputed states and transformation
+# matrix in the file cache come with another version number, they will be recomputed. This will also render all other
+# elements following in the chain of dependent cache elements invalid, which is the module 'matrix', see the init
+# function of the Lanthanide class.
 TERM_VERSION = 2
+
+# Chain of symmetry group operators used to classify the SLJM and SLJ states. The order in these tuples relates to
+# the columns of the eigenvalue matrices.
 SYM_CHAIN_SLJM = ("S2", "GR/7", "GG/2", "L2", "tau", "J2", "num", "Jz")
 SYM_CHAIN_SLJ = ("S2", "GR/7", "GG/2", "L2", "tau", "J2", "num")
 
 
 class Coupling(Enum):
+    """ This enumeration class is used to mark the four coupling schemes used in the Lanthanide package: determinantal
+    product state coupling, SLJM coupling, SLJ coupling, and intermediate coupling. """
+
     Product = 0
     SLJM = 1
     SLJ = 2
     J = 3
 
 
-class StateList:
+def val2key(values, sym_chain=SYM_CHAIN_SLJM):
+    """ Convert a float array of symmetry values to an integer symmetry key array. The rows of the arrays are
+    referring to the electron states and the columns refer to the chain of symmetry operators of which the names
+    are given in the parameter sym_chain. """
 
+    assert isinstance(values, np.ndarray)
+    assert len(values.shape) == 2
+    assert values.dtype == float
+    assert values.shape[1] == len(sym_chain)
+
+    return np.array([SymmetryList(values[:, i], name).keys for i, name in enumerate(SYM_CHAIN_SLJM)], dtype=int).T
+
+
+class StateList:
     states = []
 
     def __len__(self):
@@ -44,9 +66,9 @@ class StateList:
         return [state.long() for state in self.states]
 
 
-##################################################
+##########################################################################
 # Product states
-##################################################
+##########################################################################
 
 class StateProduct:
     def __init__(self, values):
@@ -83,9 +105,9 @@ class StateListProduct(StateList):
         return f"<List of {len(self)} product states>"
 
 
-##################################################
+##########################################################################
 # SLJM states
-##################################################
+##########################################################################
 
 class StateSLJM:
     def __init__(self, values):
@@ -146,20 +168,9 @@ class StateListSLJM(StateList):
         return f"<List of {len(self)} SLJM states>"
 
 
-def val2key(values, sym_chain=SYM_CHAIN_SLJM):
-    """ Convert float symmetry value array to int symmetry key array. """
-
-    assert isinstance(values, np.ndarray)
-    assert len(values.shape) == 2
-    assert values.dtype == float
-    assert values.shape[1] == len(sym_chain)
-
-    return np.array([SymmetryList(values[:, i], name).keys for i, name in enumerate(SYM_CHAIN_SLJM)], dtype=int).T
-
-
-##################################################
+##########################################################################
 # SLJ states
-##################################################
+##########################################################################
 
 class StateSLJ:
     def __init__(self, values):
@@ -210,9 +221,10 @@ class StateListSLJ(StateList):
     def __str__(self):
         return f"<List of {len(self)} SLJ states>"
 
-##################################################
+
+##########################################################################
 # Intermediate states
-##################################################
+##########################################################################
 
 class StateJ:
     def __init__(self, energy, values, states):
@@ -232,10 +244,12 @@ class StateJ:
 
     def long(self, min_weight=0.0):
         indices = reversed(np.argsort(self.weights))
-        return " + ".join([f"{self.weights[i]:.2f} {self.states[i].short()}" for i in indices if self.weights[i] > min_weight])
+        return " + ".join(
+            [f"{self.weights[i]:.2f} {self.states[i].short()}" for i in indices if self.weights[i] > min_weight])
 
     def __str__(self):
         return self.long()
+
 
 class StateListJ(StateList):
     def __init__(self, slj_states, energies, transform):
@@ -261,18 +275,21 @@ class StateListJ(StateList):
         return f"<List of {len(self)} intermediate states>"
 
 
-##################################################
+##########################################################################
 # Build SLJM states
-##################################################
+##########################################################################
 
 class ReducedMatrixUk:
     """ SLJM matrix holding reduced matrix elements <J'||U(k)||J> of the unit tensor U(k) of rank k in the
     orbital space or NAN, if the Wigner-Eckart theorem is not applicable for the respective matrix element.
     As long as the phases of the transformation vectors from product to SLJM space are not adjusted, only the
-    diagonal elements of this matrix contain reduced matrix elements with correct sign. The non-diagonal
-    elements may thus be used to fix the signs of the transformation vectors. """
+    diagonal elements of this matrix contain reduced matrix elements with correct sign. Therefore, the
+    non-diagonal elements are used to fix the signs of the transformation vectors by the function
+    phase_SLJM(). """
 
     def __init__(self, ion, transform, J, M, k: int):
+        """ Calculate and store the non-zero components of the unit tensor operator U(k) in the SLJM space. Use
+        the given transformation matrix and the vectors of J and M quantum numbers of every state. """
         assert 0 <= k <= 2 * ion.l
         assert len(J) == len(M)
 
@@ -281,7 +298,7 @@ class ReducedMatrixUk:
         self.M = M
         self.k = k
 
-        # Store all components of the unit tensor operator U(k)
+        # Store the non-zero component of the unit tensor operator U(k) for each matrix element
         self.hyper = np.zeros((2 * k + 1, len(J), len(J)), dtype=float)
         for q in range(-k, k + 1):
             self.hyper[q + k, :, :] = transform.T @ ion.matrix(f"U/a/{k},{q}").array @ transform
@@ -410,8 +427,10 @@ def phase_SLJM(ion, values, transform):
                     sign = element * signs[row] / ref_element
                     assert abs(ref_element) < 1e-25 or (abs(sign) - 1) < 1e-5
                     if abs(ref_element) < 1e-25 or (abs(sign) - 1) >= 1e-5:
-                        state = StateSLJ(values[col,:-1])
-                        print(f"Warning (phase_SLJM) for state | {state} >: element({row},{col}) = {element} / ref({i_min},{i_min}) = {ref_element} / sign = {sign}")
+                        state = StateSLJ(values[col, :-1])
+                        str_element = f"element({row},{col}) = {element}"
+                        str_ref = f"ref({i_min},{i_min}) = {ref_element}"
+                        print(f"Warning (phase_SLJM) for state | {state} >: {str_element} / {str_ref} / sign = {sign}")
                     if sign < 0:
                         signs[col] = -1
                     unknown[col] = False
@@ -419,11 +438,17 @@ def phase_SLJM(ion, values, transform):
 
     # Correct all column vectors
     assert not np.any(unknown)
-    #print(f"{np.sum(signs < 0)} signs flipped.")
+    # print(f"{np.sum(signs < 0)} signs flipped.")
     return transform * signs
 
 
 def build_tau(syms, states):
+    """ The lanthanide configurations f5 - f9 contain pairs of SLJM states, which match in all quantum numbers
+    in the chain of operators S2, G(R7), G(G2), L2, and J2. These states get an artificial tau value of 1 and 2
+    assigned ad-hoc. The tau value of unique states is 0. Return an SymmetryList object containing the tau values
+    of all states. """
+
+    # Build a dictionary which maps every distinct state to the respective state indices
     names = {}
     for i in range(states):
         key = f"{syms['S2'][i]} {syms['GR/7'][i]} {syms['GG/2'][i]} {syms['L2'][i]} {syms['J2'][i]} {syms['Jz'][i]}"
@@ -432,6 +457,7 @@ def build_tau(syms, states):
         else:
             names[key].append(i)
 
+    # Assign tau values 1 and 2 to matching pairs and 0 to states with unique quantum numbers
     tau_values = states * [0]
     for key in names:
         if len(names[key]) > 1:
@@ -439,17 +465,27 @@ def build_tau(syms, states):
                 raise RuntimeError("More than 2 equal SLJM states found!")
             for num, i in enumerate(names[key]):
                 tau_values[i] = num + 1
+
+    # Return an SymmetryList object containing the tau values of all states
     return SymmetryList(tau_values, "tau")
 
 
 def build_num(syms, states):
+    """ Assign individual integer numbers to states, which match in the quantum numbers for the operators
+    S2, L2, and J2 as a short-cut. The num value of unique states is 0. Return an SymmetryList object containing
+    the num values of all states."""
+
+    # Build a dictionary which maps every distinct quantum number combination S, L, J to the respective state indices
     names = {}
     for i in range(states):
+
+        # This is the reference SLJ key
         key1 = f"{syms['S2'][i]} {syms['L2'][i]} {syms['J2'][i]}"
         if key1 not in names:
             names[key1] = {}
             names[key1]["keys"] = []
 
+        # This key distinguishes the SLJ states with the same SLJ values
         key2 = f"{syms['GR/7'][i]} {syms['GG/2'][i]} {syms['tau'][i]}"
         if key2 not in names[key1]:
             names[key1][key2] = [i]
@@ -457,6 +493,7 @@ def build_num(syms, states):
         else:
             names[key1][key2].append(i)
 
+    # Assign integer num values to matching states and 0 to states with unique quantum numbers
     num_values = states * [0]
     for key1 in names:
         if len(names[key1]) > 2:
@@ -465,41 +502,67 @@ def build_num(syms, states):
                 for i in names[key1][key2]:
                     num_values[i] = num_value
                 num_value += 1
+
+    # Return an SymmetryList object containing the num values of all states
     return SymmetryList(num_values, "num")
 
 
 def sort_states(values: np.ndarray, transform: np.ndarray, sym_order: tuple) -> (np.ndarray, np.ndarray):
-    """ Lexicographical sort of states based on integer symmetry values. """
+    """ Lexicographical sort of states based on their given eigenvalue matrix according to the chain of symmetry
+    groups given in SYM_CHAIN_SLJM. Return new eigenvalue and transformation matrices corresponding to the new order
+    of states. """
 
+    # Sorting is based on the integer keys. The eigenvalue matrix
     keys = val2key(values, SYM_CHAIN_SLJM)
+
+    # Map given symmetry chain to SYM_CHAIN_SLJM
     sym_indices = [SYM_CHAIN_SLJM.index(name) for name in sym_order]
+
+    # Determine state indices resembling lexicographically sorted integer eigenvalue keys
     state_indices = np.lexsort(keys[:, sym_indices].T)
+
+    # Use sorted state indices to build new eigenvalue and transformation matrices
     if np.any(state_indices != np.arange(state_indices.shape[0])):
         values = values[state_indices, :]
         transform = transform[:, state_indices]
 
+    # Return new eigenvalue and transformation matrices
     return values, transform
 
 
 def build_SLJM(ion):
-    print("Create SLJM states ...")
+    """ Build the transformation matrix from the determinantal product state space to the SLJM space and the matrix
+    of all eigenvalues of the symmetry operators in the classification chain. """
+
+    # Number of states for the given electron configuration
     states = len(ion.product_states)
+
+    # Initialize the eigenvalue matrix, the transformation matrix, and the dictionary of SymmetryList objects
     eigen_vectors = np.zeros((states, states), dtype=float)
     transform = None
     symmetries = {}
 
+    # Initialize the list of sub-spaces which will be split by the algorithm
     sym_slices = [slice(0, states)]
+
+    # Follow the chain or symmetry operators, but skip the pseudo operators "tau" and "num". Build a transformation
+    # matrix from product states to SLJM coupling together with the eigenvalues of all symmetry operators.
     for name in SYM_CHAIN_SLJM:
         if name in ("tau", "num"):
             continue
-        print(f"SLJM states: process group {name} ...")
 
+        # Get the matrix of the current symmetry operator in the determinantal product space and apply the current
+        # transformation matrix
         array = ion.matrix(name).array
         if transform is not None:
             array = transform.T @ array @ transform
 
+        # Initialize eigenvalues and eigenvectors of the current symmetry operator
         eigen_values = []
         eigen_vectors *= 0.0
+
+        # Calculate eigenvalues and eigenvectors of the current symmetry operator by diagonalising its pre-transformed
+        # matrix in each of the current sub-spaces
         for sym_slice in sym_slices:
             if sym_slice.stop - sym_slice.start > 1:
                 V, U = np.linalg.eigh(array[sym_slice, sym_slice])
@@ -511,51 +574,71 @@ def build_SLJM(ion):
             eigen_values += list(V)
             eigen_vectors[sym_slice, sym_slice] = U
 
-        eigen_values = SymmetryList(eigen_values, name)
-        sym_slices = eigen_values.split_syms(sym_slices)
-        symmetries[name] = eigen_values
+        # Store SymmetryList object containing the eigenvalues of the current symmetry operator for all states
+        symmetries[name] = SymmetryList(eigen_values, name)
 
+        # Split the sub-spaces in such a way that all states inside the new sub-spaces have the same eigenvalue of
+        # the current symmetry operator
+        sym_slices = symmetries[name].split_syms(sym_slices)
+
+        # Use the eigenvectors of the current symmetry operator to update the transformation matrix
         if transform is None:
             transform = np.array(eigen_vectors)
         else:
             transform = transform @ eigen_vectors
 
-    print("SLJM states: process tau ...")
+    # Label the state pairs which cannot be resolved by our classification with the chain of symmetry operators
     symmetries["tau"] = build_tau(symmetries, states)
-    print("SLJM states: process num ...")
+
+    # Generate short-cut numbers to distinguish states sharing the same SLJ quantum numbers
     symmetries["num"] = build_num(symmetries, states)
 
+    # Build a matrix of eigenvalues (and pseudo eigenvalues "tau" and "num"). Rows correspond to SLJM states,
+    # columns to operators from SYM_CHAIN_SLJM
     values = np.zeros((states, len(SYM_CHAIN_SLJM)), dtype=float)
     for j, name in enumerate(SYM_CHAIN_SLJM):
         eigen_values = symmetries[name]
         for i in range(len(eigen_values)):
             values[i, j] = eigen_values[i].value
 
-    print("SLJM states: adjust phases ...")
-    # Adjust phases for reduced matrix elements from SLJ states
+    # Adjust phases of the eigenvectors in the transformation matrix. This would not be necessary for the calculation
+    # of ordinary matrix elements of tensor operators. However, it is the precondition for the calculation of
+    # reduced matrix elements in SLJ coupling.
     sym_order = ("Jz", "J2", "tau", "L2", "GG/2", "GR/7", "S2")
     values, transform = sort_states(values, transform, sym_order)
     transform = phase_SLJM(ion, values, transform)
 
-    # Sort for J spaces
+    # Sort the SLJM states is such a way that all states with the same J quantum number form contiguous groups.
+    # In this the matrices of the perturbation hamiltonians can be split into a chain of sub-matrices along the
+    # main diagonal. Diagonalisation of these sub-matrices speeds the calculation of energy levels up significantly.
     sym_order = ("Jz", "tau", "L2", "GG/2", "GR/7", "S2", "J2")
     values, transform = sort_states(values, transform, sym_order)
 
-    print("SLJM states done.")
+    # Return the eigenvalue and transformation matrices
     return values, transform
 
 
-##################################################
-# HDF5 interface
-##################################################
+##########################################################################
+# HDF5 cache interface
+##########################################################################
 
 def init_states(vault, group_name, ion):
+    """ Initialize the cache for the storage of eigenvalue and transformation matrices for the transformation from
+    the determinantal product state space to SLJM coupling in the HDF5 group with given name in the given HDF5
+    file vault. """
+
+    # Delete the group in the HDF5 file, if the cache is marked as invalid or its version number does not match
     if group_name in vault:
-        if not vault.attrs["valid"] or "version" not in vault[group_name].attrs or vault[group_name].attrs["version"] != TERM_VERSION:
+        if not vault.attrs["valid"] or "version" not in vault[group_name].attrs \
+                or vault[group_name].attrs["version"] != TERM_VERSION:
             del vault[group_name]
             vault.flush()
 
+    # Generate all data, if the HDF5 group is missing
     if group_name not in vault:
+        print("Create SLJM states ...")
+
+        # Render all cache structures following in the dependence chain as invalid
         vault.attrs["valid"] = False
         vault.create_group(group_name)
         vault[group_name].attrs["version"] = TERM_VERSION
@@ -565,7 +648,10 @@ def init_states(vault, group_name, ion):
         group = vault[group_name].create_group(Coupling.SLJM.name)
         group.create_dataset("values", data=values, compression="gzip", compression_opts=9)
         group.create_dataset("transform", data=transform, compression="gzip", compression_opts=9)
+
+        # Flush the cache file
         vault.flush()
+        print("SLJM states done.")
 
     Product_States = StateListProduct(ion.product_states)
 
@@ -581,16 +667,3 @@ def init_states(vault, group_name, ion):
         Coupling.SLJM.name: SLJM_states,
         Coupling.SLJ.name: SLJ_states,
     }
-
-
-if __name__ == "__main__":
-    import time
-    from lanthanide import Lanthanide
-
-    for num in range(1, 14):
-        with Lanthanide(num) as ion:
-            print(ion)
-            states = ion.states(Coupling.SLJM)
-            new_transform = phase_SLJM(ion, states.values, states.transform)
-
-    print("Done.")
