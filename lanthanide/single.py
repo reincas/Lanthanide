@@ -396,8 +396,6 @@ def single_elements(states):
     parameters for elementary one-, two-, or three-electron tensor operators to be evaluated for the respective
     matrix elements. """
 
-    print("Creating vault single ...")
-
     # Collect comparison data for each product state
     diff_states = []
     for electrons in states:
@@ -424,21 +422,17 @@ def single_elements(states):
 
     # Determine parameters for all elementary one-electron tensor operators to be evaluated for each
     # potential matrix element (diff is 1)
-    print("Vault single: collect one-electron indices ...")
-    one = single_one(elements) if num_electrons >= 1 else None
+    one = single_one(elements) if num_electrons >= 1 else ([], [])
 
     # Determine parameters for all elementary two-electron tensor operators to be evaluated for each
     # potential matrix element (diff is 1 or 2)
-    print("Vault single: collect two-electron indices ...")
-    two = single_two(elements) if num_electrons >= 2 else None
+    two = single_two(elements) if num_electrons >= 2 else ([], [])
 
     # Determine parameters for all elementary three-electron tensor operators to be evaluated for each
     # potential matrix element (diff is 1, 2, or 3)
-    print("Vault single: collect three-electron indices ...")
-    three = single_three(elements) if num_electrons >= 3 else None
+    three = single_three(elements) if num_electrons >= 3 else ([], [])
 
     # Return evaluation parameters for elementary one-, two-, or three-electron tensor operators
-    print("Vault single done.")
     return one, two, three
 
 
@@ -536,6 +530,7 @@ def init_single(vault, group_name, states):
 
     # Generate all data, if the HDF5 group is missing
     if group_name not in vault:
+        print("Creating vault single ...")
 
         # Render all cache structures following in the dependence chain as invalid
         vault.attrs["valid"] = False
@@ -567,6 +562,7 @@ def init_single(vault, group_name, states):
 
         # Flush the cache file
         vault.flush()
+        print("Vault single done.")
 
     # Return an interface object supporting the calculation of the matrices of tensor operators in the determinantal
     # product space of the given configuration
