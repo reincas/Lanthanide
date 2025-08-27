@@ -6,7 +6,7 @@
 
 from .halfint import HalfInt
 from .wigner import wigner3j, wigner6j
-from .unit import MAGNETIC, calc_unit, get_unit
+from .unit import MAGNETIC, product_states, calc_unit, get_unit
 from .state import Coupling, StateListProduct, StateListSLJM, StateListSLJ, StateListJ, \
     StateProduct, StateSLJM, StateSLJ, StateJ
 from .matrix import MATRIX, reduced_matrix
