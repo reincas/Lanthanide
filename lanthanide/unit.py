@@ -492,8 +492,8 @@ def get_unit(ion, operator_name: str) -> np.ndarray:
 
 
 def init_unit(vault, group_name: str):
-    """ Initialize the cache for the storage of unit tensor operator matrices in the determinantal product state
-    space in the HDF5 group with given name in the given HDF5 file vault. """
+    """ Initialize and return the cache for the storage of unit tensor operator matrices in the determinantal
+    product state space in the HDF5 group with given name in the given HDF5 file vault. """
 
     # Delete the group in the HDF5 file, if the cache is marked as invalid or its version number does not match
     if group_name in vault:
