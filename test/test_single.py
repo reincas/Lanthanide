@@ -29,8 +29,6 @@ def test_single(num: int):
     result = single_elements(states)
     assert len(result) == 3
     assert all(len(sub) == 2 for sub in result)
-    sys.stdout.flush()
-    return
 
     size = [len(x) for sub in result for x in sub]
     assert size == SIZES[num]
