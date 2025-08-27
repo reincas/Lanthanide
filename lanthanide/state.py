@@ -20,7 +20,7 @@ TERM_VERSION = 2
 # Chain of symmetry group operators used to classify the SLJM and SLJ states. The order in these tuples relates to
 # the columns of the eigenvalue matrices.
 SYM_CHAIN_SLJM = ("S2", "GR/7", "GG/2", "L2", "tau", "J2", "num", "Jz")
-SYM_CHAIN_SLJ = ("S2", "GR/7", "GG/2", "L2", "tau", "J2", "num")
+SYM_CHAIN_SLJ = SYM_CHAIN_SLJM[:-1]
 
 
 class Coupling(Enum):
@@ -47,22 +47,35 @@ def val2key(values, sym_chain=SYM_CHAIN_SLJM):
 
 
 class StateList:
+    """ Abstract class for a list of electron states in a certain coupling scheme. The abstract defines some common
+    methods acting on the common attribute states, which contains the list of State objects. """
+
     states = []
 
     def __len__(self):
+        """ Returns the number of states. """
+
         return len(self.states)
 
     def __iter__(self):
+        """ Generate each state. """
+
         for state in self.states:
             yield state
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: int):
+        """ Return the state with the given index. """
+
         return self.states[item]
 
     def short(self):
+        """ Return a list containing the short names of all states. """
+
         return [state.short() for state in self.states]
 
     def long(self):
+        """ Return a list containing the long names of all states. """
+
         return [state.long() for state in self.states]
 
 
@@ -71,37 +84,65 @@ class StateList:
 ##########################################################################
 
 class StateProduct:
+    """ Class for a determinantal product state. """
+
     def __init__(self, values):
+        """ Store the index values of the electrons and all of their quantum numbers. """
+
+        # Common electron quantum numbers of the orbital angular momentum and the spin
         self.l = ORBITAL
         self.s = SPIN
+
+        # List of all magnetic quantum numbers ml, ms for electrons in the configuration
         self.m = MAGNETIC
+
+        # Index values and quantum numbers of all electrons of the state
         self.values = list(values)
         self.quantum = [(self.l, self.m[i][0], self.s, self.m[i][1]) for i in self.values]
 
     def short(self):
+        """ Return a short string representation of the state. """
+
         quantum = [(ml, "du"[(2 * ms + 1) // 2]) for l, ml, s, ms in self.quantum]
         return " ".join(f"{ml:+d}{ms}" for ml, ms in quantum)
 
     def long(self):
+        """ Return a long string representation of the state. """
+
         quantum = [(CHR_ORBITAL[l].lower(), ml, 2 * s, 2 * ms) for l, ml, s, ms in self.quantum]
         return " ".join(f"{l},{ml:+d},{s}/2,{ms:+d}/2" for l, ml, s, ms in quantum)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: int):
+        """ Return the quantum numbers l, s, ml, and ms of the state with the given index. """
+
         return self.quantum[item]
 
     def __str__(self):
+        """ Return a long string representation of the state. """
+
         return self.long()
 
 
 class StateListProduct(StateList):
+    """ Class containing a list of StateProduct objects representing an electron configuration. """
+
     def __init__(self, values):
+        """ Store the given array of electron indices and build the list of StateProduct objects. """
+
         assert len(set(len(state) for state in values)) == 1
 
+        # Array of electron indices. Rows represent states, columns individual electrons in each state.
         self.values = np.array(values)
-        self.transform = None
+
+        # List of all StateProduct objects
         self.states = [StateProduct(v) for v in values]
 
+        # No transformation matrix
+        self.transform = None
+
     def __str__(self):
+        """ Return a string representation of the list of states. """
+
         return f"<List of {len(self)} product states>"
 
 
@@ -110,17 +151,26 @@ class StateListProduct(StateList):
 ##########################################################################
 
 class StateSLJM:
+    """ Class for an electron state in SLJM coupling following the chain of symmetry operators in SYM_CHAIN_SLJM. """
+
     def __init__(self, values):
+        """ Store the eigenvalues of the state and build a dictionary containing a Symmetry object for each link in
+        the chain of symmetry operators in SYM_CHAIN_SLJM. """
+
         self.sym_chain = SYM_CHAIN_SLJM
         assert len(values) == len(self.sym_chain)
         self.values = list(values)
         self.symmetries = dict((name, SYMMETRY[name](value)) for name, value in zip(SYM_CHAIN_SLJM, self.values))
 
     def short(self):
+        """ Return a short string representation of the state. """
+
         num = f"({self['num']})" if self["num"].key > 0 else ""
         return f"{self['S2']}{self['L2']}{self['J2']}{num} {self['Jz']}"
 
     def long(self):
+        """ Return a long string representation of the state. """
+
         tau = f"{self['tau']}" if self["tau"].value > 0 else ""
         num = f"({self['num']})" if self["num"].key > 0 else ""
         return f"{self['S2']}{self['L2']} {self['GR/7']} {self['GG/2']} {self['J2']}{tau}{num} {self['Jz']}"
@@ -130,26 +180,40 @@ class StateSLJM:
     #         sym_names = self.sym_chain
     #     return " ".join([str(self[sym]) for sym in sym_names])
 
-    def __getitem__(self, key):
-        if key not in self.symmetries:
-            raise KeyError(f"Unknown symmetry {key}!")
-        return self.symmetries[key]
+    def __getitem__(self, sym_name: str):
+        """ Return the Symmetry object for the given operator name. """
+
+        if sym_name not in self.symmetries:
+            raise KeyError(f"Unknown symmetry {sym_name}!")
+        return self.symmetries[sym_name]
 
     def __str__(self):
+        """ Return a long string representation of the state. """
+
         return self.long()
 
 
 class StateListSLJM(StateList):
+    """ Class containing a list of StateSLJM objects representing an electron configuration. """
+
     def __init__(self, values, transform):
+        """ Store the given eigenvalue matrix, as well as the transformation matrix from the determinantal product
+        state space to SLJM coupling, and build the list of StateSLJM objects. """
+
         assert len(values.shape) == 2 and values.shape[1] == len(SYM_CHAIN_SLJM)
         assert len(transform.shape) == 2 and transform.shape[0] == transform.shape[1]
         assert values.shape[0] == transform.shape[0]
 
+        # Store the chain of symmetry operators and the eigenvalue and transformation matrices
         self.sym_chain = SYM_CHAIN_SLJM
         self.values = np.array(values)
         self.transform = np.array(transform)
+
+        # List of StateSLJM objects
         self.states = [StateSLJM(v) for v in self.values]
 
+        # List of slices for all states with different J quantum number. This is used for the calculation of
+        # energy levels from perturbation hamiltonians.
         self.J_slices = []
         i = 0
         for j in range(1, len(self) + 1):
@@ -158,13 +222,24 @@ class StateListSLJM(StateList):
                 i = j
 
     def to_SLJ(self):
+        """ Pick all stretched states with M = J and return the respective StateListSLJ object. """
+
+        # Indices of all stretched states
         state_indices = [i for i, state in enumerate(self.states) if state["J2"].key == state["Jz"].key]
+
+        # Indices of all symmetry operators except Jz in the symmetry chain
         sym_indices = [j for j in range(len(SYM_CHAIN_SLJM)) if SYM_CHAIN_SLJM[j] != "Jz"]
+
+        # Extract the eigenvalues and transformation vectors of the stretched states
         values = self.values[state_indices, :][:, sym_indices]
         transform = self.transform[:, state_indices]
+
+        # Return a StateListSLJ object of the stretched states
         return StateListSLJ(values, transform)
 
     def __str__(self):
+        """ Return a string representation of the list of states. """
+
         return f"<List of {len(self)} SLJM states>"
 
 
@@ -173,41 +248,64 @@ class StateListSLJM(StateList):
 ##########################################################################
 
 class StateSLJ:
+    """ Class for an electron state in SLJ coupling following the chain of symmetry operators in SYM_CHAIN_SLJ. """
+
     def __init__(self, values):
+        """ Store the eigenvalues of the state and build a dictionary containing a Symmetry object for each link in
+        the chain of symmetry operators in SYM_CHAIN_SLJ. """
+
         self.sym_chain = SYM_CHAIN_SLJ
         assert len(values) == len(self.sym_chain)
         self.values = list(values)
         self.symmetries = dict((name, SYMMETRY[name](value)) for name, value in zip(self.sym_chain, self.values))
 
     def short(self):
+        """ Return a short string representation of the state. """
+
         num = f"({self['num']})" if self["num"].key > 0 else ""
         return f"{self['S2']}{self['L2']}{self['J2']}{num}"
 
     def long(self):
+        """ Return a long string representation of the state. """
+
         tau = f"{self['tau']}" if self["tau"].value > 0 else ""
         num = f"({self['num']})" if self["num"].key > 0 else ""
         return f"{self['S2']}{self['L2']} {self['GR/7']} {self['GG/2']} {self['J2']}{tau}{num}"
 
-    def __getitem__(self, key):
-        if key not in self.symmetries:
-            raise KeyError(f"Unknown symmetry {key}!")
-        return self.symmetries[key]
+    def __getitem__(self, sym_name: str):
+        """ Return the Symmetry object for the given operator name. """
+
+        if sym_name not in self.symmetries:
+            raise KeyError(f"Unknown symmetry {sym_name}!")
+        return self.symmetries[sym_name]
 
     def __str__(self):
+        """ Return a long string representation of the state. """
+
         return self.long()
 
 
 class StateListSLJ(StateList):
+    """ Class containing a list of StateSLJ objects representing an electron configuration. """
+
     def __init__(self, values, transform):
-        self.sym_chain = SYM_CHAIN_SLJ
-        assert len(values.shape) == 2 and values.shape[1] == len(self.sym_chain)
+        """ Store the given eigenvalue matrix, as well as the transformation matrix from the determinantal product
+        state space to SLJ coupling, and build the list of StateSLJ objects. """
+
+        assert len(values.shape) == 2 and values.shape[1] == len(SYM_CHAIN_SLJ)
         assert len(transform.shape) == 2
         assert values.shape[0] == transform.shape[1]
 
+        # Store the chain of symmetry operators and the eigenvalue and transformation matrices
+        self.sym_chain = SYM_CHAIN_SLJ
         self.values = np.array(values)
         self.transform = np.array(transform)
+
+        # List of StateSLJ objects
         self.states = [StateSLJ(v) for v in self.values]
 
+        # List of slices for all states with different J quantum number. This is used for the calculation of
+        # energy levels from perturbation hamiltonians.
         self.J_slices = []
         i = 0
         for j in range(1, len(self) + 1):
@@ -216,9 +314,13 @@ class StateListSLJ(StateList):
                 i = j
 
     def to_J(self, energies, transform):
+        """ Return a StateListJ object representing an intermediate coupling of the SLJ states. """
+
         return StateListJ(self, energies, transform)
 
     def __str__(self):
+        """ Return a string representation of the list of states. """
+
         return f"<List of {len(self)} SLJ states>"
 
 
@@ -240,9 +342,13 @@ class StateJ:
         self.J = self.states[0]["J2"].J
 
     def short(self):
+        """ Return a short string representation of the state. """
+
         return self.states[np.argmax(self.weights)].short()
 
     def long(self, min_weight=0.0):
+        """ Return a long string representation of the state. """
+
         indices = reversed(np.argsort(self.weights))
         return " + ".join(
             [f"{self.weights[i]:.2f} {self.states[i].short()}" for i in indices if self.weights[i] > min_weight])
@@ -625,7 +731,7 @@ def build_SLJM(ion):
 def init_states(vault, group_name, ion):
     """ Initialize the cache for the storage of eigenvalue and transformation matrices for the transformation from
     the determinantal product state space to SLJM coupling in the HDF5 group with given name in the given HDF5
-    file vault. """
+    file vault. Return a dictionary containing StateList objects for product, SLJM, and SLJ coupling. """
 
     # Delete the group in the HDF5 file, if the cache is marked as invalid or its version number does not match
     if group_name in vault:
