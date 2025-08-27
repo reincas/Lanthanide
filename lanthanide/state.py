@@ -640,11 +640,16 @@ def init_states(vault, group_name, ion):
 
         # Render all cache structures following in the dependence chain as invalid
         vault.attrs["valid"] = False
+
+        # Create new HDF5 group and store the current version number
         vault.create_group(group_name)
         vault[group_name].attrs["version"] = TERM_VERSION
 
+        # Build the transformation matrix from the determinantal product state space to the SLJM space and the
+        # matrix of all eigenvalues of the symmetry operators in the classification chain.
         values, transform = build_SLJM(ion)
 
+        # Store eigenvalue and transformation matrices
         group = vault[group_name].create_group(Coupling.SLJM.name)
         group.create_dataset("values", data=values, compression="gzip", compression_opts=9)
         group.create_dataset("transform", data=transform, compression="gzip", compression_opts=9)
@@ -653,15 +658,19 @@ def init_states(vault, group_name, ion):
         vault.flush()
         print("SLJM states done.")
 
+    # StateList object for the determinantal product states
     Product_States = StateListProduct(ion.product_states)
 
+    # The StateList object for SLJM states is taken from the file cache
     group = vault[group_name][Coupling.SLJM.name]
     values = np.array(group["values"])
     transform = np.array(group["transform"])
     SLJM_states = StateListSLJM(values, transform)
 
+    # StateList object for SLJ states
     SLJ_states = SLJM_states.to_SLJ()
 
+    # Return StateList dictionary
     return {
         Coupling.Product.name: Product_States,
         Coupling.SLJM.name: SLJM_states,
