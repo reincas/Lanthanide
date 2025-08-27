@@ -519,7 +519,8 @@ class SingleElements:
 
 def init_single(vault, group_name, states):
     """ Initialize the cache for the support structure for the calculation of tensor operator matrix elements for
-    the given determinantal product states in the HDF5 group with given name in the given HDF5 file vault. """
+    the given determinantal product states in the HDF5 group with given name in the given HDF5 file vault. Return
+    the SingleElements support object. """
 
     # Delete the group in the HDF5 file, if the cache is marked as invalid or its version number does not match
     if group_name in vault:
