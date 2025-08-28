@@ -534,13 +534,13 @@ class Matrix:
             transform = self.ion.states(coupling).transform
             array = transform.T @ array @ transform
 
-        # Return matrix in new state
+        # Return matrix in new coupling scheme
         return Matrix(self.ion, array, self.name, coupling)
 
 
 def build_hamilton(ion, radial: dict, coupling: Coupling):
-    """ Build and return the matrix of a perturbation hamiltonian operator as linear combination of the hamiltonians
-    and factors specified in the dictionary radial in the given coupling scheme."""
+    """ Build and return the matrix of a perturbation hamiltonian operator as linear combination of the interaction
+    hamiltonians and factors specified in the dictionary radial in the given coupling scheme."""
 
     assert coupling in (Coupling.SLJM, Coupling.SLJ)
     assert isinstance(radial, dict)
@@ -562,6 +562,11 @@ def build_hamilton(ion, radial: dict, coupling: Coupling):
 
 
 def reduced_matrix(ion, name: str, k: int, J: list, transform=None) -> np.ndarray:
+    """ Return a matrix of reduced matrix elements derived from the components of the operator with given name and
+    rank k. The parameter is a list of quantum numbers J of the total angular momentum for all states. If a
+    transformation matrix is given, it is used to transform the operator to an intermediate SLJ coupling. Note
+    that the intermediate coupling must preserve the quantum number J of each state. """
+
     assert 0 <= k <= 2 * ion.l
     assert isinstance(J, list)
     if transform is not None:
@@ -569,6 +574,7 @@ def reduced_matrix(ion, name: str, k: int, J: list, transform=None) -> np.ndarra
         assert len(transform.shape) == 2
         assert transform.shape[0] == transform.shape[1] == len(J)
 
+    # Matrix of the potentially non-zero components or the tensor operator of rank k
     num_states = len(J)
     if k == 0:
         array = ion.cached_matrix(name, Coupling.SLJ).array
@@ -577,10 +583,12 @@ def reduced_matrix(ion, name: str, k: int, J: list, transform=None) -> np.ndarra
         for q in range(-k, k + 1):
             array += ion.cached_matrix(name.format(q=q), Coupling.SLJ).array
 
+    # Transform to intermediate coupling
     if transform is not None:
         array = transform.T @ array @ transform
 
     def value(i: int, j: int):
+        """ Apply the Wigner-Eckart theorem to the given matrix element of array. """
         Ja = J[i]
         Jb = J[j]
         q = Ja - Jb
@@ -591,6 +599,7 @@ def reduced_matrix(ion, name: str, k: int, J: list, transform=None) -> np.ndarra
             return 0.0
         return array[i, j] / factor
 
+    # Apply the Wigner-Eckart theorem to every matrix element and return the matrix of reduced tensor matrix elements
     return np.array([[value(i, j) for j in range(num_states)] for i in range(num_states)], dtype=float)
 
 
@@ -598,15 +607,22 @@ def reduced_matrix(ion, name: str, k: int, J: list, transform=None) -> np.ndarra
 # HDF5 cache interface
 ##########################################################################
 
+# List of tensor operators which are eventually stored in the file cache
 STORE = ["H1", "H2", "H3", "H4", "H5", "H6"]
 
+
 def get_matrix(ion, name, coupling=None):
+    """ Return a Matrix object of the matrix of the tensor operator with given name and in the given coupling
+    scheme (default: Coupling.Product). The matrices of the tensor operators in the list STORE are stored in the
+    HDF5 file cache in SLJM and SLJ coupling. """
+
     assert isinstance(name, str)
     assert coupling is None or isinstance(coupling, Coupling)
 
+    # Coupling scheme of the returned Matrix object
     coupling = coupling or Coupling.Product
 
-    # Matrix of unit tensor operator
+    # Matrix of unit tensor operator. These matrices are provided by the module "unit".
     if name.count("/") == 2:
         array = get_unit(ion, name)
         return Matrix(ion, array, name).transform(coupling)
@@ -655,11 +671,17 @@ def get_matrix(ion, name, coupling=None):
 
 
 def init_matrix(vault, group_name: str):
+    """ Initialize and return the cache for the storage of higher order tensor operator matrices in SLJM and SLJ
+    coupling in the HDF5 group with given name in the given HDF5 file vault. """
+
+    # Delete the group in the HDF5 file, if the cache is marked as invalid or its version number does not match
     if group_name in vault:
-        if not vault.attrs["valid"] or "version" not in vault[group_name].attrs or vault[group_name].attrs["version"] != MATRIX_VERSION:
+        if not vault.attrs["valid"] or "version" not in vault[group_name].attrs or vault[group_name].attrs[
+            "version"] != MATRIX_VERSION:
             del vault[group_name]
             vault.flush()
 
+    # Create a new HDF5 group with current version number if it is missing
     if group_name not in vault:
         vault.attrs["valid"] = False
         group = vault.create_group(group_name)
@@ -668,4 +690,5 @@ def init_matrix(vault, group_name: str):
         group.create_group(Coupling.SLJ.name)
         vault.flush()
 
+    # Return the HDF5 group of the higher-order tensor matrix cache
     return vault[group_name]
