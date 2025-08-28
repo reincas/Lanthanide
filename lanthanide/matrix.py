@@ -15,66 +15,6 @@ from .state import Coupling
 # matrices in the file cache come with another version number, they will be recomputed.
 MATRIX_VERSION = 2
 
-# These data tables are required for the calculation of the perturbation hamiltonian H4 of intra-configuration
-# interactions which is based on effective three-electron scalar products
-JUDD_TABLE = [[
-    (2, 2, 2, 1),
-    -math.sqrt(11 / 1134), math.sqrt(605 / 5292), math.sqrt(32761 / 889056),
-    math.sqrt(3575 / 889056), -math.sqrt(17303 / 396900), -math.sqrt(1573 / 8232),
-    math.sqrt(264407 / 823200), math.sqrt(21879 / 274400), -math.sqrt(46189 / 231525),
-], [
-    (2, 2, 4, 3),
-    math.sqrt(4 / 189), -math.sqrt(6760 / 43659), math.sqrt(33 / 1372),
-    -math.sqrt(325 / 37044), math.sqrt(416 / 33075), -math.sqrt(15028 / 305613),
-    math.sqrt(28717 / 2778300), -math.sqrt(37349 / 926100), -math.sqrt(8398 / 694575),
-], [
-    (2, 4, 4, 3),
-    math.sqrt(1 / 847), -math.sqrt(1805 / 391314), -math.sqrt(4 / 33957),
-    -math.sqrt(54925 / 373527), -math.sqrt(117 / 296450), math.sqrt(4693 / 12326391),
-    -math.sqrt(1273597 / 28014525), math.sqrt(849524 / 9338175), -math.sqrt(134368 / 3112725),
-], [
-    (2, 4, 6, 6),
-    math.sqrt(26 / 3267), -math.sqrt(4160 / 754677), -math.sqrt(13 / 264),
-    math.sqrt(625 / 26136), math.sqrt(256 / 571725), math.sqrt(1568 / 107811),
-    math.sqrt(841 / 1960200), -math.sqrt(17 / 653400), -math.sqrt(15827 / 245025),
-], [
-    (4, 4, 4, 1),
-    -math.sqrt(6877 / 139755), math.sqrt(55016 / 717409), math.sqrt(49972 / 622545),
-    math.sqrt(92480 / 1369599), math.sqrt(178802 / 978285), -math.sqrt(297680 / 5021863),
-    -math.sqrt(719104 / 2282665), -math.sqrt(73644 / 2282665), -math.sqrt(2584 / 18865),
-], [
-    (4, 4, 6, 3),
-    math.sqrt(117 / 1331), -math.sqrt(195 / 204974), math.sqrt(52 / 1089),
-    math.sqrt(529 / 11979), -math.sqrt(2025 / 18634), -math.sqrt(49 / 395307),
-    -math.sqrt(1369 / 35937), math.sqrt(68 / 11979), 0,
-], [
-    (2, 6, 6, 3),
-    math.sqrt(2275 / 19602), math.sqrt(1625 / 143748), math.sqrt(325 / 199584),
-    math.sqrt(6889 / 2195424), 71 / 198, -math.sqrt(1 / 223608),
-    math.sqrt(625 / 81312), math.sqrt(1377 / 27104), math.sqrt(323 / 22869),
-], [
-    (4, 6, 6, 3),
-    math.sqrt(12376 / 179685), math.sqrt(88400 / 1185921), -math.sqrt(442 / 12705),
-    -math.sqrt(10880 / 251559), -math.sqrt(1088 / 179685), -math.sqrt(174080 / 8301447),
-    -math.sqrt(8704 / 3773385), -math.sqrt(103058 / 1257795), -math.sqrt(19 / 31185),
-], [
-    (6, 6, 6, 1),
-    math.sqrt(4199 / 539055), math.sqrt(29393 / 790614), math.sqrt(205751 / 784080),
-    -math.sqrt(79135 / 1724976), math.sqrt(2261 / 1078110), math.sqrt(79135 / 175692),
-    math.sqrt(15827 / 319440), -math.sqrt(8379 / 106480), -math.sqrt(98 / 1485),
-]]
-
-
-def judd_factor(i: int, c: int):
-    """ Return the ranks k1, k2, and k3 of the three factors of the triple scalar product for the summand i for the
-    perturbation hamiltonian H4/{c}. """
-
-    assert 0 <= i < len(JUDD_TABLE)
-    assert 1 <= c <= 9
-
-    k1, k2, k3, mult = JUDD_TABLE[i][0]
-    return k1, k2, k3, mult * JUDD_TABLE[i][c]
-
 
 ##########################################################################
 # Unit tensor operators
@@ -165,20 +105,66 @@ def matrix_S2(ion):
 
 
 def matrix_LS(ion):
+    """ Return the matrix of the scalar product of the tensor operators of the total orbital angular momentum and
+    total spin angular momentum in determinantal product state coupling. """
+
     return math.sqrt(1.5 * ion.l * (ion.l + 1) * (2 * ion.l + 1)) * ion.matrix("UT/1")
 
 
 def matrix_J2(ion):
+    """ Return the matrix of the squared tensor operator of the total angular momentum in determinantal product
+    state coupling. """
+
     return ion.matrix("L2") + 2 * ion.matrix("LS") + ion.matrix("S2")
 
 
+##########################################################################
+# Radiative transition tensor operators
+##########################################################################
+
 def matrix_ED(ion, k: int, q: int):
+    """ Return the matrix of the component q of the unit tensor operator of rank k in determinantal product state
+    coupling as required for the calculation of electric dipole transitions. Note that for each matrix element only
+    one component q may be non-zero depending on the initial and final states. """
+
     return ion.matrix(f"U/a/{k},{q}")
 
 
 def matrix_MD(ion, q: int):
+    """ Return the matrix of the component q of the tensor operator of the total orbital angular momentum plus the
+    tensor operator of the total spin angular momentum times the spin-g-factor in determinantal product state coupling
+    as required for the calculation of magnetic dipole transitions. Note that for each matrix element only one
+    component q may be non-zero depending on the initial and final states. """
+
     return ion.matrix(f"L/{q}") + 2.00231924 * ion.matrix(f"S/{q}")
 
+
+##########################################################################
+# Tensor operator of the perturbation hamiltonian H1
+##########################################################################
+
+def matrix_H1(ion, k: int):
+    l = ion.l
+    assert 0 <= k <= 2 * l
+    assert k % 2 == 0
+
+    factor = (2 * l + 1) * wigner3j(l, k, l, 0, 0, 0)
+    return factor * factor * ion.matrix(f"UU/b/{k}")
+
+
+##########################################################################
+# Tensor operator of the perturbation hamiltonian H2
+##########################################################################
+
+def matrix_H2(ion):
+    l = ion.l
+    factor = math.sqrt(1.5 * l * (l + 1) * (2 * l + 1))
+    return factor * ion.matrix("UT/a/1")
+
+
+##########################################################################
+# Tensor operator of the perturbation hamiltonian H3
+##########################################################################
 
 def matrix_GR(ion, d: int):
     assert d in (3, 5, 7)
@@ -194,21 +180,6 @@ def matrix_GG(ion, d: int):
     return (3 * ion.matrix("UU/1") + 11 * ion.matrix("UU/5")) / 4
 
 
-def matrix_H1(ion, k: int):
-    l = ion.l
-    assert 0 <= k <= 2 * l
-    assert k % 2 == 0
-
-    factor = (2 * l + 1) * wigner3j(l, k, l, 0, 0, 0)
-    return factor * factor * ion.matrix(f"UU/b/{k}")
-
-
-def matrix_H2(ion):
-    l = ion.l
-    factor = math.sqrt(1.5 * l * (l + 1) * (2 * l + 1))
-    return factor * ion.matrix("UT/a/1")
-
-
 def matrix_H3(ion, i: int):
     assert i in (0, 1, 2)
     if i == 0:
@@ -218,6 +189,71 @@ def matrix_H3(ion, i: int):
     else:
         matrix = ion.matrix("GR/7")
     return matrix
+
+
+##########################################################################
+# Tensor operator of the perturbation hamiltonian H4
+##########################################################################
+
+# These data tables are required for the calculation of the perturbation hamiltonian H4 of intra-configuration
+# interactions which is based on effective three-electron scalar products
+JUDD_TABLE = [[
+    (2, 2, 2, 1),
+    -math.sqrt(11 / 1134), math.sqrt(605 / 5292), math.sqrt(32761 / 889056),
+    math.sqrt(3575 / 889056), -math.sqrt(17303 / 396900), -math.sqrt(1573 / 8232),
+    math.sqrt(264407 / 823200), math.sqrt(21879 / 274400), -math.sqrt(46189 / 231525),
+], [
+    (2, 2, 4, 3),
+    math.sqrt(4 / 189), -math.sqrt(6760 / 43659), math.sqrt(33 / 1372),
+    -math.sqrt(325 / 37044), math.sqrt(416 / 33075), -math.sqrt(15028 / 305613),
+    math.sqrt(28717 / 2778300), -math.sqrt(37349 / 926100), -math.sqrt(8398 / 694575),
+], [
+    (2, 4, 4, 3),
+    math.sqrt(1 / 847), -math.sqrt(1805 / 391314), -math.sqrt(4 / 33957),
+    -math.sqrt(54925 / 373527), -math.sqrt(117 / 296450), math.sqrt(4693 / 12326391),
+    -math.sqrt(1273597 / 28014525), math.sqrt(849524 / 9338175), -math.sqrt(134368 / 3112725),
+], [
+    (2, 4, 6, 6),
+    math.sqrt(26 / 3267), -math.sqrt(4160 / 754677), -math.sqrt(13 / 264),
+    math.sqrt(625 / 26136), math.sqrt(256 / 571725), math.sqrt(1568 / 107811),
+    math.sqrt(841 / 1960200), -math.sqrt(17 / 653400), -math.sqrt(15827 / 245025),
+], [
+    (4, 4, 4, 1),
+    -math.sqrt(6877 / 139755), math.sqrt(55016 / 717409), math.sqrt(49972 / 622545),
+    math.sqrt(92480 / 1369599), math.sqrt(178802 / 978285), -math.sqrt(297680 / 5021863),
+    -math.sqrt(719104 / 2282665), -math.sqrt(73644 / 2282665), -math.sqrt(2584 / 18865),
+], [
+    (4, 4, 6, 3),
+    math.sqrt(117 / 1331), -math.sqrt(195 / 204974), math.sqrt(52 / 1089),
+    math.sqrt(529 / 11979), -math.sqrt(2025 / 18634), -math.sqrt(49 / 395307),
+    -math.sqrt(1369 / 35937), math.sqrt(68 / 11979), 0,
+], [
+    (2, 6, 6, 3),
+    math.sqrt(2275 / 19602), math.sqrt(1625 / 143748), math.sqrt(325 / 199584),
+    math.sqrt(6889 / 2195424), 71 / 198, -math.sqrt(1 / 223608),
+    math.sqrt(625 / 81312), math.sqrt(1377 / 27104), math.sqrt(323 / 22869),
+], [
+    (4, 6, 6, 3),
+    math.sqrt(12376 / 179685), math.sqrt(88400 / 1185921), -math.sqrt(442 / 12705),
+    -math.sqrt(10880 / 251559), -math.sqrt(1088 / 179685), -math.sqrt(174080 / 8301447),
+    -math.sqrt(8704 / 3773385), -math.sqrt(103058 / 1257795), -math.sqrt(19 / 31185),
+], [
+    (6, 6, 6, 1),
+    math.sqrt(4199 / 539055), math.sqrt(29393 / 790614), math.sqrt(205751 / 784080),
+    -math.sqrt(79135 / 1724976), math.sqrt(2261 / 1078110), math.sqrt(79135 / 175692),
+    math.sqrt(15827 / 319440), -math.sqrt(8379 / 106480), -math.sqrt(98 / 1485),
+]]
+
+
+def judd_factor(i: int, c: int):
+    """ Return the ranks k1, k2, and k3 of the three factors of the triple scalar product for the summand i for the
+    perturbation hamiltonian H4/{c}. """
+
+    assert 0 <= i < len(JUDD_TABLE)
+    assert 1 <= c <= 9
+
+    k1, k2, k3, mult = JUDD_TABLE[i][0]
+    return k1, k2, k3, mult * JUDD_TABLE[i][c]
 
 
 def matrix_H4(ion, c: int):
@@ -230,6 +266,10 @@ def matrix_H4(ion, c: int):
                   * ion.matrix(f"UUU/c/{k1},{k2},{k3}")
     return matrix
 
+
+##########################################################################
+# Tensor operator of the perturbation hamiltonian H5
+##########################################################################
 
 def matrix_ss(ion, k: int):
     l = ion.l
@@ -266,6 +306,10 @@ def matrix_H5fix(ion):
     return ion.matrix("H5/0") + 0.56 * ion.matrix("H5/2") + 0.38 * ion.matrix("H5/4")
 
 
+##########################################################################
+# Tensor operator of the perturbation hamiltonian H6
+##########################################################################
+
 def matrix_H6(ion, k: int):
     l = ion.l
     assert 0 < k <= 2 * l
@@ -287,6 +331,12 @@ def matrix_H6fix(ion):
     return ion.matrix("H6/2") + 0.75 * ion.matrix("H6/4") + 0.50 * ion.matrix("H6/6")
 
 
+##########################################################################
+# Module interface
+##########################################################################
+
+# This dictionary is used to determine the respective function for the calculation of a tensor operator matrix
+# identified by name string.
 MATRIX = {
     "UU": matrix_UU,
     "TT": matrix_TT,
@@ -474,9 +524,9 @@ def reduced_matrix(ion, name: str, k: int, J: list, transform=None) -> np.ndarra
     return np.array([[value(i, j) for j in range(num_states)] for i in range(num_states)], dtype=float)
 
 
-##################################################
-# HDF5 interface
-##################################################
+##########################################################################
+# HDF5 cache interface
+##########################################################################
 
 STORE = ["H1", "H2", "H3", "H4", "H5", "H6"]
 
