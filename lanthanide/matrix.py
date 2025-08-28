@@ -402,8 +402,14 @@ MATRIX = {
 
 
 class Matrix:
+    """ This class holds the matrix of a tensor operator in arbitrary coupling. It supports basic arithmetic
+    operations to allow for linear combinations of several Matrix objects. It also supports diagonalisation and
+    transformation to another coupling scheme. """
 
-    def __init__(self, ion, array, name=None, coupling=None):
+    def __init__(self, ion, array: np.ndarray, name=None, coupling=None):
+        """ Initialize a new tensor operator matrix for the given lanthanide ion by the given numpy array in the
+        given coupling scheme (default Coupling.Product) with an optional name string. """
+
         assert name is None or isinstance(name, str)
         assert coupling is None or isinstance(coupling, Coupling)
 
@@ -414,9 +420,13 @@ class Matrix:
         self.shape = self.array.shape
 
     def __neg__(self):
+        """ Return this matrix multiplied by -1. """
+
         return Matrix(self.ion, -self.array)
 
     def __add__(self, other):
+        """ Return this + other matrix. Return this matrix if other is zero. """
+
         if not other:
             return self
         elif isinstance(other, Matrix):
@@ -426,9 +436,13 @@ class Matrix:
         return NotImplemented
 
     def __radd__(self, other):
+        """ Return other + this matrix. """
+
         return self.__add__(other)
 
     def __sub__(self, other):
+        """ Return this - other matrix. """
+
         if isinstance(other, Matrix):
             if self.coupling != other.coupling:
                 raise ValueError("Cannot subtract matrices with different couplings!")
@@ -436,6 +450,8 @@ class Matrix:
         return NotImplemented
 
     def __rsub__(self, other):
+        """ Return other - this matrix. """
+
         if isinstance(other, Matrix):
             if self.coupling != other.coupling:
                 raise ValueError("Cannot subtract matrices with different couplings!")
@@ -443,24 +459,35 @@ class Matrix:
         return NotImplemented
 
     def __mul__(self, other):
+        """ Return this matrix multiplied by a real factor. """
+
         if isinstance(other, (float, int)):
             return Matrix(self.ion, self.array * other)
         return NotImplemented
 
     def __rmul__(self, other):
+        """ Return this matrix multiplied by a real factor. """
+
         return self.__mul__(other)
 
     def __truediv__(self, other):
+        """ Return this matrix divided by a real factor. """
+
         if isinstance(other, (float, int)):
             return Matrix(self.ion, self.array / other)
         return NotImplemented
 
     def diagonalize(self):
+        """ Standard diagonalisation algorithm acting on the whole matrix. Return the ordered numpy vector of
+        eigenvalues and the 2D numpy array of eigenvectors (columns). """
+
         values, vectors = np.linalg.eigh(self.array)
         return values, vectors
 
     def fast_diagonalize(self):
-        """ Fast diagonalisation algorithm acting inside J spaces. """
+        """ Fast diagonalisation algorithm acting inside J spaces only. Return the ordered numpy vector of
+        eigenvalues and the 2D numpy array of eigenvectors (columns). """
+
         if self.coupling not in (Coupling.SLJM, Coupling.SLJ):
             raise RuntimeError("Fast diagonalisation is only available for SLJM or SLJ coupling!")
 
@@ -488,7 +515,9 @@ class Matrix:
         # Return eigenvalues and eigenvectors
         return values, vectors
 
-    def transform(self, coupling):
+    def transform(self, coupling: Coupling):
+        """ Return this matrix transformed to the given coupling scheme. """
+
         # Coupling matches already
         if coupling == self.coupling:
             return self
@@ -509,18 +538,26 @@ class Matrix:
         return Matrix(self.ion, array, self.name, coupling)
 
 
-def build_hamilton(ion, radial, coupling):
+def build_hamilton(ion, radial: dict, coupling: Coupling):
+    """ Build and return the matrix of a perturbation hamiltonian operator as linear combination of the hamiltonians
+    and factors specified in the dictionary radial in the given coupling scheme."""
+
     assert coupling in (Coupling.SLJM, Coupling.SLJ)
     assert isinstance(radial, dict)
 
+    # Initialize empty hamiltonian matrix
     num_states = len(ion.states(coupling))
     array = np.zeros((num_states, num_states), dtype=float)
+
+    # Build linear combination specified in the radial dictionary
     for name in radial:
         if name == "base":
             continue
         if name[:1] != "H":
             continue
         array += radial[name] * ion.cached_matrix(name, coupling).array
+
+    # Return the total hamiltonian as Matrix object in the given coupling scheme
     return Matrix(ion, array, "H", coupling)
 
 
