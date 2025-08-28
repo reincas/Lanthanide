@@ -11,7 +11,12 @@ from .wigner import wigner3j
 from .unit import get_unit
 from .state import Coupling
 
+# Version of the algorithms for the calculation of high-order tensor operators in this module. If the precomputed
+# matrices in the file cache come with another version number, they will be recomputed.
 MATRIX_VERSION = 2
+
+# These data tables are required for the calculation of the perturbation hamiltonian H4 of intra-configuration
+# interactions which is based on effective three-electron scalar products
 JUDD_TABLE = [[
     (2, 2, 2, 1),
     -math.sqrt(11 / 1134), math.sqrt(605 / 5292), math.sqrt(32761 / 889056),
@@ -61,64 +66,101 @@ JUDD_TABLE = [[
 
 
 def judd_factor(i: int, c: int):
+    """ Return the ranks k1, k2, and k3 of the three factors of the triple scalar product for the summand i for the
+    perturbation hamiltonian H4/{c}. """
+
     assert 0 <= i < len(JUDD_TABLE)
     assert 1 <= c <= 9
+
     k1, k2, k3, mult = JUDD_TABLE[i][0]
     return k1, k2, k3, mult * JUDD_TABLE[i][c]
 
 
+##########################################################################
+# Unit tensor operators
+##########################################################################
+
 def matrix_UU(ion, k: int):
+    """ Return the matrix of the scalar product of two unit tensor operators of rank k in the orbital angular momentum
+    space in determinantal product state coupling. """
+
     assert 0 <= k <= 2 * ion.l
     return ion.matrix(f"UU/a/{k}") + 2 * ion.matrix(f"UU/b/{k}")
 
 
 def matrix_TT(ion, k: int):
+    """ Return the matrix of the scalar product of two unit tensor operators of rank k in the spin angular momentum
+    space in determinantal product state coupling. """
+
     assert 0 <= k <= 2 * ion.s
     return ion.matrix(f"TT/a/{k}") + 2 * ion.matrix(f"TT/b/{k}")
 
 
 def matrix_UT(ion, k: int):
+    """ Return the matrix of the scalar product of two unit tensor operators of rank k in the orbital and spin angular
+    momentum space in determinantal product state coupling. """
+
     assert 0 <= k <= 2 * ion.s
     return ion.matrix(f"UT/a/{k}") + 2 * ion.matrix(f"UT/b/{k}")
 
 
+##########################################################################
+# Angular momentum tensor operators
+##########################################################################
+
 def matrix_L(ion, q: int):
+    """ Return the matrix of the component q of the tensor operator of the total orbital angular momentum in
+    determinantal product state coupling. """
+
     return math.sqrt(ion.l * (ion.l + 1) * (2 * ion.l + 1)) * ion.matrix(f"U/a/1,{q}")
 
 
 def matrix_S(ion, q: int):
+    """ Return the matrix of the component q of the tensor operator of the total spin angular momentum in
+    determinantal product state coupling. """
+
     return math.sqrt(1.5) * ion.matrix(f"T/a/1,{q}")
 
 
 def matrix_J(ion, q: int):
+    """ Return the matrix of the component q of the tensor operator of the total angular momentum in determinantal
+    product state coupling. """
+
     return ion.matrix(f"L/{q}") + ion.matrix(f"S/{q}")
 
 
-def matrix_ED(ion, k: int, q: int):
-    return ion.matrix(f"U/a/{k},{q}")
-
-
-def matrix_MD(ion, q: int):
-    return ion.matrix(f"L/{q}") + 2.00231924 * ion.matrix(f"S/{q}")
-
-
 def matrix_Lz(ion):
+    """ Return the matrix of the z component of the tensor operator of the total orbital angular momentum in
+    determinantal product state coupling. """
+
     return ion.matrix("L/0")
 
 
 def matrix_Sz(ion):
+    """ Return the matrix of the z component of the tensor operator of the total spin angular momentum in
+    determinantal product state coupling. """
+
     return ion.matrix("S/0")
 
 
 def matrix_Jz(ion):
+    """ Return the matrix of the z component of the tensor operator of the total angular momentum in determinantal
+    product state coupling. """
+
     return ion.matrix("Lz") + ion.matrix("Sz")
 
 
 def matrix_L2(ion):
+    """ Return the matrix of the squared tensor operator of the total orbital angular momentum in determinantal
+    product state coupling. """
+
     return ion.l * (ion.l + 1) * (2 * ion.l + 1) * ion.matrix("UU/1")
 
 
 def matrix_S2(ion):
+    """ Return the matrix of the squared tensor operator of the total spin angular momentum in determinantal
+    product state coupling. """
+
     return 1.5 * ion.matrix("TT/1")
 
 
@@ -128,6 +170,14 @@ def matrix_LS(ion):
 
 def matrix_J2(ion):
     return ion.matrix("L2") + 2 * ion.matrix("LS") + ion.matrix("S2")
+
+
+def matrix_ED(ion, k: int, q: int):
+    return ion.matrix(f"U/a/{k},{q}")
+
+
+def matrix_MD(ion, q: int):
+    return ion.matrix(f"L/{q}") + 2.00231924 * ion.matrix(f"S/{q}")
 
 
 def matrix_GR(ion, d: int):
@@ -499,12 +549,3 @@ def init_matrix(vault, group_name: str):
         vault.flush()
 
     return vault[group_name]
-
-
-if __name__ == "__main__":
-    from lanthanide import Lanthanide
-
-    with Lanthanide(1) as ion:
-        print(ion)
-        states = ion.states(Coupling.SLJM)
-        H = ion.matrix("H1/4", Coupling.SLJM)
