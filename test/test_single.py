@@ -1,5 +1,4 @@
 import math
-import pytest
 
 from lanthanide import LEN_SHELL, product_states, single_elements, SingleElements
 
@@ -19,10 +18,7 @@ SIZES = {
     13: [105, 273, 105, 8736, 105, 360360],
 }
 
-import sys
-
-@pytest.mark.parametrize("num", [1, 2])
-def test_single(num: int):
+def run_single(num: int):
     states = product_states(num)
     assert len(states) == math.comb(LEN_SHELL, num)
 
@@ -42,3 +38,19 @@ def test_single(num: int):
     single = SingleElements(group, states)
     assert len(single) == num
     assert single[1] == group["one"]
+    if num >= 2:
+        assert single[2] == group["two"]
+    if num >= 3:
+        assert single[3] == group["three"]
+
+def test_single_Ce():
+    run_single(1)
+
+def test_single_Pr():
+    run_single(2)
+
+def test_single_Er():
+    run_single(3)
+
+def test_single_Yb():
+    run_single(13)
