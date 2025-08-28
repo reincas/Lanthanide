@@ -144,10 +144,12 @@ def matrix_MD(ion, q: int):
 ##########################################################################
 
 def matrix_H1(ion, k: int):
-    l = ion.l
-    assert 0 <= k <= 2 * l
+    """ Return the matrix of the perturbation hamiltonian H1/k in determinantal product state coupling. """
+
+    assert 0 <= k <= 2 * ion.l
     assert k % 2 == 0
 
+    l = ion.l
     factor = (2 * l + 1) * wigner3j(l, k, l, 0, 0, 0)
     return factor * factor * ion.matrix(f"UU/b/{k}")
 
@@ -157,6 +159,8 @@ def matrix_H1(ion, k: int):
 ##########################################################################
 
 def matrix_H2(ion):
+    """ Return the matrix of the perturbation hamiltonian H2 in determinantal product state coupling. """
+
     l = ion.l
     factor = math.sqrt(1.5 * l * (l + 1) * (2 * l + 1))
     return factor * ion.matrix("UT/a/1")
@@ -167,7 +171,11 @@ def matrix_H2(ion):
 ##########################################################################
 
 def matrix_GR(ion, d: int):
+    """ Return the matrix of the Casimir operator G(Rd) of the rotational group in d dimensions in determinantal
+    product state coupling. """
+
     assert d in (3, 5, 7)
+
     sum = 0.0
     for k in range(1, d, 2):
         sum += (2 * k + 1) * ion.matrix(f"UU/{k}")
@@ -176,12 +184,19 @@ def matrix_GR(ion, d: int):
 
 
 def matrix_GG(ion, d: int):
+    """ Return the matrix of the Casimir operator G(G2) of the special group G2 in determinantal product state
+    coupling. """
+
     assert d == 2
+
     return (3 * ion.matrix("UU/1") + 11 * ion.matrix("UU/5")) / 4
 
 
 def matrix_H3(ion, i: int):
+    """ Return the matrix of the perturbation hamiltonian H2/i in determinantal product state coupling. """
+
     assert i in (0, 1, 2)
+
     if i == 0:
         matrix = ion.matrix("L2")
     elif i == 1:
@@ -257,6 +272,8 @@ def judd_factor(i: int, c: int):
 
 
 def matrix_H4(ion, c: int):
+    """ Return the matrix of the perturbation hamiltonian H4/c in determinantal product state coupling. """
+
     assert 1 <= c <= 9
 
     matrix = 0.0
@@ -272,10 +289,12 @@ def matrix_H4(ion, c: int):
 ##########################################################################
 
 def matrix_ss(ion, k: int):
-    l = ion.l
-    assert 0 <= k < 2 * l
+    """ Return the matrix of the spin-spin interaction in determinantal product state coupling. """
+
+    assert 0 <= k < 2 * ion.l
     assert k % 2 == 0
 
+    l = ion.l
     ck0 = -(2 * l + 1) * wigner3j(l, k, l, 0, 0, 0)
     ck2 = -(2 * l + 1) * wigner3j(l, k + 2, l, 0, 0, 0)
     factor = -12 * ck0 * ck2 * math.sqrt((k + 1) * (k + 2) * (2 * k + 1) * (2 * k + 3) * (2 * k + 5) / 5)
@@ -283,9 +302,12 @@ def matrix_ss(ion, k: int):
 
 
 def matrix_soo(ion, k: int):
-    l = ion.l
-    assert 0 <= k < 2 * l
+    """ Return the matrix of the spin-other-orbit interaction in determinantal product state coupling. """
+
+    assert 0 <= k < 2 * ion.l
     assert k % 2 == 0
+
+    l = ion.l
 
     ck0 = -(2 * l + 1) * wigner3j(l, k, l, 0, 0, 0)
     factor0 = -ck0 * ck0 * math.sqrt((2 * l + k + 2) * (2 * l - k) * (k + 1) * (2 * k + 1) * (2 * k + 3))
@@ -299,10 +321,15 @@ def matrix_soo(ion, k: int):
 
 
 def matrix_H5(ion, k: int):
+    """ Return the matrix of the perturbation hamiltonian H5/k in determinantal product state coupling. """
+
     return ion.matrix(f"hss/{k}") + ion.matrix(f"hsoo/{k}")
 
 
 def matrix_H5fix(ion):
+    """ Return the linear combination H5/0 + 0.56 * H5/2 + 0.38 * H5/4 of the total perturbation hamiltonian H5 in
+    determinantal product state coupling. """
+
     return ion.matrix("H5/0") + 0.56 * ion.matrix("H5/2") + 0.38 * ion.matrix("H5/4")
 
 
@@ -311,9 +338,12 @@ def matrix_H5fix(ion):
 ##########################################################################
 
 def matrix_H6(ion, k: int):
-    l = ion.l
-    assert 0 < k <= 2 * l
+    """ Return the matrix of the perturbation hamiltonian H6/k in determinantal product state coupling. """
+
+    assert 0 < k <= 2 * ion.l
     assert k % 2 == 0
+
+    l = ion.l
 
     matrix = 0.0
     if k > 0:
@@ -328,6 +358,9 @@ def matrix_H6(ion, k: int):
 
 
 def matrix_H6fix(ion):
+    """ Return the linear combination H6/2 + 0.75 * H6/4 + 0.50 * H6/6 of the total perturbation hamiltonian H6 in
+    determinantal product state coupling. """
+
     return ion.matrix("H6/2") + 0.75 * ion.matrix("H6/4") + 0.50 * ion.matrix("H6/6")
 
 
