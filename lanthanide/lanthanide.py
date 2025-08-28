@@ -15,9 +15,14 @@ from .single import init_single
 from .matrix import build_hamilton, reduced_matrix, get_matrix, init_matrix
 from .state import Coupling, init_states
 
+# Folder with cache files is located in the installation directory of the lanthanide package
 VAULT_PATH = Path(__file__).resolve().parent / "vaults"
+VAULT_NAME = "data-f{num:02d}.hdf5"
+
+# Symbols of the 15 Lanthanides. The configurations of the triply ionized atoms are 4f0 - 4f14
 NAMES = ["La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu"]
 
+# Physical constants
 CONST_e = 1.6022e-19  # C
 CONST_eps0 = 8.8542e-12  # C / V m
 CONST_me = 9.1095e-31  # kg
@@ -121,6 +126,7 @@ RADIAL = {
         {"base": 0, "H2": 2900},
 }
 
+# Judd-Ofelt parameters from [RC]
 JUDD_OFELT = {
     "Pr3+/ZBLAN":  # from [RC]
         {"JO/2": 1.981, "JO/4": 4.645, "JO/6": 6.972},
@@ -133,6 +139,9 @@ JUDD_OFELT = {
 
 @dataclass
 class Reduced:
+    """ Dataclass containing the reduced matrix elements required for the calculation of the line strength
+    of electric and magnetic dipole transitions. """
+
     U2: np.ndarray
     U4: np.ndarray
     U6: np.ndarray
@@ -141,58 +150,101 @@ class Reduced:
 
 @dataclass
 class LineStrength:
+    """ Dataclass containing the matrices of the line strengths of electric and magnetic dipole transitions. """
+
     Sed: np.ndarray
     Smd: np.ndarray
 
 
 class Lanthanide:
-    """ Lanthanide ion with given number of 4f electrons. """
+    """ Lanthanide ion with given number of 4f electrons. It provides all energy levels and states in intermediate
+    coupling as well as the line strengths of all radiative electric and magnetic dipole transitions. """
 
     def __init__(self, num: int, coupling=None, radial=None):
+        """ Initialize attributes, datastructures, and the file cache for the lanthanide ion with given number of
+        4f electrons. Calculate energy levels and states in intermediate coupling based on the given dictionary of
+        radial integrals (default: Carnalls integrals for LaF3). The given coupling scheme may be SLJM or
+        SLJ (default). """
+
         assert isinstance(num, int)
         assert 0 < num < LEN_SHELL
+        assert coupling is None or coupling in (Coupling.SLJ, Coupling.SLJM)
 
+        # Number of electrons, name and electron configuration of the lanthanide ion
         self.num = num
         self.name = f"{NAMES[num]}3+"
         self.config = f"4f{num}"
 
+        # Quantum number of the orbital and spin angular momenta of the electrons
         self.l = ORBITAL
         self.s = SPIN
-        self.product_states = product_states(self.num)
+
+        # Determinantal product states of the lanthanide ion
+        self.product_states = states = product_states(self.num)
+
+        # Coupling scheme for the states. Default is SLJ.
         self.coupling = coupling or Coupling.SLJ
 
+        # Create cache folder and open cache file
         if not VAULT_PATH.exists():
             VAULT_PATH.mkdir()
-        self.vault = h5py.File(VAULT_PATH / f"data-f{num:02d}.hdf5", "a")
+        self.vault = h5py.File(VAULT_PATH / VAULT_NAME.format(num=num), "a")
+
+        # Make sure that the main validity flag exists in the cache
         if "valid" not in self.vault.attrs:
             self.vault.attrs["valid"] = True
-        self.single = init_single(self.vault, "single", self.product_states)
+
+        # Initialize the support structure for the calculation of elementary tensor operator matrices
+        self.single = init_single(self.vault, "single", states)
+
+        # Initialize the cache group for unit tensor operator matrices
         self.unit_vault = init_unit(self.vault, "unit")
+
+        # Initialize the electron states for SLJM and SLJ coupling
         self._state_dict_ = init_states(self.vault, "states", self)
+
+        # Initialize the cache group for higher-order tensor operator matrices
         self.matrix_vault = init_matrix(self.vault, "matrix")
+
+        # Cache is valid now
         self.vault.attrs["valid"] = True
         self.vault.flush()
 
+        # Calculate energy levels and states in intermediate coupling based on the given radial integrals
         self.set_radial(radial or RADIAL[self.name])
 
     def __enter__(self):
+        """ Entry hook of the content management protocol. """
+
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """ Exit hook of the content management protocol. Close the cache file. """
+
         self.close()
         return False
 
     def close(self):
+        """ Close the cache file. """
+
         self.vault.close()
 
     def matrix(self, name, coupling=None):
+        """ Return Matrix object of the given operator in the given coupling scheme (default: Product). """
+
         return get_matrix(self, name, coupling)
 
     @lru_cache(maxsize=None)
     def cached_matrix(self, name, coupling):
+        """ Return Matrix object of the given operator in the given coupling scheme (default: Product). Take it
+        from the memory cache, if possible. """
+
         return get_matrix(self, name, coupling)
 
     def states(self, coupling=None):
+        """ Return StateList object of the given coupling scheme or the one selected when the Lanthanide object
+        was initialized. """
+
         coupling = coupling or self.coupling
         return self._state_dict_[coupling.name]
 
@@ -245,19 +297,3 @@ class Lanthanide:
 
     def __str__(self):
         return f"{self.name} ({self.config})"
-
-
-if __name__ == "__main__":
-    with Lanthanide(2, coupling=Coupling.SLJ, radial=RADIAL["Pr3+/ZBLAN"]) as ion:
-        print(ion)
-        print("Ion:", ion)
-
-        print("Energy levels:")
-        for state in ion.str_levels(0.05):
-            print(f"  {state}")
-
-        print(np.rint(10000 * ion.reduced()["U4"][0, 1:]).astype(int))
-        print(ion.intermediate.J)
-
-        # M = ion.matrix()
-    print("Done.")
