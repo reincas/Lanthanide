@@ -4,6 +4,7 @@
 # This program is free software under the terms of the MIT license.      #
 ##########################################################################
 
+import pytest
 import numpy as np
 
 from lanthanide import Lanthanide, RADIAL, Coupling, StateListJ, StateJ
@@ -12,8 +13,9 @@ F02_ENERGIES = [327.39, 2363.85298, 4498.00172, 5106.88044, 6463.20358, 6954.386
                 17022.73705, 20856.47111, 21471.52564, 21510.80436, 22646.25844, 46461.4324]
 F02_REDUCED = [0.20208, 0.03274, 0.40418, 0.34733, 0.05105, 0.00609,
                0.0162, 0.17265, 0.17099, 0.0499, 0.03641, 0.00663]
-F02_SED = [0.46281, 0.09618, 0.31718, 0.56533, 0.31429, 0.01498, 0.03703, 0.06853, 0.06787, 0.03506, 0.0956, 0.00263]
-F02_SMD = [0.03363, 0.0, 0.0, 2e-05, 0.00049, 0.0002, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+F02_SED = [0.46280620, 0.09617662, 0.31717911, 0.56532627, 0.31428973, 0.01498091,
+           0.03703203, 0.06852648, 0.06786849, 0.03506035, 0.09560437, 0.00262989]
+F02_SMD = [3.36312633e-02, 0.0, 0.0, 1.90612714e-05, 4.89040561e-04, 1.97265651e-04, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 def test_lanthanide():
     with Lanthanide(2) as ion:
@@ -36,8 +38,6 @@ def test_lanthanide():
         strength = ion.line_strengths(judd_ofelt)
         sed = strength.Sed[1:, 0] * 1e52
         smd = strength.Smd[1:, 0] * 1e52
-        assert list(np.round(sed, 5)) == F02_SED
-        assert list(np.round(smd, 5)) == F02_SMD
-
-        #print(", ".join(map(str, np.round(smd, 5))))
+        assert pytest.approx(sed, abs=1e-6) == F02_SED
+        assert pytest.approx(smd, abs=1e-9) == F02_SMD
 
