@@ -509,5 +509,5 @@ def init_unit(vault, group_name: str):
         vault[group_name].attrs["version"] = UNIT_VERSION
         vault.flush()
 
-    # Return the HDF5 group of the unit tensor cache
+    # Return the HDF5 group of the unit tensor matrix cache
     return vault[group_name]
