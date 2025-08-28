@@ -3,6 +3,20 @@
 # <reinhard.caspary@phoenixd.uni-hannover.de>                            #
 # This program is free software under the terms of the MIT license.      #
 ##########################################################################
+#
+# This module provides the calculation of matrices of higher-order tensor
+# operators in the determinantal product space of a given electron
+# configuration based on unit tensor operators from the module "unit".
+#
+# The function get_matrix() returns a Matrix object containing a given
+# tensor operator matrix in a given coupling scheme. The matrices of
+# certain tensor operators, namely the perturbation hamiltonians are
+# eventually stored in the HDF5 file cache in SLJM and SLJ coupling.
+#
+# Matrix objects support diagonalisation and elementary arithmetic
+# operations to build for linear combinations of these matrices.
+#
+##########################################################################
 
 import math
 import numpy as np
