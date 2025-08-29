@@ -449,7 +449,7 @@ def calc_unit(ion, operator_name: str) -> np.ndarray:
     operator = operator(*params)
 
     # Initialize empty matrix and elementary values cache
-    N = len(ion.product_states)
+    N = len(ion.product)
     matrix = np.zeros((N, N), dtype=float)
     cache = {}
 

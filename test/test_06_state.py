@@ -5,7 +5,7 @@
 ##########################################################################
 
 from lanthanide import product_states, init_single, get_matrix, ORBITAL, SPIN, build_SLJM, SymmetryList, \
-    SYM_CHAIN_SLJM, StateListSLJM, init_states
+    SYM_CHAIN_SLJM, StateListProduct, init_states
 
 SYMS = {
     1: {
@@ -56,8 +56,8 @@ class DummyLanthanide:
         self.num = num
         self.l = ORBITAL
         self.s = SPIN
-        self.product_states = states = product_states(num)
-        self.single = init_single(None, None, states)
+        self.product = product_states(num)
+        self.single = init_single(None, None, self.product)
 
     def matrix(self, name):
         return get_matrix(self, name)
@@ -65,19 +65,21 @@ class DummyLanthanide:
 
 def run_state(num, num_sljm, num_slj):
     ion = DummyLanthanide(num)
-    values, transform = build_SLJM(ion)
-    for i, name in enumerate(SYM_CHAIN_SLJM):
-        result = SymmetryList(values[:, i], name).count()
+
+    states = StateListProduct(ion.product)
+
+    get_array = lambda name: get_matrix(ion, name).array
+    states = states.to_SLJM(get_array)
+    assert len(states) == num_sljm
+    assert type(states[1]).__name__ == "StateSLJM"
+    for i, name in enumerate(states.sym_chain):
+        result = SymmetryList(states.values[:, i], name).count()
         # print(f'"{name}": {result},')
         assert result == SYMS[num][name]
 
-    states_sljm = StateListSLJM(values, transform)
-    assert len(states_sljm) == num_sljm
-    assert type(states_sljm[1]).__name__ == "StateSLJM"
-
-    states_slj = states_sljm.to_SLJ()
-    assert len(states_slj) == num_slj
-    assert type(states_slj[1]).__name__ == "StateSLJ"
+    states = states.to_SLJ()
+    assert len(states) == num_slj
+    assert type(states[1]).__name__ == "StateSLJ"
 
     states = init_states(None, None, ion)
     assert set(states.keys()) == {'Product', 'SLJM', 'SLJ'}

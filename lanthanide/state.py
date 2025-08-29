@@ -149,6 +149,13 @@ class StateListProduct(StateList):
         # No transformation matrix
         self.transform = None
 
+    def to_SLJM(self, get_array):
+        """ Build and return a StateListSLJM object using the given get_array function used to get the matrix of
+         a symmetry operator of given name in determinantal product state coupling. """
+
+        values, transform = build_SLJM(ORBITAL, len(self), get_array)
+        return StateListSLJM(values, transform)
+
     def __str__(self):
         """ Return a string representation of the list of states. """
 
@@ -439,10 +446,11 @@ class ReducedMatrixUk:
     non-diagonal elements are used to fix the signs of the transformation vectors by the function
     phase_SLJM(). """
 
-    def __init__(self, ion, transform, J, M, k: int):
+    def __init__(self, l, get_array, transform, J, M, k: int):
         """ Calculate and store the non-zero components of the unit tensor operator U(k) in the SLJM space. Use
         the given transformation matrix and the vectors of J and M quantum numbers of every state. """
-        assert 0 <= k <= 2 * ion.l
+
+        assert 0 <= k <= 2 * l
         assert len(J) == len(M)
 
         # Store the J and M values of all states as well as the tensor rank
@@ -453,7 +461,7 @@ class ReducedMatrixUk:
         # Store the non-zero component of the unit tensor operator U(k) for each matrix element
         self.hyper = np.zeros((2 * k + 1, len(J), len(J)), dtype=float)
         for q in range(-k, k + 1):
-            self.hyper[q + k, :, :] = transform.T @ ion.matrix(f"U/a/{k},{q}").array @ transform
+            self.hyper[q + k, :, :] = transform.T @ get_array(f"U/a/{k},{q}") @ transform
 
     def __getitem__(self, item):
         """ Use the Wigner-Eckart theorem to calculate the reduced matrix element from <J'M'|U(k)_q|JM>. """
@@ -490,7 +498,7 @@ class ReducedMatrixUk:
         return np.array(elements, dtype=float).reshape(n, n)
 
 
-def phase_SLJM(ion, values, transform):
+def phase_SLJM(l, get_array, values, transform):
     """ Adjust the signs of the transformation vectors from product to SLJM space. This adjustment allows to calculate
     reduced matrix elements in the SLJ space. """
 
@@ -537,13 +545,13 @@ def phase_SLJM(ion, values, transform):
     M = [s.M for s in SymmetryList(values[:, SYM_CHAIN_SLJM.index("Jz")], "Jz")]
 
     # Increase unit tensor rank until all phases are fixed. Rank 0 is completely diagonal. We thus start with k=1.
-    for k in range(1, 2 * ion.l + 1):
+    for k in range(1, 2 * l + 1):
         if not np.any(unknown):
             break
 
         # Prepare unit tensor matrix with Wigner-Eckart theorem applied
         # print(f"unit({k}): {sum(unknown)}/{num_states}")
-        reduced_Uk = ReducedMatrixUk(ion, transform, J, M, k)
+        reduced_Uk = ReducedMatrixUk(l, get_array, transform, J, M, k)
 
         # Use every J space with unknown phases
         for i_min, i_max in slices:
@@ -682,20 +690,19 @@ def sort_states(values: np.ndarray, transform: np.ndarray, sym_order: tuple) -> 
     return values, transform
 
 
-def build_SLJM(ion):
+def build_SLJM(l: int, num_states: int, get_array):
     """ Build the transformation matrix from the determinantal product state space to the SLJM space and the matrix
-    of all eigenvalues of the symmetry operators in the classification chain. """
-
-    # Number of states for the given electron configuration
-    states = len(ion.product_states)
+    of all eigenvalues of the symmetry operators in the classification chain. The first argument is the number of
+    electron states and the second is a function used to get the matrix of a symmetry operator of given name in
+    determinantal product state coupling. """
 
     # Initialize the eigenvalue matrix, the transformation matrix, and the dictionary of SymmetryList objects
-    eigen_vectors = np.zeros((states, states), dtype=float)
+    eigen_vectors = np.zeros((num_states, num_states), dtype=float)
     transform = None
     symmetries = {}
 
     # Initialize the list of sub-spaces which will be split by the algorithm
-    sym_slices = [slice(0, states)]
+    sym_slices = [slice(0, num_states)]
 
     # Follow the chain or symmetry operators, but skip the pseudo operators "tau" and "num". Build a transformation
     # matrix from product states to SLJM coupling together with the eigenvalues of all symmetry operators.
@@ -705,7 +712,7 @@ def build_SLJM(ion):
 
         # Get the matrix of the current symmetry operator in the determinantal product space and apply the current
         # transformation matrix
-        array = ion.matrix(name).array
+        array = get_array(name)
         if transform is not None:
             array = transform.T @ array @ transform
         assert isinstance(array, np.ndarray)
@@ -741,14 +748,14 @@ def build_SLJM(ion):
             transform = transform @ eigen_vectors
 
     # Label the state pairs which cannot be resolved by our classification with the chain of symmetry operators
-    symmetries["tau"] = build_tau(symmetries, states)
+    symmetries["tau"] = build_tau(symmetries, num_states)
 
     # Generate short-cut numbers to distinguish states sharing the same SLJ quantum numbers
-    symmetries["num"] = build_num(symmetries, states)
+    symmetries["num"] = build_num(symmetries, num_states)
 
     # Build a matrix of eigenvalues (and pseudo eigenvalues "tau" and "num"). Rows correspond to SLJM states,
     # columns to operators from SYM_CHAIN_SLJM
-    values = np.zeros((states, len(SYM_CHAIN_SLJM)), dtype=float)
+    values = np.zeros((num_states, len(SYM_CHAIN_SLJM)), dtype=float)
     for j, name in enumerate(SYM_CHAIN_SLJM):
         eigen_values = symmetries[name]
         for i in range(len(eigen_values)):
@@ -759,7 +766,7 @@ def build_SLJM(ion):
     # reduced matrix elements in SLJ coupling.
     sym_order = ("Jz", "J2", "tau", "L2", "GG/2", "GR/7", "S2")
     values, transform = sort_states(values, transform, sym_order)
-    transform = phase_SLJM(ion, values, transform)
+    transform = phase_SLJM(l, get_array, values, transform)
 
     # Sort the SLJM states is such a way that all states with the same J quantum number form contiguous groups.
     # In this the matrices of the perturbation hamiltonians can be split into a chain of sub-matrices along the
@@ -782,7 +789,9 @@ def init_states(vault, group_name, ion):
 
     # No file cache
     if not vault:
-        values, transform = build_SLJM(ion)
+        num_states = len(ion.product)
+        get_array = lambda name: ion.matrix(name).array
+        values, transform = build_SLJM(ion.l, num_states, get_array)
         group = {"values": values, "transform": transform}
 
     # Use file cache
@@ -808,7 +817,9 @@ def init_states(vault, group_name, ion):
 
             # Build the transformation matrix from the determinantal product state space to the SLJM space and the
             # matrix of all eigenvalues of the symmetry operators in the classification chain.
-            values, transform = build_SLJM(ion)
+            num_states = len(ion.product)
+            get_array = lambda name: ion.matrix(name).array
+            values, transform = build_SLJM(ion.l, num_states, get_array)
 
             # Store eigenvalue and transformation matrices
             group = vault[group_name].create_group(Coupling.SLJM.name)
@@ -824,7 +835,7 @@ def init_states(vault, group_name, ion):
             group = vault[group_name][Coupling.SLJM.name]
 
     # StateList object for the determinantal product states
-    Product_States = StateListProduct(ion.product_states)
+    Product_States = StateListProduct(ion.product)
 
     # The StateList object for SLJM states is taken from the file cache
     values = np.array(group["values"])

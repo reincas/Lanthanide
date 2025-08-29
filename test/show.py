@@ -14,7 +14,7 @@ def show_ion(ion):
     print()
     print("Ion:", ion)
     print(f"  electrons: {ion.num}")
-    print(f"  states: {len(ion.product_states)}")
+    print(f"  states: {len(ion.product)}")
     for num, group in enumerate(ion.single):
         print(f"  {num + 1}-electron elements: {len(group['elements'])} ({len(group['indices'])})")
 

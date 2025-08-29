@@ -179,7 +179,7 @@ class Lanthanide:
         self.s = SPIN
 
         # Determinantal product states of the lanthanide ion
-        self.product_states = states = product_states(self.num)
+        self.product = product_states(self.num)
 
         # Coupling scheme for the states. Default is SLJ.
         self.coupling = coupling or Coupling.SLJ
@@ -194,7 +194,7 @@ class Lanthanide:
             self.vault.attrs["valid"] = True
 
         # Initialize the support structure for the calculation of elementary tensor operator matrices
-        self.single = init_single(self.vault, "single", states)
+        self.single = init_single(self.vault, "single", self.product)
 
         # Initialize the cache group for unit tensor operator matrices
         self.unit_vault = init_unit(self.vault, "unit")
