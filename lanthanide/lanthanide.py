@@ -211,6 +211,11 @@ class Lanthanide:
         self.vault.flush()
 
         # Calculate energy levels and states in intermediate coupling based on the given radial integrals
+        self._reduced_ = None
+        self.radial = None
+        self.hamilton = None
+        self.energies = None
+        self.intermediate = None
         self.set_radial(radial or RADIAL[self.name])
 
     def __enter__(self):
@@ -249,19 +254,40 @@ class Lanthanide:
         return self._state_dict_[coupling.name]
 
     def set_radial(self, radial):
+        """ Store new dictionary of radial integrals and use them to calculate all energy levels and states in
+        intermediate coupling. """
+
         assert isinstance(radial, dict)
+
+        # Do nothing, if the given integrals are identical to the current ones
+        if radial == self.radial:
+            return
+
+        # Store radial integrals and use them to build the full perturbation hamiltonian
         self.radial = radial
         self.hamilton = build_hamilton(self, self.radial, self.coupling)
+
+        # Diagonalise the hamiltonian matrix and get energies and intermediate coupling vectors
         # self.energies, transform = self.hamilton.diagonalize()
         self.energies, transform = self.hamilton.fast_diagonalize()
+
+        # Adjust the energy level of the ground state
         self.energies -= self.energies[0]
         if "base" in self.radial:
             self.energies += self.radial["base"]
+
+        # Build and store the StateListJ object of the electron states in intermediate coupling
         self.intermediate = self.states().to_J(self.energies, transform)
         self._state_dict_[Coupling.J] = self.intermediate
+
+        # Invalidate previously calculated reduced matrix elements
         self._reduced_ = None
 
     def reduced(self):
+        """ Calculate and return all reduced matrix elements required for the calculation of line strengths of
+        radiative electric or magnetic dipole transitions if they were not yet calculated. Rows refer to final and
+        columns to initial states. """
+
         if not self._reduced_:
             J = self.intermediate.J
             transform = self.intermediate.transform
@@ -273,6 +299,9 @@ class Lanthanide:
         return self._reduced_
 
     def line_strengths(self, judd_ofelt: dict):
+        """ Calculate and return matrices containing the line strengths of all electric and magnetic dipole
+        transitions. Rows refer to final and columns to initial states. """
+
         # Multiply each matrix column with factor with J of the initial state
         reduced = self.reduced()
         invJi = np.array([1 / (3 * (2 * j + 1)) for j in self.intermediate.J])
@@ -292,8 +321,13 @@ class Lanthanide:
         return LineStrength(Sed=result_ed, Smd=result_md)
 
     def str_levels(self, min_weight=0.0):
+        """ Return a list containing an extensive description string for each state with energy and composition with
+        weights in intermediate coupling. Only SLJ states with the given minimum weight are included. """
+
         for state in self.intermediate:
             yield f"  {state.energy:7.0f} | {state.long(min_weight)} >"
 
     def __str__(self):
+        """ Return a short string representation of this Lanthanide object. """
+
         return f"{self.name} ({self.config})"
