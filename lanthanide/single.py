@@ -522,49 +522,60 @@ def init_single(vault, group_name, states):
     the given determinantal product states in the HDF5 group with given name in the given HDF5 file vault. Return
     the SingleElements support object. """
 
-    # Delete the group in the HDF5 file, if the cache is marked as invalid or its version number does not match
-    if group_name in vault:
-        if not vault.attrs["valid"] or "version" not in vault[group_name].attrs or \
-                vault[group_name].attrs["version"] != SINGLE_VERSION:
-            del vault[group_name]
-            vault.flush()
-
-    # Generate all data, if the HDF5 group is missing
-    if group_name not in vault:
-        print("Creating vault single ...")
-
-        # Render all cache structures following in the dependence chain as invalid
-        vault.attrs["valid"] = False
-
-        # Create new HDF5 group and store the current version number
-        vault.create_group(group_name)
-        vault[group_name].attrs["version"] = SINGLE_VERSION
-
-        # Calculate the lists of matrix indices and bra-ket keys for one-, two-, and three-electron operators
+    # No file cache
+    if not vault:
         one, two, three = single_elements(states)
+        group = {"one": {"indices": one[0], "elements": one[1]},
+                 "two": {"indices": two[0], "elements": two[1]},
+                 "three": {"indices": three[0], "elements": three[1]}}
 
-        # Store the lists of matrix indices and bra-ket keys for one-electron operators as HDF5 datasets
-        if len(states[0]) >= 1:
+    # Use file cache
+    else:
+
+        # Delete the group in the HDF5 file, if the cache is marked as invalid or its version number does not match
+        if group_name in vault:
+            if not vault.attrs["valid"] or "version" not in vault[group_name].attrs or \
+                    vault[group_name].attrs["version"] != SINGLE_VERSION:
+                del vault[group_name]
+                vault.flush()
+
+        # Generate all data, if the HDF5 group is missing
+        if group_name not in vault:
+            print("Creating vault single ...")
+
+            # Render all cache structures following in the dependence chain as invalid
+            vault.attrs["valid"] = False
+
+            # Create new HDF5 group and store the current version number
+            vault.create_group(group_name)
+            vault[group_name].attrs["version"] = SINGLE_VERSION
+
+            # Calculate the lists of matrix indices and bra-ket keys for one-, two-, and three-electron operators
+            one, two, three = single_elements(states)
+
+            # Store the lists of matrix indices and bra-ket keys for one-electron operators as HDF5 datasets
             group = vault[group_name].create_group("one")
             group.create_dataset("indices", data=one[0], compression="gzip", compression_opts=9)
             group.create_dataset("elements", data=one[1], compression="gzip", compression_opts=9)
 
-        # Store the lists of matrix indices and bra-ket keys for two-electron operators as HDF5 datasets
-        if len(states[0]) >= 2:
+            # Store the lists of matrix indices and bra-ket keys for two-electron operators as HDF5 datasets
             group = vault[group_name].create_group("two")
             group.create_dataset("indices", data=two[0], compression="gzip", compression_opts=9)
             group.create_dataset("elements", data=two[1], compression="gzip", compression_opts=9)
 
-        # Store the lists of matrix indices and bra-ket keys for three-electron operators as HDF5 datasets
-        if len(states[0]) >= 3:
+            # Store the lists of matrix indices and bra-ket keys for three-electron operators as HDF5 datasets
             group = vault[group_name].create_group("three")
             group.create_dataset("indices", data=three[0], compression="gzip", compression_opts=9)
             group.create_dataset("elements", data=three[1], compression="gzip", compression_opts=9)
 
-        # Flush the cache file
-        vault.flush()
-        print("Vault single done.")
+            # Flush the cache file
+            vault.flush()
+            print("Vault single done.")
+
+        # HDF5 single group
+        else:
+            group = vault[group_name]
 
     # Return an interface object supporting the calculation of the matrices of tensor operators in the determinantal
     # product space of the given configuration
-    return SingleElements(vault[group_name], states)
+    return SingleElements(group, states)

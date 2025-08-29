@@ -6,13 +6,13 @@
 
 from .halfint import HalfInt
 from .wigner import wigner3j, wigner6j
-from .single import SingleElements, single_elements
+from .single import SingleElements, single_elements, init_single
 from .unit import ORBITAL, SPIN, MAGNETIC, LEN_SHELL, product_states, calc_unit, get_unit
 from .symmetry import SYMMETRY, Symmetry, SymmetryS2, SymmetryGR7, SymmetryGR5, SymmetryGG2, SymmetryL2, \
     SymmetryJ2, SymmetryJz, SymmetryTau, SymmetryNum, SymmetryList
 from .state import Coupling, StateListProduct, StateListSLJM, StateListSLJ, StateListJ, \
-    StateProduct, StateSLJM, StateSLJ, StateJ
-from .matrix import MATRIX, build_hamilton, reduced_matrix, Matrix
+    StateProduct, StateSLJM, StateSLJ, StateJ, build_SLJM
+from .matrix import MATRIX, build_hamilton, reduced_matrix, Matrix, get_matrix
 from .lanthanide import RADIAL, JUDD_OFELT, Lanthanide, CONST_e, CONST_eps0, CONST_me, CONST_h, CONST_c
 
 

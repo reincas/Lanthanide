@@ -6,20 +6,14 @@
 
 import pytest
 
-from lanthanide import product_states, single_elements, SingleElements, calc_unit
+from lanthanide import product_states, init_single, calc_unit
 
 
 class DummyLanthanide:
     def __init__(self, num: int):
         self.num = num
         self.product_states = states = product_states(num)
-        one, two, three = single_elements(states)
-        group = {
-            "one": {"indices": one[0], "elements": one[1]},
-            "two": {"indices": two[0], "elements": two[1]},
-            "three": {"indices": three[0], "elements": three[1]},
-        }
-        self.single = SingleElements(group, states)
+        self.single = init_single(None, None, states)
 
 
 def get_nz(array):

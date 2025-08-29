@@ -5,7 +5,6 @@
 ##########################################################################
 
 from pathlib import Path
-from functools import lru_cache
 from dataclasses import dataclass
 import numpy as np
 import h5py
@@ -236,13 +235,6 @@ class Lanthanide:
 
     def matrix(self, name, coupling=None):
         """ Return Matrix object of the given operator in the given coupling scheme (default: Product). """
-
-        return get_matrix(self, name, coupling)
-
-    @lru_cache(maxsize=None)
-    def cached_matrix(self, name, coupling):
-        """ Return Matrix object of the given operator in the given coupling scheme (default: Product). Take it
-        from the memory cache, if possible. """
 
         return get_matrix(self, name, coupling)
 
