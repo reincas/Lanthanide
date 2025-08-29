@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 
 from lanthanide import RADIAL, product_states, init_single, Matrix, get_matrix, ORBITAL, SPIN, Coupling, \
-    build_hamilton, reduced_matrix, init_states
+    build_hamilton, reduced_matrix, init_states, LANTHANIDES
 
 EIGEN = np.array([2, 3, 5, 6, 9])
 MATRIX = np.array([[-0.07344058, 0.31934316, 0.88450433, 0.22878318, 0.24070059],
@@ -24,6 +24,7 @@ WEIGHT4 = [0.033471471373506444, 0.23274398860708642, 0.7107571845637194, 0.0164
            0.4963453057444576, 0.0]
 WEIGHT6 = [0.11737443386221942, 0.6591978972155589, 0.303903979802215, 0.0, 0.0, 0.0909492368332769,
            0.005887991636483049, 0.0, 0.0, 0.0, 0.03237457133704324, 0.0, 0.0]
+
 
 class DummyMatrix:
     def __init__(self, array):
@@ -46,8 +47,21 @@ class DummyLanthanide:
         return self._state_dict_[coupling.name]
 
 
+def run_matrix(num):
+    ion = DummyLanthanide(num)
+
+    radial = RADIAL[f"{LANTHANIDES[num]}3+"]
+    H = build_hamilton(ion, radial, Coupling.SLJ)
+    energies, transform = H.fast_diagonalize()
+
+    states = ion.states(Coupling.SLJ)
+    intermediate = states.to_J(energies, transform)
+
+    return ion, energies, transform, intermediate
+
+
 def test_matrix():
-    ion = DummyLanthanide(2)
+    ion, energies, transform, intermediate = run_matrix(2)
 
     array = MATRIX @ np.diag(EIGEN) @ MATRIX.T
     matrix = Matrix(ion, array, "test")
@@ -61,13 +75,14 @@ def test_matrix():
     assert pytest.approx(eigen, abs=1e-6) == 2 * EIGEN
     assert pytest.approx(np.abs(vectors), abs=1e-6) == np.abs(MATRIX)
 
-    radial = RADIAL["Pr3+"]
-    H = build_hamilton(ion, radial, Coupling.SLJ)
-    energies, transform = H.fast_diagonalize()
+
+def test_hamilton():
+    ion, energies, transform, intermediate = run_matrix(2)
     assert pytest.approx(energies, abs=1e-5) == ENERGIES_F02
 
-    states = ion.states(Coupling.SLJ)
-    intermediate = states.to_J(energies, transform)
+
+def test_reduced():
+    ion, energies, transform, intermediate = run_matrix(2)
     J = intermediate.J
     U4 = np.power(reduced_matrix(ion, "ED/4,{q}", 4, J, transform), 2)
     assert pytest.approx(U4[:, 2], abs=1e-9) == WEIGHT4

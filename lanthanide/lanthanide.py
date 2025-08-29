@@ -19,7 +19,7 @@ VAULT_PATH = Path(__file__).resolve().parent / "vaults"
 VAULT_NAME = "data-f{num:02d}.hdf5"
 
 # Symbols of the 15 Lanthanides. The configurations of the triply ionized atoms are 4f0 - 4f14
-NAMES = ["La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu"]
+LANTHANIDES = ["La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu"]
 
 # Physical constants
 CONST_e = 1.6022e-19  # C
@@ -171,7 +171,7 @@ class Lanthanide:
 
         # Number of electrons, name and electron configuration of the lanthanide ion
         self.num = num
-        self.name = f"{NAMES[num]}3+"
+        self.name = f"{LANTHANIDES[num]}3+"
         self.config = f"4f{num}"
 
         # Quantum number of the orbital and spin angular momenta of the electrons

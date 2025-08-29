@@ -599,7 +599,7 @@ def reduced_matrix(ion, name: str, k: int, J: list, transform=None) -> np.ndarra
     # Matrix of the potentially non-zero components or the tensor operator of rank k
     num_states = len(J)
     if k == 0:
-        array = get_matrix(ion, name, Coupling.SLJ).array
+        array = get_matrix(ion, name.format(q=0), Coupling.SLJ).array
     else:
         array = np.zeros((num_states, num_states), dtype=float)
         for q in range(-k, k + 1):
