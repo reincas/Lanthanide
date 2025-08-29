@@ -12,7 +12,7 @@ from .symmetry import SYMMETRY, Symmetry, SymmetryS2, SymmetryGR7, SymmetryGR5, 
     SymmetryJ2, SymmetryJz, SymmetryTau, SymmetryNum, SymmetryList
 from .state import Coupling, StateListProduct, StateListSLJM, StateListSLJ, StateListJ, \
     StateProduct, StateSLJM, StateSLJ, StateJ
-from .matrix import MATRIX, reduced_matrix, Matrix
+from .matrix import MATRIX, build_hamilton, reduced_matrix, Matrix
 from .lanthanide import RADIAL, JUDD_OFELT, Lanthanide, CONST_e, CONST_eps0, CONST_me, CONST_h, CONST_c
 
 
