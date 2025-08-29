@@ -39,7 +39,7 @@ def matrix_UU(ion, k: int):
     space in determinantal product state coupling. """
 
     assert 0 <= k <= 2 * ion.l
-    return ion.matrix(f"UU/a/{k}") + 2 * ion.matrix(f"UU/b/{k}")
+    return calc_matrix(ion, f"UU/a/{k}") + 2 * calc_matrix(ion, f"UU/b/{k}")
 
 
 def matrix_TT(ion, k: int):
@@ -47,7 +47,7 @@ def matrix_TT(ion, k: int):
     space in determinantal product state coupling. """
 
     assert 0 <= k <= 2 * ion.s
-    return ion.matrix(f"TT/a/{k}") + 2 * ion.matrix(f"TT/b/{k}")
+    return calc_matrix(ion, f"TT/a/{k}") + 2 * calc_matrix(ion, f"TT/b/{k}")
 
 
 def matrix_UT(ion, k: int):
@@ -55,7 +55,7 @@ def matrix_UT(ion, k: int):
     momentum space in determinantal product state coupling. """
 
     assert 0 <= k <= 2 * ion.s
-    return ion.matrix(f"UT/a/{k}") + 2 * ion.matrix(f"UT/b/{k}")
+    return calc_matrix(ion, f"UT/a/{k}") + 2 * calc_matrix(ion, f"UT/b/{k}")
 
 
 ##########################################################################
@@ -66,70 +66,70 @@ def matrix_L(ion, q: int):
     """ Return the matrix of the component q of the tensor operator of the total orbital angular momentum in
     determinantal product state coupling. """
 
-    return math.sqrt(ion.l * (ion.l + 1) * (2 * ion.l + 1)) * ion.matrix(f"U/a/1,{q}")
+    return math.sqrt(ion.l * (ion.l + 1) * (2 * ion.l + 1)) * calc_matrix(ion, f"U/a/1,{q}")
 
 
 def matrix_S(ion, q: int):
     """ Return the matrix of the component q of the tensor operator of the total spin angular momentum in
     determinantal product state coupling. """
 
-    return math.sqrt(1.5) * ion.matrix(f"T/a/1,{q}")
+    return math.sqrt(1.5) * calc_matrix(ion, f"T/a/1,{q}")
 
 
 def matrix_J(ion, q: int):
     """ Return the matrix of the component q of the tensor operator of the total angular momentum in determinantal
     product state coupling. """
 
-    return ion.matrix(f"L/{q}") + ion.matrix(f"S/{q}")
+    return calc_matrix(ion, f"L/{q}") + calc_matrix(ion, f"S/{q}")
 
 
 def matrix_Lz(ion):
     """ Return the matrix of the z component of the tensor operator of the total orbital angular momentum in
     determinantal product state coupling. """
 
-    return ion.matrix("L/0")
+    return calc_matrix(ion, "L/0")
 
 
 def matrix_Sz(ion):
     """ Return the matrix of the z component of the tensor operator of the total spin angular momentum in
     determinantal product state coupling. """
 
-    return ion.matrix("S/0")
+    return calc_matrix(ion, "S/0")
 
 
 def matrix_Jz(ion):
     """ Return the matrix of the z component of the tensor operator of the total angular momentum in determinantal
     product state coupling. """
 
-    return ion.matrix("Lz") + ion.matrix("Sz")
+    return calc_matrix(ion, "Lz") + calc_matrix(ion, "Sz")
 
 
 def matrix_L2(ion):
     """ Return the matrix of the squared tensor operator of the total orbital angular momentum in determinantal
     product state coupling. """
 
-    return ion.l * (ion.l + 1) * (2 * ion.l + 1) * ion.matrix("UU/1")
+    return ion.l * (ion.l + 1) * (2 * ion.l + 1) * calc_matrix(ion, "UU/1")
 
 
 def matrix_S2(ion):
     """ Return the matrix of the squared tensor operator of the total spin angular momentum in determinantal
     product state coupling. """
 
-    return 1.5 * ion.matrix("TT/1")
+    return 1.5 * calc_matrix(ion, "TT/1")
 
 
 def matrix_LS(ion):
     """ Return the matrix of the scalar product of the tensor operators of the total orbital angular momentum and
     total spin angular momentum in determinantal product state coupling. """
 
-    return math.sqrt(1.5 * ion.l * (ion.l + 1) * (2 * ion.l + 1)) * ion.matrix("UT/1")
+    return math.sqrt(1.5 * ion.l * (ion.l + 1) * (2 * ion.l + 1)) * calc_matrix(ion, "UT/1")
 
 
 def matrix_J2(ion):
     """ Return the matrix of the squared tensor operator of the total angular momentum in determinantal product
     state coupling. """
 
-    return ion.matrix("L2") + 2 * ion.matrix("LS") + ion.matrix("S2")
+    return calc_matrix(ion, "L2") + 2 * calc_matrix(ion, "LS") + calc_matrix(ion, "S2")
 
 
 ##########################################################################
@@ -141,7 +141,7 @@ def matrix_ED(ion, k: int, q: int):
     coupling as required for the calculation of electric dipole transitions. Note that for each matrix element only
     one component q may be non-zero depending on the initial and final states. """
 
-    return ion.matrix(f"U/a/{k},{q}")
+    return calc_matrix(ion, f"U/a/{k},{q}")
 
 
 def matrix_MD(ion, q: int):
@@ -150,7 +150,7 @@ def matrix_MD(ion, q: int):
     as required for the calculation of magnetic dipole transitions. Note that for each matrix element only one
     component q may be non-zero depending on the initial and final states. """
 
-    return ion.matrix(f"L/{q}") + 2.00231924 * ion.matrix(f"S/{q}")
+    return calc_matrix(ion, f"L/{q}") + 2.00231924 * calc_matrix(ion, f"S/{q}")
 
 
 ##########################################################################
@@ -165,7 +165,7 @@ def matrix_H1(ion, k: int):
 
     l = ion.l
     factor = (2 * l + 1) * wigner3j(l, k, l, 0, 0, 0)
-    return factor * factor * ion.matrix(f"UU/b/{k}")
+    return factor * factor * calc_matrix(ion, f"UU/b/{k}")
 
 
 ##########################################################################
@@ -177,7 +177,7 @@ def matrix_H2(ion):
 
     l = ion.l
     factor = math.sqrt(1.5 * l * (l + 1) * (2 * l + 1))
-    return factor * ion.matrix("UT/a/1")
+    return factor * calc_matrix(ion, "UT/a/1")
 
 
 ##########################################################################
@@ -192,7 +192,7 @@ def matrix_GR(ion, d: int):
 
     sum = 0.0
     for k in range(1, d, 2):
-        sum += (2 * k + 1) * ion.matrix(f"UU/{k}")
+        sum += (2 * k + 1) * calc_matrix(ion, f"UU/{k}")
     sum /= d - 2
     return sum
 
@@ -203,7 +203,7 @@ def matrix_GG(ion, d: int):
 
     assert d == 2
 
-    return (3 * ion.matrix("UU/1") + 11 * ion.matrix("UU/5")) / 4
+    return (3 * calc_matrix(ion, "UU/1") + 11 * calc_matrix(ion, "UU/5")) / 4
 
 
 def matrix_H3(ion, i: int):
@@ -212,11 +212,11 @@ def matrix_H3(ion, i: int):
     assert i in (0, 1, 2)
 
     if i == 0:
-        matrix = ion.matrix("L2")
+        matrix = calc_matrix(ion, "L2")
     elif i == 1:
-        matrix = ion.matrix("GG/2")
+        matrix = calc_matrix(ion, "GG/2")
     else:
-        matrix = ion.matrix("GR/7")
+        matrix = calc_matrix(ion, "GR/7")
     return matrix
 
 
@@ -294,7 +294,7 @@ def matrix_H4(ion, c: int):
     for i in range(len(JUDD_TABLE)):
         k1, k2, k3, factor = judd_factor(i, c)
         matrix += factor * 6 * math.sqrt((2 * k1 + 1) * (2 * k2 + 1) * (2 * k3 + 1)) \
-                  * ion.matrix(f"UUU/c/{k1},{k2},{k3}")
+                  * calc_matrix(ion, f"UUU/c/{k1},{k2},{k3}")
     return matrix
 
 
@@ -312,7 +312,7 @@ def matrix_ss(ion, k: int):
     ck0 = -(2 * l + 1) * wigner3j(l, k, l, 0, 0, 0)
     ck2 = -(2 * l + 1) * wigner3j(l, k + 2, l, 0, 0, 0)
     factor = -12 * ck0 * ck2 * math.sqrt((k + 1) * (k + 2) * (2 * k + 1) * (2 * k + 3) * (2 * k + 5) / 5)
-    return factor * ion.matrix(f"UUTT/b/{k},{k + 2},1,1,2")
+    return factor * calc_matrix(ion, f"UUTT/b/{k},{k + 2},1,1,2")
 
 
 def matrix_soo(ion, k: int):
@@ -325,11 +325,13 @@ def matrix_soo(ion, k: int):
 
     ck0 = -(2 * l + 1) * wigner3j(l, k, l, 0, 0, 0)
     factor0 = -ck0 * ck0 * math.sqrt((2 * l + k + 2) * (2 * l - k) * (k + 1) * (2 * k + 1) * (2 * k + 3))
-    matrix0 = factor0 * (ion.matrix(f"UUTT/b/{k},{k + 1},0,1,1") + 2 * ion.matrix(f"UUTT/b/{k + 1},{k},0,1,1"))
+    matrix0 = factor0 * (calc_matrix(ion, f"UUTT/b/{k},{k + 1},0,1,1") \
+                         + 2 * calc_matrix(ion, f"UUTT/b/{k + 1},{k},0,1,1"))
 
     ck2 = -(2 * l + 1) * wigner3j(l, k + 2, l, 0, 0, 0)
     factor2 = -ck2 * ck2 * math.sqrt((2 * l + k + 3) * (2 * l - k - 1) * (k + 2) * (2 * k + 3) * (2 * k + 5))
-    matrix2 = factor2 * (ion.matrix(f"UUTT/b/{k + 2},{k + 1},0,1,1") + 2 * ion.matrix(f"UUTT/b/{k + 1},{k + 2},0,1,1"))
+    matrix2 = factor2 * (calc_matrix(ion, f"UUTT/b/{k + 2},{k + 1},0,1,1") \
+                         + 2 * calc_matrix(ion, f"UUTT/b/{k + 1},{k + 2},0,1,1"))
 
     return 2 * (matrix0 + matrix2)
 
@@ -337,14 +339,16 @@ def matrix_soo(ion, k: int):
 def matrix_H5(ion, k: int):
     """ Return the matrix of the perturbation hamiltonian H5/k in determinantal product state coupling. """
 
-    return ion.matrix(f"hss/{k}") + ion.matrix(f"hsoo/{k}")
+    return calc_matrix(ion, f"hss/{k}") + calc_matrix(ion, f"hsoo/{k}")
 
 
 def matrix_H5fix(ion):
     """ Return the linear combination H5/0 + 0.56 * H5/2 + 0.38 * H5/4 of the total perturbation hamiltonian H5 in
     determinantal product state coupling. """
 
-    return ion.matrix("H5/0") + 0.56 * ion.matrix("H5/2") + 0.38 * ion.matrix("H5/4")
+    return calc_matrix(ion, "H5/0") \
+        + 0.56 * calc_matrix(ion, "H5/2") \
+        + 0.38 * calc_matrix(ion, "H5/4")
 
 
 ##########################################################################
@@ -362,10 +366,10 @@ def matrix_H6(ion, k: int):
     matrix = 0.0
     if k > 0:
         factor = math.sqrt((2 * l + k + 1) * (2 * l - k + 1) * k * (2 * k - 1) / (2 * k + 1))
-        matrix += factor * ion.matrix(f"UUTT/b/{k},{k - 1},0,1,1")
+        matrix += factor * calc_matrix(ion, f"UUTT/b/{k},{k - 1},0,1,1")
     if k < 2 * l:
         factor = -math.sqrt((2 * l + k + 2) * (2 * l - k) * (k + 1) * (2 * k + 3) / (2 * k + 1))
-        matrix += factor * ion.matrix(f"UUTT/b/{k},{k + 1},0,1,1")
+        matrix += factor * calc_matrix(ion, f"UUTT/b/{k},{k + 1},0,1,1")
 
     ck = -(2 * l + 1) * wigner3j(l, k, l, 0, 0, 0)
     return (2 * ck * ck / 6) * matrix
@@ -375,7 +379,9 @@ def matrix_H6fix(ion):
     """ Return the linear combination H6/2 + 0.75 * H6/4 + 0.50 * H6/6 of the total perturbation hamiltonian H6 in
     determinantal product state coupling. """
 
-    return ion.matrix("H6/2") + 0.75 * ion.matrix("H6/4") + 0.50 * ion.matrix("H6/6")
+    return calc_matrix(ion, "H6/2") \
+        + 0.75 * calc_matrix(ion, "H6/4") \
+        + 0.50 * calc_matrix(ion, "H6/6")
 
 
 ##########################################################################
@@ -617,6 +623,32 @@ def reduced_matrix(ion, name: str, k: int, J: list, transform=None) -> np.ndarra
     return np.array([[value(i, j) for j in range(num_states)] for i in range(num_states)], dtype=float)
 
 
+def calc_matrix(ion, name):
+    """ Return a 2D numpy array of the tensor operator with given name in determinantal product state coupling. """
+
+    # Matrix of unit tensor operator. These matrices are provided by the module "unit".
+    if name.count("/") == 2:
+        array = get_unit(ion, name)
+
+    # Matrix of high order operator
+    else:
+
+        # Get name and arguments
+        if "/" in name:
+            main, args = name.split("/")
+        else:
+            main, args = name, ""
+        if main not in MATRIX:
+            raise ValueError(f"Unknown matrix: {name}")
+        args = map(int, args.split(",")) if args else ()
+
+        # Build matrix from scratch
+        array = MATRIX[main](ion, *args)
+
+    # Return matrix
+    return array
+
+
 ##########################################################################
 # HDF5 cache interface
 ##########################################################################
@@ -636,23 +668,13 @@ def get_matrix(ion, name, coupling=None):
     # Coupling scheme of the returned Matrix object
     coupling = coupling or Coupling.Product
 
-    # Matrix of unit tensor operator. These matrices are provided by the module "unit".
-    if name.count("/") == 2:
-        array = get_unit(ion, name)
-        return Matrix(ion, array, name).transform(coupling)
-
-    # Get name and arguments for high order operator
-    if "/" in name:
-        main, args = name.split("/")
-    else:
-        main, args = name, ""
-    if main not in MATRIX:
-        raise ValueError(f"Unknown matrix: {name}")
-    args = map(int, args.split(",")) if args else ()
+    # Tensor name
+    tensor = name if "/" not in name else name.split("/")[0]
 
     # Build matrix from scratch
-    if main not in STORE or coupling not in (Coupling.SLJM, Coupling.SLJ):
-        return MATRIX[main](ion, *args).transform(coupling)
+    if tensor not in STORE or coupling not in (Coupling.SLJM, Coupling.SLJ):
+        array = calc_matrix(ion, name)
+        return Matrix(ion, array, name).transform(coupling)
 
     # Get SLJM matrix from HDF5 vault
     if coupling == Coupling.SLJM:
@@ -661,8 +683,9 @@ def get_matrix(ion, name, coupling=None):
             matrix = Matrix(ion, np.array(group[name]), name, Coupling.SLJM)
         else:
             print(f"Create SLJM matrix {name} ...")
-            matrix = MATRIX[main](ion, *args).transform(Coupling.SLJM)
-            group.create_dataset(name, data=matrix.array, compression="gzip", compression_opts=9)
+            array = calc_matrix(ion, name)
+            matrix = Matrix(ion, array, name).transform(Coupling.SLJM)
+            group.create_dataset(name, data=array, compression="gzip", compression_opts=9)
             ion.vault.flush()
             print(f"SLJM matrix {name} done.")
 
