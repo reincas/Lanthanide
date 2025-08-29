@@ -123,7 +123,7 @@ elementary operator is thus evaluated only once.
 
 ## Unit tensor matrices
 
-Unit tensor matrices in the determinantal product state space are provided ad 2D numpy arrays via the function
+Unit tensor matrices in the determinantal product state space are provided as 2D numpy arrays via the function
 `get_unit(ion, name)`.
 If you want to force the calculation without using the file cache, you can also use `calc_unit(ion, name)`.
 Here is a sample code segment to calculate the component $\mathrm{U}_{-1}^{(2)}$ of the unit tensor operator of
