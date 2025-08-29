@@ -5,7 +5,7 @@
 ##########################################################################
 
 from lanthanide import product_states, init_single, get_matrix, ORBITAL, SPIN, build_SLJM, SymmetryList, \
-    SYM_CHAIN_SLJM, StateListSLJM
+    SYM_CHAIN_SLJM, StateListSLJM, init_states
 
 SYMS = {
     1: {
@@ -78,6 +78,9 @@ def run_state(num, num_sljm, num_slj):
     states_slj = states_sljm.to_SLJ()
     assert len(states_slj) == num_slj
     assert type(states_slj[1]).__name__ == "StateSLJ"
+
+    states = init_states(None, None, ion)
+    assert set(states.keys()) == {'Product', 'SLJM', 'SLJ'}
 
 
 def test_state_Ce():

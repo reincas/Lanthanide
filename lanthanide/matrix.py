@@ -626,32 +626,6 @@ def reduced_matrix(ion, name: str, k: int, J: list, transform=None) -> np.ndarra
     return np.array([[value(i, j) for j in range(num_states)] for i in range(num_states)], dtype=float)
 
 
-# def calc_array(ion, name):
-#     """ Return a 2D numpy array of the tensor operator with given name in determinantal product state coupling. """
-#
-#     # Matrix of unit tensor operator. These matrices are provided by the module "unit".
-#     if name.count("/") == 2:
-#         array = calc_unit(ion, name)
-#
-#     # Matrix of high order operator
-#     else:
-#
-#         # Get name and arguments
-#         if "/" in name:
-#             main, args = name.split("/")
-#         else:
-#             main, args = name, ""
-#         if main not in MATRIX:
-#             raise ValueError(f"Unknown matrix: {name}")
-#         args = map(int, args.split(",")) if args else ()
-#
-#         # Build matrix from scratch
-#         array = MATRIX[main](ion, *args)
-#
-#     # Return matrix
-#     return array
-
-
 ##########################################################################
 # HDF5 cache interface
 ##########################################################################
