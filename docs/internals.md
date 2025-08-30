@@ -130,12 +130,12 @@ rank 2 in the orbital angular momentum space and the matrix of the two-electron 
 $(\mathbf{U}_1^{(2)}\cdot\mathbf{U}_2^{(2)})$:
 
 ```
-from lanthanide import Lanthanide, calc_unit
+from lanthanide import Lanthanide, get_unit
 with Lanthanide(2) as ion:
     k = 2
     q = -1
-    matrix_1 = calc_unit(ion, f"U/a/{k},{q}")
-    matrix_2 = calc_unit(ion, f"UU/b/{k}")
+    matrix_1 = get_unit(ion, f"U/a/{k},{q}")
+    matrix_2 = get_unit(ion, f"UU/b/{k}")
 ```
 
 The following table lists all unit tensor operators provided by the Lanthanide package with their respective names:
@@ -152,6 +152,10 @@ The following table lists all unit tensor operators provided by the Lanthanide p
 | `UT/b/{k}`                           | 2         | $(\mathbf{U}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                                   |
 | `UUTT/b/{ku1},{ku2},{kt1},{kt2},{k}` | 2         | $(\\{\mathbf{U}_1^{(ku1)}\times\mathbf{U}_2^{(ku2)}\\}^{(k)} \cdot \\{\mathbf{T}_1^{(kt1)}\times\mathbf{T}_2^{(kt2)}\\}^{(k)})$ |
 | `UUU/c/{k1},{k2},{k3}`               | 3         | $(\mathbf{U}_1^{(k1)}\cdot\mathbf{U}_2^{(k2)}\cdot\mathbf{U}_2^{(k3)})$                                                         |
+
+Note that the intended way to receive any tensor operator matrix including unit tensor operators is the method
+`Lanthanide.matrix(name, coupling)`. This method is explained below and delivers a `Matrix` object in the given
+coupling space.
 
 ## Symmetry classes
 
