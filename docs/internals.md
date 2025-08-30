@@ -299,8 +299,8 @@ with Lanthanide(2) as ion:
 ```
 
 The perturbation hamiltonians preserve only symmetry in $R_3$, thus only the quantum number J of the total angular
-momentum. The states of lanthanide ions are thus intermediate states. Each state is a linear combination of
-different SLJ states with the same quantum number J. The class `StateListJ` provides a list of `StateJ` objects
+momentum. The physical states of lanthanide ions are therefore intermediate states. Each state is a linear combination
+of different SLJ states with the same quantum number J. The class `StateListJ` provides a list of `StateJ` objects
 representing individual states in intermediate SLJ coupling in the order of their energy levels, which are
 available in the attribute `energies`.
 
