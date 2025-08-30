@@ -73,8 +73,8 @@ cache.
 
 The class `SingleElements` supports you with the calculation of matrices of your own one-, two- or three-electron
 tensor operators in the determinantal product space. It exploits the fact that these matrices are necessarily
-sparse because all matrix elements between states which differ in more electrons than the respective tensor operator
-is acting on, must be zero.
+sparse because all matrix elements for which initial and final state differ in more electrons than the respective
+tensor operator is acting on, must be zero.
 
 The `SingleElements` object for the current configuration is available in the attribute `single` of a `Lanthanide`
 object. Its method `elements(num)` generates the indices of the initial and the final state of each potentially
