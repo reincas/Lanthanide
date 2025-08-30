@@ -226,7 +226,7 @@ phase adjustment of the transformation vectors, which are the columns of the mat
 in the choice of the sign of these vectors, which is used to select the sign which allows the calculation of
 reduced matrix elements inside the SLJ space without reference to the SLJM space.
 
-The method `StateListProduct.to_SLJM(ion)` returns an object of the state list class `StateListSLJM` which provides
+The method `StateListProduct.to_SLJM(ion)` returns an object of the class `StateListSLJM` which provides
 a list of `StateSLJM` objects representing individual states. The state object acts as a dictionary with symmetry
 names as keys and symmetry objects as values. Symmetry objects are described in more detail below. The following
 sample code derives a `StateListSLJM` object from an product states object instead of using the method
