@@ -270,8 +270,8 @@ in the choice of the sign of these vectors, which is used to select the sign whi
 reduced matrix elements inside the SLJ space without reference to the SLJM space.
 
 The class `StateListSLJM` provides a list of `StateSLJM` objects representing individual states. Each state object
-acts as a dictionary with symmetry names as keys and symmetry objects as values. Symmetry objects are described in
-more detail below. The following sample code takes the SLJM states of Dy<sup>3+</sup> and prints details of state 3:
+acts as a dictionary with symmetry names as keys and symmetry objects as values. The following sample code takes
+the SLJM states of Dy<sup>3+</sup> and prints details of state 3:
 
 ```
 from lanthanide import Lanthanide, Coupling
@@ -284,20 +284,18 @@ with Lanthanide(9) as ion:
     print(f"U = {state["GG/2"]}")
 ```
 
-The method `StateListSLJM.to_SLJ()` returns an object of the class `StateListSLJ` which provides a list of
-`StateSLJ` objects representing individual states. It picks all stretched states with M=J and strips the symmetry
-objects relating to `"Jz"`. The state object acts as a dictionary with symmetry names as keys and symmetry objects
-as values. Symmetry objects are described in more detail below. The following sample code derives a `StateListSLJ`
-object from an SLJM states object instead of using the method `Lanthanides.states()` directly:
+The SLJ sub-space consists of all stretched SLJM states with M=J. The class `StateListSLJ` provides a list of
+`StateSLJ` objects representing individual states. It is almost identical to the class `StateListSLJ` without the
+symmetry objects relating to `"Jz"`. The state object `StateSLJ` again acts as a dictionary with symmetry names as
+keys and symmetry objects as values. The following sample code takes the SLJM states of Pr<sup>3+</sup> and prints
+long string representations of all states:
 
 ```
-from lanthanide import StateListProduct, Lanthanide
-ion = Lanthanides(3)
-states = StateListProduct(ion.product)
-states = states.to_SLJM(ion)
-states = states.to_SLJ()
-for states in states:
-    print(state)
+from lanthanide import Lanthanide, Coupling
+with Lanthanide(2) as ion:
+    states = ion.states(Coupling.SLJM)
+    for states in states:
+        print(state)
 ```
 
 ## Matrix class
