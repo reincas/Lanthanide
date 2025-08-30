@@ -151,11 +151,16 @@ class StateListProduct(StateList):
 
     def to_SLJM(self, ion):
         """ Build and return a StateListSLJM object using the function ion.matrix(name) to get the matrix of
-         a symmetry operator of given name in determinantal product state coupling. """
+         a symmetry operator of given name in determinantal product state coupling. Use the cache in the
+         given Lanthanide object if available. """
 
-        get_array = lambda name: ion.matrix(name).array
-        values, transform = build_SLJM(ORBITAL, len(self), get_array)
-        return StateListSLJM(values, transform)
+        if hasattr(ion, "states"):
+            states = ion.states(Coupling.SLJM)
+        else:
+            get_array = lambda name: ion.matrix(name).array
+            values, transform = build_SLJM(ORBITAL, len(self), get_array)
+            states = StateListSLJM(values, transform)
+        return states
 
     def __str__(self):
         """ Return a string representation of the list of states. """
