@@ -166,7 +166,7 @@ enumeration class `Coupling`. There is one class for each coupling scheme which 
 | SLJ coupling                 | `Coupling.SLJ`     | `"StateListSLJ"`     | `"StateSLJ"`     |
 | intermediate SLJ coupling    | `Coupling.J`       | `"StateListJ"`       | `"StateJ"`       |
 
-The intended way to access this data structure is via the method `states()` of the `Lanthanide` class:
+The intended way to access state list objects is via the method `Lanthanide.states()`:
 
 ```
 from lanthanide import Lanthanide, Coupling
