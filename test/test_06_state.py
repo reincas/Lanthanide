@@ -4,8 +4,10 @@
 # This program is free software under the terms of the MIT license.      #
 ##########################################################################
 
-from lanthanide import product_states, init_single, get_matrix, ORBITAL, SPIN, build_SLJM, SymmetryList, \
-    SYM_CHAIN_SLJM, StateListProduct, init_states
+import math
+
+from lanthanide import product_states, init_single, get_matrix, ORBITAL, SPIN, \
+    SymmetryList, StateListProduct, init_states
 
 SYMS = {
     1: {
@@ -63,14 +65,14 @@ class DummyLanthanide:
         return get_matrix(self, name)
 
 
-def run_state(num, num_sljm, num_slj):
+def run_state(num, num_slj):
     ion = DummyLanthanide(num)
 
     states = StateListProduct(ion.product)
+    assert len(states) == math.comb(14, num)
 
-    get_array = lambda name: get_matrix(ion, name).array
-    states = states.to_SLJM(get_array)
-    assert len(states) == num_sljm
+    states = states.to_SLJM(ion)
+    assert len(states) == math.comb(14, num)
     assert type(states[1]).__name__ == "StateSLJM"
     for i, name in enumerate(states.sym_chain):
         result = SymmetryList(states.values[:, i], name).count()
@@ -86,16 +88,16 @@ def run_state(num, num_sljm, num_slj):
 
 
 def test_state_Ce():
-    run_state(1, 14, 2)
+    run_state(1, 2)
 
 
 def test_state_Pr():
-    run_state(2, 91, 13)
+    run_state(2, 13)
 
 
 def test_state_Tm():
-    run_state(12, 91, 13)
+    run_state(12, 13)
 
 
 def test_state_Yb():
-    run_state(13, 14, 2)
+    run_state(13, 2)

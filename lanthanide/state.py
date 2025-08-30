@@ -149,10 +149,11 @@ class StateListProduct(StateList):
         # No transformation matrix
         self.transform = None
 
-    def to_SLJM(self, get_array):
-        """ Build and return a StateListSLJM object using the given get_array function used to get the matrix of
+    def to_SLJM(self, ion):
+        """ Build and return a StateListSLJM object using the function ion.matrix(name) to get the matrix of
          a symmetry operator of given name in determinantal product state coupling. """
 
+        get_array = lambda name: ion.matrix(name).array
         values, transform = build_SLJM(ORBITAL, len(self), get_array)
         return StateListSLJM(values, transform)
 
