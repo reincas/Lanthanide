@@ -154,11 +154,27 @@ The following table lists all unit tensor operators provided by the Lanthanide p
 | `UUTT/b/{ku1},{ku2},{kt1},{kt2},{k}` | 2         | $(\\{\mathbf{U}_1^{(ku1)}\times\mathbf{U}_2^{(ku2)}\\}^{(k)} \cdot \\{\mathbf{T}_1^{(kt1)}\times\mathbf{T}_2^{(kt2)}\\}^{(k)})$ |
 | `UUU/c/{k1},{k2},{k3}`               | 3         | $(\mathbf{U}_1^{(k1)}\cdot\mathbf{U}_2^{(k2)}\cdot\mathbf{U}_2^{(k3)})$                                                         |
 
+
+## State classes
+
+The calculation of the matrices of tensor operators in the Lanthanide package is carried out in the space of 
+determinantal product states. Each electron is described by a 5-tuple of quantum numbers: the shell number $n$, the
+orbital angular momentum $l$, its z-component $m_l$, the spin $s$ and its z-component $m_s$. For lanthanide ions, three
+of these quantum numbers are fixed: $n=4$, $l=3$, and $s=1/2$. The remaining magnetic quantum numbers $m_l$ and
+$m_s$ allow for a total of 14 combinations, $2l+1=7$ for $m_l$ and $2s+1=2$ for $m_s$. The standard order of these 14
+different electrons is obtained by ordering $(m_l, m_s)$-tuples for decreasing values lexicographically.
+
+The determinantal product states of a given lanthanide configuration with k electrons in the 4f shell are given by
+all k-combinations of the 14 available electrons. We could thus use `itertools.combinations(range(14), k)` to get
+the list of states. Each state is represented by a tuple of indices into the list of available electrons in standard
+order. In order to keep the relationship to data in the file cache, we need to asure a defined and fixed order of 
+the states, although the order does not matter physically. The Lanthanide package therefore uses its own function
+`product_states(k)` to determine the list of determinantal product states for a 4f configuration with k electrons.
+
 ## Matrix class
 
 ... to be added ...
 
-## State classes
+## Symmetry classes
 
 ... to be added ...
-
