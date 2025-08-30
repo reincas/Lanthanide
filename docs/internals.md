@@ -157,7 +157,8 @@ The following table lists all unit tensor operators provided by the Lanthanide p
 ## Symmetry classes
 
 Symmetry classes are used to store the representation of a certain state in a given symmetry group. The following
-classes are available:
+classes are available, including the two pseudo-symmetry classes `"tau"` and `"num"`, which are explained in the next
+section:
 
 | class         | name     | symbol | tensor operator   |
 |---------------|----------|--------|-------------------|
@@ -167,6 +168,8 @@ classes are available:
 | `SymmetryL2`  | `"L2"`   | $L$    | $\mathbf{L}^2$    |
 | `SymmetryJ2`  | `"J2"`   | $J$    | $\mathbf{J}^2$    |
 | `SymmetryJz`  | `"Jz"`   | $M$    | $\mathrm{J}_z$    |
+| `SymmetryTau` | `"tau"`  | $\tau$ |     |
+| `SymmetryNum` | `"num"`  | $\#$   |     |
 
 ## State classes
 
