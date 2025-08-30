@@ -171,6 +171,24 @@ order. In order to keep the relationship to data in the file cache, we need to a
 the states, although the order does not matter physically. The Lanthanide package therefore uses its own function
 `product_states(k)` to determine the list of determinantal product states for a 4f configuration with k electrons.
 
+The class `StateListProduct` takes this list of index tuples and provides a list of `StateProduct` objects representing
+individual product states. The most relevant state attributes are the electron indices in `values` and the list of
+$(l, m_l, s, m_s)$ tuples in `quantum`. The methods `short()` and `long()` return short and long string representations
+of the state. Calling `str(state)` is equivalent to `state.long()`. The following sample code generates the
+determinantal product states of Er<sup>3+</sup> and shows the state 2 in numerical and string format.
+
+```
+from lanthanide import StateListProduct, product_states
+
+product = product_states(3)
+states = StateListProduct(product)
+state = states[2]
+print("Indices:", state.values)
+print("Quantum numbers:", state.quantum)
+print("Short:", state.short())
+print("Long:", state.long())
+```
+
 ## Matrix class
 
 ... to be added ...
