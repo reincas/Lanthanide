@@ -192,15 +192,15 @@ print("Long:", state.long())
 The transformation of a tensor operator matrix $M$ from the product space into the SLJM space by the linear
 transformation $M^\prime = V^T\cdot M\cdot V$ requires a transformation matrix $V$. The first step for the calculation
 of this matrix is the diagonalisation of the tensor operator matrices `"S2"`, `"GR/7"`, `"GG/2"`, `"L2"`, `"J2"`, and 
-`"Jz"` in smaller and smaller subspaces. In this way the representation of each SLJM in the respective symmetry groups
-is determined. It turns out, that in the f configurations with 5-9 electrons, there are pairs of different states
-left, which share the same set or symmetry representations (quantum numbers). In order to distinguish them, a pseudo 
-symmetry `"tau"` is introduced and ad-hoc numbers 1 and 2 are assigned to the states in these pairs, while unique
-states get the value 0. Another pseudo symmetry `"num"` is introduced as an abbreviation code for states which share
-the same quantum numbers S, L, and J. The final step in constructing the transformation to the SLJM space is a phase
-adjustment of the transformation vectors, which are the columns of the matrix $V$. There is a degree of freedom in the
-choice of the sign of these vectors, which is used to select the choice, which allows the calculation of reduced
-matrix elements inside the SLJ space without reference to the SLJM space.  
+`"Jz"` in smaller and smaller subspaces. In this way the representation of each SLJM state in the respective symmetry
+groups is determined. It turns out, that in the f configurations with 5-9 electrons, there are pairs of different
+states left, which share the same set or symmetry representations (quantum numbers). In order to distinguish them, a
+pseudo symmetry `"tau"` is introduced and ad-hoc numbers 1 and 2 are assigned to the states in these pairs, while
+unique states get the value 0. Another pseudo symmetry `"num"` is introduced as an abbreviation code for states which
+share the same quantum numbers S, L, and J. The final step in constructing the transformation to the SLJM space is a
+phase adjustment of the transformation vectors, which are the columns of the matrix $V$. There is a degree of freedom
+in the choice of the sign of these vectors, which is used to select the choice, which allows the calculation of
+reduced matrix elements inside the SLJ space without reference to the SLJM space.  
 
 ## Matrix class
 
