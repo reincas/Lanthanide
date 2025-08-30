@@ -166,7 +166,10 @@ enumeration class `Coupling`. There is one class for each coupling scheme which 
 | SLJ coupling                 | `Coupling.SLJ`     | `StateListSLJ`     | `StateSLJ`     |
 | intermediate SLJ coupling    | `Coupling.J`       | `StateListJ`       | `StateJ`       |
 
-The intended way to access state list objects is via the method `Lanthanide.states()`:
+State objects provide numerical values in different attributes and two string formatting methods `short()`
+and `long()` which return short and long string representations of the state, respectively. Calling `str(state)`
+is equivalent to `state.long()`. The intended way to access state list objects is via the method
+`Lanthanide.states()`:
 
 ```
 from lanthanide import Lanthanide, Coupling
@@ -176,10 +179,6 @@ states = ion.states(Coupling.SLJ)
 for state in states:
     print(state)
 ```
-
-State objects provide numerical values in different attributes and two string formatting methods `short()`
-and `long()` which return short and long string representations of the state, respectively. Calling `str(state)`
-is equivalent to `state.long()`.
 
 In the following, the state objects are described in more detail, beginning with `Product`:
 The calculation of matrices of tensor operators in the Lanthanide package is carried out in the space of
