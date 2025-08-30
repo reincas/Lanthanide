@@ -12,8 +12,8 @@ from lanthanide import product_states, init_single, calc_unit
 class DummyLanthanide:
     def __init__(self, num: int):
         self.num = num
-        self.product_states = states = product_states(num)
-        self.single = init_single(None, None, states)
+        self.product = product_states(num)
+        self.single = init_single(None, None, self.product)
 
 
 def get_nz(array):
