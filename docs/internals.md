@@ -293,7 +293,31 @@ representations of all states:
 ```
 from lanthanide import Lanthanide, Coupling
 with Lanthanide(2) as ion:
-    states = ion.states(Coupling.SLJM)
+    states = ion.states(Coupling.SLJ)
+    for states in states:
+        print(state)
+```
+
+The perturbation hamiltonians preserve symmetry in $R_3$, thus only the quantum number J of the total angular
+momentum. The states of lanthanide ions are thus intermediate states. Each state is a linear combination of
+different SLJ states with the same quantum number J. The class `StateListJ` provides a list of `StateJ` objects
+representing individual states in intermediate SLJ coupling. The state object `StateJ` keeps a linear combination
+of all SLJ states with the same J. The attribute `values` contains the respective factors, `weights` the squared
+factors and `states` the respective list of `StateSLJ` objects. The short string representation of a state in
+intermediate coupling it that of its SLJ component with largest weight. Note that this can result in more than
+one state with exactly the same label. The long representation lists the SLJ components with their weight in
+descending order. In order to limit the length of the representation strings, the method `StateJ.long()` can
+be called with the optional argument `min_weight` to displ
+
+acts as a dictionary with
+symmetry names as keys and symmetry objects as values. It is identical to a `StateSLJM` object without the `"Jz"`
+symmetry object. The following sample code takes the SLJM states of Pr<sup>3+</sup> and prints long string
+representations of all states:
+
+```
+from lanthanide import Lanthanide, Coupling
+with Lanthanide(2) as ion:
+    states = ion.states(Coupling.SLJ)
     for states in states:
         print(state)
 ```
