@@ -232,7 +232,7 @@ all k-combinations of the 14 available electrons. We could thus use `itertools.c
 the list of states. In order to keep the relationship to data in the file cache, we need to asure a defined and fixed order of
 the states, although the order does not matter physically. The Lanthanide package therefore uses its own function
 `product_states(k)` to determine the list of determinantal product states for a 4f configuration with k electrons.
-Each state is represented by a tuple of indices into the list of available electrons in standard order:
+Each state is represented by a tuple of indices into the list of different available electrons in standard order:
 
 ```
 from lanthanide import product_states
