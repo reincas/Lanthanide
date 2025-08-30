@@ -180,14 +180,14 @@ Lists of symmetry objects of the same symmetry group can be stored in a `Symmetr
 method of this object for external applications is the method `count()` which returns a dictionary with the number
 of symmetry objects for each different symmetry representation in the list. Two `SymmetryList` objects of the same
 symmetry group can be concatenated using the `+` operator. The following sample code shows all representations of
-the rotational group in 7 dimensions for Dy<sup>3+</sup> by diagonalizing the matrix of the Casimir operator
+the rotational group in 7 dimensions for Dy<sup>3+</sup> by diagonalising the matrix of the Casimir operator
 $\mathbf{G}(R_7)$:
 
 ```
 from lanthanide import Lanthanide, Coupling, SymmetryList
 with Lanthanides(9) as ion:
     name = "GR/7"
-    values, _ = ion.matrix(name).diagonalize()
+    values, _ = ion.matrix(name).diagonalise()
     syms = SymmetryList(values, name)
     print(syms.count())
 ```
