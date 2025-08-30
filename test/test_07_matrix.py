@@ -36,8 +36,8 @@ class DummyLanthanide:
         self.num = num
         self.l = ORBITAL
         self.s = SPIN
-        self.product_states = states = product_states(num)
-        self.single = init_single(None, None, states)
+        self.product = product_states(num)
+        self.single = init_single(None, None, self.product)
         self._state_dict_ = init_states(None, None, self)
 
     def matrix(self, name):

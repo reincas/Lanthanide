@@ -12,8 +12,8 @@ from lanthanide import product_states, init_single, calc_unit, SymmetryList, ORB
 class DummyLanthanide:
     def __init__(self, num: int):
         self.num = num
-        self.product_states = states = product_states(num)
-        self.single = init_single(None, None, states)
+        self.product = product_states(num)
+        self.single = init_single(None, None, self.product)
 
 
 def test_symmetry():
