@@ -160,6 +160,11 @@ class SymmetryS2(Symmetry):
         self.key = self._to_int_(math.sqrt(4 * self.value + 1))
         self.str_value = (str(self.key))
 
+        if self.key % 2 == 0:
+            self.S = HalfInt(self.key - 1)
+        else:
+            self.S = (self.key - 1) // 2
+
 
 class SymmetryGR7(Symmetry):
     """ Symmetry class of the rotational group in 7 dimensions R7 or SO(7). We use the Casimir operator G(R7) as
@@ -211,7 +216,7 @@ class SymmetryL2(Symmetry):
         self.value = value
         self.key = self._to_int_((math.sqrt(4 * self.value + 1) - 1) / 2)
         self.str_value = CHR_ORBITAL[self.key]
-
+        self.L = self.key
 
 class SymmetryJ2(Symmetry):
     """ Symmetry class of the tensor operator of the squared total angular momentum J2 and its integer or half-integer
