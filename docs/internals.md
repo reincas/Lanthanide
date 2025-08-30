@@ -170,11 +170,11 @@ section:
 | `SymmetryTau` | `"tau"`  | $\tau$ |                   |
 | `SymmetryNum` | `"num"`  |        |                   |
 
-Name and symbol are available in the attributes `name`, and `symbol` of the symmetry objects. The attribute `value`
-contains the eigenvalue of the tensor operator which is converted into to integer `key` attribute when the object is 
-initialized. This attribute is used when symmetry objects of the same symmetry group are ordered or compared with 
-the usual operators `<`, `<=`, `>`, `>=`, `==`, or `!=`. The classes support string conversion using the Python
-function `str()`, which delivers the respective symmetry group representation string. 
+Name and symbol are available in the attributes `name` and `symbol` of the symmetry objects. The attribute `value`
+contains the respective eigenvalue of the tensor operator which is converted into to integer `key` attribute when
+the object is initialized. This attribute is used when symmetry objects of the same symmetry group are ordered or
+compared with the usual operators `<`, `<=`, `>`, `>=`, `==`, or `!=`. The classes support string conversion using
+the Python function `str()`, which delivers the respective symmetry group representation string. 
 
 Lists of symmetry objects of the same symmetry group can be stored in a `SymmetryList` object. The most useful
 method of this object for external applications is the method `count()` which returns a dictionary with the number
