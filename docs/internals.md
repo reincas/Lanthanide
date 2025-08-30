@@ -181,7 +181,7 @@ State objects provide numerical values in different attributes and two string fo
 and `long()` which return short and long string representations of the state, respectively. Calling `str(state)`
 is equivalent to `state.long()`.
 
-In the following, the state objects are described in more detail, beginning with `"Product"`:
+In the following, the state objects are described in more detail, beginning with `Product`:
 The calculation of matrices of tensor operators in the Lanthanide package is carried out in the space of
 determinantal product states. Each electron is described by a 5-tuple of quantum numbers: the shell number $n$, the
 orbital angular momentum $l$, its z-component $m_l$, the spin $s$ and its z-component $m_s$. For lanthanide ions, three
@@ -226,11 +226,11 @@ phase adjustment of the transformation vectors, which are the columns of the mat
 in the choice of the sign of these vectors, which is used to select the sign which allows the calculation of
 reduced matrix elements inside the SLJ space without reference to the SLJM space.
 
-The method `StateListProduct.to_SLJM(ion)` returns the state list class `StateListSLJM` which provides a list of
-`StateSLJM` objects representing individual states. The state object acts as a dictionary with symmetry names as
-keys and symmetry objects as values. Symmetry objects are described in more detail below. The following sample code
-derives a `StateListSLJM` object from an product states object instead of using the method `Lanthanides.states()`
-directly:
+The method `StateListProduct.to_SLJM(ion)` returns an object of the state list class `StateListSLJM` which provides
+a list of `StateSLJM` objects representing individual states. The state object acts as a dictionary with symmetry
+names as keys and symmetry objects as values. Symmetry objects are described in more detail below. The following
+sample code derives a `StateListSLJM` object from an product states object instead of using the method
+`Lanthanides.states()` directly:
 
 ```
 from lanthanide import StateListProduct, StateListSLJM, Lanthanide
