@@ -160,7 +160,7 @@ The following table lists all unit tensor operators provided by the Lanthanide p
 The calculation of matrices of tensor operators in the Lanthanide package is carried out in the space of 
 determinantal product states. Each electron is described by a 5-tuple of quantum numbers: the shell number $n$, the
 orbital angular momentum $l$, its z-component $m_l$, the spin $s$ and its z-component $m_s$. For lanthanide ions, three
-of these quantum numbers are fixed: $n=4$, $l=3$, and $s=1/2$. The remaining magnetic quantum numbers $m_l$ and
+of these quantum numbers are fixed: $n=4$, $l=3$, and $s=\frac12$. The remaining magnetic quantum numbers $m_l$ and
 $m_s$ allow for a total of 14 combinations, $2l+1=7$ for $m_l$ and $2s+1=2$ for $m_s$. The standard order of these 14
 different electrons is obtained by ordering $(m_l, m_s)$-tuples for decreasing values lexicographically.
 
