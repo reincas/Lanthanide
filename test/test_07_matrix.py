@@ -52,7 +52,7 @@ def run_matrix(num):
 
     radial = RADIAL[f"{LANTHANIDES[num]}3+"]
     H = build_hamilton(ion, radial, Coupling.SLJ)
-    energies, transform = H.fast_diagonalize()
+    energies, transform = H.fast_diagonalise()
 
     states = ion.states(Coupling.SLJ)
     intermediate = states.to_J(energies, transform)
@@ -65,13 +65,13 @@ def test_matrix():
 
     array = MATRIX @ np.diag(EIGEN) @ MATRIX.T
     matrix = Matrix(ion, array, "test")
-    eigen, vectors = matrix.diagonalize()
+    eigen, vectors = matrix.diagonalise()
     assert pytest.approx(eigen, abs=1e-6) == EIGEN
     assert pytest.approx(np.abs(vectors), abs=1e-6) == np.abs(MATRIX)
 
     array = ((5 * matrix - matrix) / 2).array
     matrix = Matrix(ion, array)
-    eigen, vectors = matrix.diagonalize()
+    eigen, vectors = matrix.diagonalise()
     assert pytest.approx(eigen, abs=1e-6) == 2 * EIGEN
     assert pytest.approx(np.abs(vectors), abs=1e-6) == np.abs(MATRIX)
 

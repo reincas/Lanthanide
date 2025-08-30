@@ -499,14 +499,14 @@ class Matrix:
             return Matrix(self.ion, self.array / other)
         return NotImplemented
 
-    def diagonalize(self):
+    def diagonalise(self):
         """ Standard diagonalisation algorithm acting on the whole matrix. Return the ordered numpy vector of
         eigenvalues and the 2D numpy array of eigenvectors (columns). """
 
         values, vectors = np.linalg.eigh(self.array)
         return values, vectors
 
-    def fast_diagonalize(self):
+    def fast_diagonalise(self):
         """ Fast diagonalisation algorithm acting inside J spaces only. Return the ordered numpy vector of
         eigenvalues and the 2D numpy array of eigenvectors (columns). """
 

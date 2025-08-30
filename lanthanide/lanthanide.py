@@ -261,7 +261,7 @@ class Lanthanide:
 
         # Diagonalise the hamiltonian matrix and get energies and intermediate coupling vectors
         # self.energies, transform = self.hamilton.diagonalize()
-        self.energies, transform = self.hamilton.fast_diagonalize()
+        self.energies, transform = self.hamilton.fast_diagonalise()
 
         # Adjust the energy level of the ground state
         self.energies -= self.energies[0]
