@@ -229,10 +229,10 @@ different electrons is obtained by ordering $(m_l, m_s)$-tuples for decreasing v
 
 The determinantal product states of a given lanthanide configuration with k electrons in the 4f shell are given by
 all k-combinations of the 14 available electrons. We could thus use `itertools.combinations(range(14), k)` to get
-the list of states. Each state is represented by a tuple of indices into the list of available electrons in standard
-order. In order to keep the relationship to data in the file cache, we need to asure a defined and fixed order of
+the list of states. In order to keep the relationship to data in the file cache, we need to asure a defined and fixed order of
 the states, although the order does not matter physically. The Lanthanide package therefore uses its own function
-`product_states(k)` to determine the list of determinantal product states for a 4f configuration with k electrons:
+`product_states(k)` to determine the list of determinantal product states for a 4f configuration with k electrons.
+Each state is represented by a tuple of indices into the list of available electrons in standard order:
 
 ```
 from lanthanide import product_states
