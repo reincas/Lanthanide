@@ -309,7 +309,7 @@ contains the respective factors, `weights` the squared factors, `states` the res
 objects, and `energy` the energy of the state. The short string representation of a state in intermediate coupling
 is that of its SLJ component with largest weight. Note that this can result in more than one state with exactly the
 same label. The long representation of a state lists the SLJ components with their weight in descending order. In
-order to limit the length of the representation strings, the method `StateJ.long()` can be called with the optional
+order to limit the length of the representation strings, the method `StateJ.long()` may be called with an optional
 argument `min_weight` to include only SLJ components with at least the given weight in the representation string.
 The following sample code takes the intermediate states of Er<sup>3+</sup> and prints long string representations
 of all states:
