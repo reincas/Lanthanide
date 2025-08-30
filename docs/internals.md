@@ -12,7 +12,6 @@ objects. Results with even numerator are converted into `int` objects:
 
 ```
 from lanthanide import HalfInt
-
 print(HalfInt(1) + 2 == HalfInt(5))
 print(4 * HalfInt(3) == 6)
 print(5 * HalfInt(1) == HalfInt(5))
@@ -171,6 +170,29 @@ section:
 | `SymmetryTau` | `"tau"`  | $\tau$ |                   |
 | `SymmetryNum` | `"num"`  |        |                   |
 
+Name and symbol are available in the attributes `name`, and `symbol` of the symmetry objects. The attribute `value`
+contains the eigenvalue of the tensor operator which is converted into to integer `key` attribute when the object is 
+initialized. This attribute is used when symmetry objects of the same symmetry group are ordered or compared with 
+the usual operators `<`, `<=`, `>`, `>=`, `==`, or `!=`. The classes support string conversion using the Python
+function `str()`, which delivers the respective symmetry group representation string. 
+
+... introduce SymmetryList ...
+
+The following sample code
+shows all representations of the rotational group in 7 dimensions for Dy<sup>3+</sup> by diagonalizing the matrix of
+the Casimir operator $\mathbf{G}(R_7)$:
+
+```
+from lanthanide import Lanthanide, Coupling, SymmetryList
+with Lanthanides(9) as ion:
+    name = "GR/7"
+    values, _ = ion.matrix(name).diagonalize()
+    syms = SymmetryList(values, name)
+    print(syms.count())
+```
+
+... SymmetryJ2.J & SymmetryJz.M ...
+
 ## State classes
 
 The Lanthanide package provides four coupling schemes for electron states. These schemes are addressed using the
@@ -190,11 +212,10 @@ is equivalent to `state.long()`. The intended way to access state list objects i
 
 ```
 from lanthanide import Lanthanide, Coupling
-
-ion = Lanthanides(2)
-states = ion.states(Coupling.SLJ)
-for state in states:
-    print(state)
+with Lanthanides(2) as ion:
+    states = ion.states(Coupling.SLJ)
+    for state in states:
+        print(state)
 ```
 
 In the following, the state objects are described in more detail, beginning with `Product`:
@@ -270,7 +291,6 @@ object from an SLJM states object instead of using the method `Lanthanides.state
 
 ```
 from lanthanide import StateListProduct, Lanthanide
-
 ion = Lanthanides(3)
 states = StateListProduct(ion.product)
 states = states.to_SLJM(ion)
