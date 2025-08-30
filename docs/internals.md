@@ -176,11 +176,12 @@ initialized. This attribute is used when symmetry objects of the same symmetry g
 the usual operators `<`, `<=`, `>`, `>=`, `==`, or `!=`. The classes support string conversion using the Python
 function `str()`, which delivers the respective symmetry group representation string. 
 
-... introduce SymmetryList ...
-
-The following sample code
-shows all representations of the rotational group in 7 dimensions for Dy<sup>3+</sup> by diagonalizing the matrix of
-the Casimir operator $\mathbf{G}(R_7)$:
+Lists of symmetry objects of the same symmetry group can be stored in a `SymmetryList` object. The most useful
+method of this object for external applications is the method `count()` which returns a dictionary with the number
+of symmetry objects for each different symmetry representation in the list.  Two `SymmetryList` objects of the same
+symmetry group can be concatenated using the `+` operator. The following sample code shows all representations of
+the rotational group in 7 dimensions for Dy<sup>3+</sup> by diagonalizing the matrix of the Casimir operator
+$\mathbf{G}(R_7)$:
 
 ```
 from lanthanide import Lanthanide, Coupling, SymmetryList
@@ -191,7 +192,8 @@ with Lanthanides(9) as ion:
     print(syms.count())
 ```
 
-... SymmetryJ2.J & SymmetryJz.M ...
+Note that the angular momentum symmetry objects all provide their quantum number as `int` or `HalfInt` value in
+their respective special attributes `SymmetryS2.S`, `SymmetryL2.L`, `SymmetryJ2.J`, and `SymmetryJz.M`.
 
 ## State classes
 
