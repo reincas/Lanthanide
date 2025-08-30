@@ -78,8 +78,8 @@ def run_state(num, num_slj):
     assert type(states[1]).__name__ == "StateSLJM"
     for i, name in enumerate(states.sym_chain):
         result = SymmetryList(states.values[:, i], name).count()
-        print(f'"{name}": {result},')
-        #assert result == SYMS[num][name]
+        #print(f'"{name}": {result},')
+        assert result == SYMS[num][name]
 
     states = states.to_SLJ()
     assert len(states) == num_slj
