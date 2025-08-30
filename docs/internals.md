@@ -168,8 +168,8 @@ section:
 | `SymmetryL2`  | `"L2"`   | $L$    | $\mathbf{L}^2$    |
 | `SymmetryJ2`  | `"J2"`   | $J$    | $\mathbf{J}^2$    |
 | `SymmetryJz`  | `"Jz"`   | $M$    | $\mathrm{J}_z$    |
-| `SymmetryTau` | `"tau"`  | $\tau$ |     |
-| `SymmetryNum` | `"num"`  | $\#$   |     |
+| `SymmetryTau` | `"tau"`  | $\tau$ |                   |
+| `SymmetryNum` | `"num"`  |        |                   |
 
 ## State classes
 
