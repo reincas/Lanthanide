@@ -199,7 +199,7 @@ pseudo symmetry `"tau"` is introduced and ad-hoc numbers 1 and 2 are assigned to
 unique states get the value 0. Another pseudo symmetry `"num"` is introduced as an abbreviation code for states which
 share the same quantum numbers S, L, and J. The final step in constructing the transformation to the SLJM space is a
 phase adjustment of the transformation vectors, which are the columns of the matrix $V$. There is a degree of freedom
-in the choice of the sign of these vectors, which is used to select the choice, which allows the calculation of
+in the choice of the sign of these vectors, which is used to select the sign, which allows the calculation of
 reduced matrix elements inside the SLJ space without reference to the SLJM space.  
 
 ## Matrix class
