@@ -285,9 +285,9 @@ with Lanthanide(9) as ion:
 ```
 
 The SLJ sub-space consists of all stretched SLJM states with M=J. The class `StateListSLJ` provides a list of
-`StateSLJ` objects representing individual states. They are identical to`StateSLJM` objects without the symmetry
-objects relating to `"Jz"`. The state object `StateSLJ` again acts as a dictionary with symmetry names as keys and
-symmetry objects as values. The following sample code takes the SLJM states of Pr<sup>3+</sup> and prints long string
+`StateSLJ` objects representing individual states. The state object `StateSLJ` again acts as a dictionary with
+symmetry names as keys and symmetry objects as values. It is identical to a `StateSLJM` object without the `"Jz"`
+symmetry object. The following sample code takes the SLJM states of Pr<sup>3+</sup> and prints long string
 representations of all states:
 
 ```
