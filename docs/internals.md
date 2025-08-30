@@ -157,7 +157,7 @@ The following table lists all unit tensor operators provided by the Lanthanide p
 
 ## State classes
 
-The calculation of the matrices of tensor operators in the Lanthanide package is carried out in the space of 
+The calculation of matrices of tensor operators in the Lanthanide package is carried out in the space of 
 determinantal product states. Each electron is described by a 5-tuple of quantum numbers: the shell number $n$, the
 orbital angular momentum $l$, its z-component $m_l$, the spin $s$ and its z-component $m_s$. For lanthanide ions, three
 of these quantum numbers are fixed: $n=4$, $l=3$, and $s=1/2$. The remaining magnetic quantum numbers $m_l$ and
