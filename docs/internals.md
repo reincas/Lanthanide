@@ -154,10 +154,36 @@ The following table lists all unit tensor operators provided by the Lanthanide p
 | `UUTT/b/{ku1},{ku2},{kt1},{kt2},{k}` | 2         | $(\\{\mathbf{U}_1^{(ku1)}\times\mathbf{U}_2^{(ku2)}\\}^{(k)} \cdot \\{\mathbf{T}_1^{(kt1)}\times\mathbf{T}_2^{(kt2)}\\}^{(k)})$ |
 | `UUU/c/{k1},{k2},{k3}`               | 3         | $(\mathbf{U}_1^{(k1)}\cdot\mathbf{U}_2^{(k2)}\cdot\mathbf{U}_2^{(k3)})$                                                         |
 
-
 ## State classes
 
-The calculation of matrices of tensor operators in the Lanthanide package is carried out in the space of 
+The Lanthanide package provides four coupling schemes for electron states: `"Product"`, `"SLJM"`, `"SLJ"`, and the
+intermediate SLJ coupling `"J"`. These schemes are addressed using the enumeration class `Coupling`. There is one class
+for each coupling scheme which acts as a list of state objects:
+
+| coupling object    | attribute `name` | state list object    | state object     |
+|--------------------|------------------|----------------------|------------------|
+| `Coupling.Product` | `"Product"`      | `"StateListProduct"` | `"StateProduct"` |
+| `Coupling.SLJM`    | `"SLJM"`         | `"StateListSLJM"`    | `"StateSLJM"`    |
+| `Coupling.SLJ`     | `"SLJ"`          | `"StateListSLJ"`     | `"StateSLJ"`     |
+| `Coupling.J`       | `"J"`            | `"StateListJ"`       | `"StateJ"`       |
+
+The intended way to access this data structure is via the method `states()` of the `Lanthanide` class:
+
+```
+from lanthanide import Lanthanide, Coupling
+
+ion = Lanthanides(2)
+states = ion.states(Coupling.SLJ.name)
+for state in states:
+    print(state)
+```
+
+State objects provide numerical values in different attributes and with two string formatting methods `short()`
+and `long()` which return short and long string representations of the state, respectively. Calling `str(state)`
+is equivalent to `state.long()`. 
+
+In the following, the state objects are described in more detail, beginning with `"Product"`:
+The calculation of matrices of tensor operators in the Lanthanide package is carried out in the space of
 determinantal product states. Each electron is described by a 5-tuple of quantum numbers: the shell number $n$, the
 orbital angular momentum $l$, its z-component $m_l$, the spin $s$ and its z-component $m_s$. For lanthanide ions, three
 of these quantum numbers are fixed: $n=4$, $l=3$, and $s=\frac12$. The remaining magnetic quantum numbers $m_l$ and
@@ -167,15 +193,14 @@ different electrons is obtained by ordering $(m_l, m_s)$-tuples for decreasing v
 The determinantal product states of a given lanthanide configuration with k electrons in the 4f shell are given by
 all k-combinations of the 14 available electrons. We could thus use `itertools.combinations(range(14), k)` to get
 the list of states. Each state is represented by a tuple of indices into the list of available electrons in standard
-order. In order to keep the relationship to data in the file cache, we need to asure a defined and fixed order of 
+order. In order to keep the relationship to data in the file cache, we need to asure a defined and fixed order of
 the states, although the order does not matter physically. The Lanthanide package therefore uses its own function
 `product_states(k)` to determine the list of determinantal product states for a 4f configuration with k electrons.
 
 The class `StateListProduct` takes this list of index tuples and provides a list of `StateProduct` objects representing
 individual product states. The most relevant state attributes are the electron indices in `values` and the list of
-$(l, m_l, s, m_s)$ tuples in `quantum`. The methods `short()` and `long()` return short and long string representations
-of the state. Calling `str(state)` is equivalent to `state.long()`. The following sample code generates the
-determinantal product states of Er<sup>3+</sup> and shows the state 2 in numerical and string format.
+$(l, m_l, s, m_s)$ tuples in `quantum`. The following sample code generates the determinantal product states of
+Er<sup>3+</sup> and shows the state 2 in numerical and string format.
 
 ```
 from lanthanide import StateListProduct, product_states
@@ -191,16 +216,30 @@ print("Long:", state.long())
 
 The transformation of a tensor operator matrix $M$ from the product space into the SLJM space by the linear
 transformation $M^\prime = V^T\cdot M\cdot V$ requires a transformation matrix $V$. The first step for the calculation
-of this matrix is the diagonalisation of the tensor operator matrices `"S2"`, `"GR/7"`, `"GG/2"`, `"L2"`, `"J2"`, and 
+of this matrix is the diagonalisation of the tensor operator matrices `"S2"`, `"GR/7"`, `"GG/2"`, `"L2"`, `"J2"`, and
 `"Jz"` in smaller and smaller subspaces. In this way the representation of each SLJM state in the respective symmetry
 groups is determined. It turns out, that in the f configurations with 5-9 electrons, there are pairs of different
-states left, which share the same set or symmetry representations (quantum numbers). In order to distinguish them, a
+states left, which share the same set of symmetry representations (quantum numbers). In order to distinguish them, a
 pseudo symmetry `"tau"` is introduced and ad-hoc numbers 1 and 2 are assigned to the states in these pairs, while
 unique states get the value 0. Another pseudo symmetry `"num"` is introduced as an abbreviation code for states which
 share the same quantum numbers S, L, and J. The final step in constructing the transformation to the SLJM space is a
 phase adjustment of the transformation vectors, which are the columns of the matrix $V$. There is a degree of freedom
-in the choice of the sign of these vectors, which is used to select the sign, which allows the calculation of
-reduced matrix elements inside the SLJ space without reference to the SLJM space.  
+in the choice of the sign of these vectors, which is used to select the sign which allows the calculation of
+reduced matrix elements inside the SLJ space without reference to the SLJM space.
+
+The method `StateListProduct.to_SLJM(ion)` returns
+
+```
+from lanthanide import StateListProduct, StateListSLJM, Lanthanide
+
+ion = Lanthanides(3)
+states = StateListProduct(ion.product)
+states = states.to_SLJM(ion)
+assert isinstance(states, StateListSLJM)
+state = states[2]
+for states in states:
+    print(state)
+```
 
 ## Matrix class
 
