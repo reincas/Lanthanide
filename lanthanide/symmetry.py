@@ -306,11 +306,10 @@ class SymmetryList:
         self.keys = [sym.key for sym in self.objects]
 
     def count(self):
-        """ Return a dictionary which contains the number of states with the same key value for each key of the
-        Symmetry objects. """
+        """ Return a dictionary which contains the number of all states with the same symmetry representation. """
 
-        keys = set([obj.key for obj in self.objects])
-        return dict([(key, self.count_key(key)) for key in keys])
+        keys = sorted(set([obj.key for obj in self.objects]))
+        return dict([(self.find(key).str_value, self.count_key(key)) for key in keys])
 
     def find(self, key):
         """ Find and return one Symmetry object with the given key value. """
