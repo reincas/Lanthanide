@@ -156,16 +156,16 @@ The following table lists all unit tensor operators provided by the Lanthanide p
 
 ## State classes
 
-The Lanthanide package provides four coupling schemes for electron states: `"Product"`, `"SLJM"`, `"SLJ"`, and the
-intermediate SLJ coupling `"J"`. These schemes are addressed using the enumeration class `Coupling`. There is one class
+The Lanthanide package provides four coupling schemes for electron states: `Product`, `SLJM`, `SLJ`, and the
+intermediate SLJ coupling `J`. These schemes are addressed using the enumeration class `Coupling`. There is one class
 for each coupling scheme which acts as a list of state objects:
 
-| coupling object    | attribute `name` | state list object    | state object     |
-|--------------------|------------------|----------------------|------------------|
-| `Coupling.Product` | `"Product"`      | `"StateListProduct"` | `"StateProduct"` |
-| `Coupling.SLJM`    | `"SLJM"`         | `"StateListSLJM"`    | `"StateSLJM"`    |
-| `Coupling.SLJ`     | `"SLJ"`          | `"StateListSLJ"`     | `"StateSLJ"`     |
-| `Coupling.J`       | `"J"`            | `"StateListJ"`       | `"StateJ"`       |
+| coupling object    | state list object    | state object     |
+|--------------------|----------------------|------------------|
+| `Coupling.Product` | `"StateListProduct"` | `"StateProduct"` |
+| `Coupling.SLJM`    | `"StateListSLJM"`    | `"StateSLJM"`    |
+| `Coupling.SLJ`     | `"StateListSLJ"`     | `"StateSLJ"`     |
+| `Coupling.J`       | `"StateListJ"`       | `"StateJ"`       |
 
 The intended way to access this data structure is via the method `states()` of the `Lanthanide` class:
 
@@ -173,7 +173,7 @@ The intended way to access this data structure is via the method `states()` of t
 from lanthanide import Lanthanide, Coupling
 
 ion = Lanthanides(2)
-states = ion.states(Coupling.SLJ.name)
+states = ion.states(Coupling.SLJ)
 for state in states:
     print(state)
 ```
@@ -230,8 +230,8 @@ reduced matrix elements inside the SLJ space without reference to the SLJM space
 The method `StateListProduct.to_SLJM(ion)` returns the state list class `StateListSLJM` which provides a list of
 `StateSLJM` objects representing individual states. The state object acts as a dictionary with symmetry names as
 keys and symmetry objects as values. Symmetry objects are described in more detail below. The following sample code
-generates a `StateListSLJM` object from scratch instead of using the method `Lanthanides.states()`. Note that this
-approach skips the file cache and therefore can take a long time for configurations of 4-10 electrons. 
+derives a `StateListSLJM` object from an product states object instead of using the method `Lanthanides.states()`
+directly: 
 
 ```
 from lanthanide import StateListProduct, StateListSLJM, Lanthanide
