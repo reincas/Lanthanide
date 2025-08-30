@@ -279,16 +279,16 @@ with Lanthanide(9) as ion:
     states = ion.states(Coupling.SLJM)
     state = states[3]
     print("Short:", state.short())
-    print("Long:", state.long(0.05))
+    print("Long:", state.long())
     print(f"W = {state["GR/7"]}")
     print(f"U = {state["GG/2"]}")
 ```
 
 The SLJ sub-space consists of all stretched SLJM states with M=J. The class `StateListSLJ` provides a list of
-`StateSLJ` objects representing individual states. It is almost identical to the class `StateListSLJ` without the
-symmetry objects relating to `"Jz"`. The state object `StateSLJ` again acts as a dictionary with symmetry names as
-keys and symmetry objects as values. The following sample code takes the SLJM states of Pr<sup>3+</sup> and prints
-long string representations of all states:
+`StateSLJ` objects representing individual states. They are identical to`StateSLJM` objects without the symmetry
+objects relating to `"Jz"`. The state object `StateSLJ` again acts as a dictionary with symmetry names as keys and
+symmetry objects as values. The following sample code takes the SLJM states of Pr<sup>3+</sup> and prints long string
+representations of all states:
 
 ```
 from lanthanide import Lanthanide, Coupling
