@@ -159,12 +159,12 @@ The following table lists all unit tensor operators provided by the Lanthanide p
 The Lanthanide package provides four coupling schemes for electron states. These schemes are addressed using the
 enumeration class `Coupling`. There is one class for each coupling scheme which acts as a list of state objects:
 
-| coupling                     | coupling object    | state list object    | state object     |
-|------------------------------|--------------------|----------------------|------------------|
-| determinantal product states | `Coupling.Product` | `"StateListProduct"` | `"StateProduct"` |
-| SLJM coupling                | `Coupling.SLJM`    | `"StateListSLJM"`    | `"StateSLJM"`    |
-| SLJ coupling                 | `Coupling.SLJ`     | `"StateListSLJ"`     | `"StateSLJ"`     |
-| intermediate SLJ coupling    | `Coupling.J`       | `"StateListJ"`       | `"StateJ"`       |
+| coupling                     | coupling object    | state list object  | state object   |
+|------------------------------|--------------------|--------------------|----------------|
+| determinantal product states | `Coupling.Product` | `StateListProduct` | `StateProduct` |
+| SLJM coupling                | `Coupling.SLJM`    | `StateListSLJM`    | `StateSLJM`    |
+| SLJ coupling                 | `Coupling.SLJ`     | `StateListSLJ`     | `StateSLJ`     |
+| intermediate SLJ coupling    | `Coupling.J`       | `StateListJ`       | `StateJ`       |
 
 The intended way to access state list objects is via the method `Lanthanide.states()`:
 
@@ -177,7 +177,7 @@ for state in states:
     print(state)
 ```
 
-State objects provide numerical values in different attributes and with two string formatting methods `short()`
+State objects provide numerical values in different attributes and two string formatting methods `short()`
 and `long()` which return short and long string representations of the state, respectively. Calling `str(state)`
 is equivalent to `state.long()`.
 
