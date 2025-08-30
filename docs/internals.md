@@ -114,7 +114,7 @@ with Lanthanide(2) as ion:
             else:
                 value -= sub_value
         if value:
-            print(f"Matrix element ({final_index}, {initial_index}) = {value}"=
+            print(f"Matrix element ({final_index}, {initial_index}) = {value}")
 ```
 
 For a more optimized application you may investigate the module `unit`. An important feature of the implementation
@@ -153,6 +153,20 @@ The following table lists all unit tensor operators provided by the Lanthanide p
 | `UT/b/{k}`                           | 2         | $(\mathbf{U}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                                   |
 | `UUTT/b/{ku1},{ku2},{kt1},{kt2},{k}` | 2         | $(\\{\mathbf{U}_1^{(ku1)}\times\mathbf{U}_2^{(ku2)}\\}^{(k)} \cdot \\{\mathbf{T}_1^{(kt1)}\times\mathbf{T}_2^{(kt2)}\\}^{(k)})$ |
 | `UUU/c/{k1},{k2},{k3}`               | 3         | $(\mathbf{U}_1^{(k1)}\cdot\mathbf{U}_2^{(k2)}\cdot\mathbf{U}_2^{(k3)})$                                                         |
+
+## Symmetry classes
+
+Symmetry classes are used to store the representation of a certain state in a given symmetry group. The following
+classes are available:
+
+| class         | name     | symbol | tensor operator   |
+|---------------|----------|--------|-------------------|
+| `SymmetryS2`  | `"S2"`   | $2S+1$ | $\mathbf{S}^2$    |
+| `SymmetryGR7` | `"GR/7"` | $W$    | $\mathbf{G}(R_7)$ |
+| `SymmetryGG2` | `"GG/2"` | $U$    | $\mathbf{G}(G_2)$ |
+| `SymmetryL2`  | `"L2"`   | $L$    | $\mathbf{L}^2$    |
+| `SymmetryJ2`  | `"J2"`   | $J$    | $\mathbf{J}^2$    |
+| `SymmetryJz`  | `"Jz"`   | $M$    | $\mathrm{J}_z$    |
 
 ## State classes
 
@@ -193,23 +207,28 @@ all k-combinations of the 14 available electrons. We could thus use `itertools.c
 the list of states. Each state is represented by a tuple of indices into the list of available electrons in standard
 order. In order to keep the relationship to data in the file cache, we need to asure a defined and fixed order of
 the states, although the order does not matter physically. The Lanthanide package therefore uses its own function
-`product_states(k)` to determine the list of determinantal product states for a 4f configuration with k electrons.
+`product_states(k)` to determine the list of determinantal product states for a 4f configuration with k electrons:
+
+```
+from lanthanide import product_states
+product = product_states(3)
+print(product)
+```
 
 The class `StateListProduct` takes this list of index tuples and provides a list of `StateProduct` objects representing
 individual product states. The most relevant state attributes are the electron indices in `values` and the list of
-$(l, m_l, s, m_s)$ tuples in `quantum`. The following sample code generates the determinantal product states of
+$(l, m_l, s, m_s)$ tuples in `quantum`. The following sample code takes the determinantal product states of
 Er<sup>3+</sup> and shows the state 2 in numerical and string format.
 
 ```
-from lanthanide import StateListProduct, product_states
-
-product = product_states(3)
-states = StateListProduct(product)
-state = states[2]
-print("Indices:", state.values)
-print("Quantum numbers:", state.quantum)
-print("Short:", state.short())
-print("Long:", state.long())
+from lanthanide import Lanthanide, Coupling
+with Lanthanide(3) as ion:
+    states = ion.states(Coupling.Product)
+    state = states[2]
+    print("Indices:", state.values)
+    print("Quantum numbers:", state.quantum)
+    print("Short:", state.short())
+    print("Long:", state.long())
 ```
 
 The transformation of a tensor operator matrix $M$ from the product space into the SLJM space by the linear
@@ -225,18 +244,34 @@ phase adjustment of the transformation vectors, which are the columns of the mat
 in the choice of the sign of these vectors, which is used to select the sign which allows the calculation of
 reduced matrix elements inside the SLJ space without reference to the SLJM space.
 
-The method `StateListProduct.to_SLJM(ion)` returns an object of the class `StateListSLJM` which provides
-a list of `StateSLJM` objects representing individual states. The state object acts as a dictionary with symmetry
-names as keys and symmetry objects as values. Symmetry objects are described in more detail below. The following
-sample code derives a `StateListSLJM` object from an product states object instead of using the method
-`Lanthanides.states()` directly:
+The class `StateListSLJM` provides a list of `StateSLJM` objects representing individual states. Each state object
+acts as a dictionary with symmetry names as keys and symmetry objects as values. Symmetry objects are described in
+more detail below. The following sample code takes the SLJM states of Dy<sup>3+</sup> and prints details of state 3:
 
 ```
-from lanthanide import StateListProduct, StateListSLJM, Lanthanide
+from lanthanide import Lanthanide, Coupling
+with Lanthanide(9) as ion:
+    states = ion.states(Coupling.SLJM)
+    state = states[3]
+    print("Short:", state.short())
+    print("Long:", state.long(0.05))
+    print(f"W = {state["GR/7"]}")
+    print(f"U = {state["GG/2"]}")
+```
+
+The method `StateListSLJM.to_SLJ()` returns an object of the class `StateListSLJ` which provides a list of
+`StateSLJ` objects representing individual states. It picks all stretched states with M=J and strips the symmetry
+objects relating to `"Jz"`. The state object acts as a dictionary with symmetry names as keys and symmetry objects
+as values. Symmetry objects are described in more detail below. The following sample code derives a `StateListSLJ`
+object from an SLJM states object instead of using the method `Lanthanides.states()` directly:
+
+```
+from lanthanide import StateListProduct, Lanthanide
 
 ion = Lanthanides(3)
 states = StateListProduct(ion.product)
 states = states.to_SLJM(ion)
+states = states.to_SLJ()
 for states in states:
     print(state)
 ```
@@ -245,6 +280,3 @@ for states in states:
 
 ... to be added ...
 
-## Symmetry classes
-
-... to be added ...
