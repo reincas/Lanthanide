@@ -156,16 +156,15 @@ The following table lists all unit tensor operators provided by the Lanthanide p
 
 ## State classes
 
-The Lanthanide package provides four coupling schemes for electron states: `Product`, `SLJM`, `SLJ`, and the
-intermediate SLJ coupling `J`. These schemes are addressed using the enumeration class `Coupling`. There is one class
-for each coupling scheme which acts as a list of state objects:
+The Lanthanide package provides four coupling schemes for electron states. These schemes are addressed using the
+enumeration class `Coupling`. There is one class for each coupling scheme which acts as a list of state objects:
 
-| coupling object    | state list object    | state object     |
-|--------------------|----------------------|------------------|
-| `Coupling.Product` | `"StateListProduct"` | `"StateProduct"` |
-| `Coupling.SLJM`    | `"StateListSLJM"`    | `"StateSLJM"`    |
-| `Coupling.SLJ`     | `"StateListSLJ"`     | `"StateSLJ"`     |
-| `Coupling.J`       | `"StateListJ"`       | `"StateJ"`       |
+| coupling                     | coupling object    | state list object    | state object     |
+|------------------------------|--------------------|----------------------|------------------|
+| determinantal product states | `Coupling.Product` | `"StateListProduct"` | `"StateProduct"` |
+| SLJM coupling                | `Coupling.SLJM`    | `"StateListSLJM"`    | `"StateSLJM"`    |
+| SLJ coupling                 | `Coupling.SLJ`     | `"StateListSLJ"`     | `"StateSLJ"`     |
+| intermediate SLJ coupling    | `Coupling.J`       | `"StateListJ"`       | `"StateJ"`       |
 
 The intended way to access this data structure is via the method `states()` of the `Lanthanide` class:
 
@@ -180,7 +179,7 @@ for state in states:
 
 State objects provide numerical values in different attributes and with two string formatting methods `short()`
 and `long()` which return short and long string representations of the state, respectively. Calling `str(state)`
-is equivalent to `state.long()`. 
+is equivalent to `state.long()`.
 
 In the following, the state objects are described in more detail, beginning with `"Product"`:
 The calculation of matrices of tensor operators in the Lanthanide package is carried out in the space of
@@ -231,7 +230,7 @@ The method `StateListProduct.to_SLJM(ion)` returns the state list class `StateLi
 `StateSLJM` objects representing individual states. The state object acts as a dictionary with symmetry names as
 keys and symmetry objects as values. Symmetry objects are described in more detail below. The following sample code
 derives a `StateListSLJM` object from an product states object instead of using the method `Lanthanides.states()`
-directly: 
+directly:
 
 ```
 from lanthanide import StateListProduct, StateListSLJM, Lanthanide
