@@ -172,13 +172,13 @@ section:
 
 Name and symbol are available in the attributes `name` and `symbol` of the symmetry objects. The attribute `value`
 contains the respective eigenvalue of the tensor operator which is converted into to integer `key` attribute when
-the object is initialized. This attribute is used when symmetry objects of the same symmetry group are ordered or
+the object is initialized. The `key` attribute is used when symmetry objects of the same symmetry group are ordered or
 compared with the usual operators `<`, `<=`, `>`, `>=`, `==`, or `!=`. The classes support string conversion using
-the Python function `str()`, which delivers the respective symmetry group representation string. 
+the Python function `str()`, which delivers the respective symmetry group representation string.
 
 Lists of symmetry objects of the same symmetry group can be stored in a `SymmetryList` object. The most useful
 method of this object for external applications is the method `count()` which returns a dictionary with the number
-of symmetry objects for each different symmetry representation in the list.  Two `SymmetryList` objects of the same
+of symmetry objects for each different symmetry representation in the list. Two `SymmetryList` objects of the same
 symmetry group can be concatenated using the `+` operator. The following sample code shows all representations of
 the rotational group in 7 dimensions for Dy<sup>3+</sup> by diagonalizing the matrix of the Casimir operator
 $\mathbf{G}(R_7)$:
@@ -200,12 +200,12 @@ their respective special attributes `SymmetryS2.S`, `SymmetryL2.L`, `SymmetryJ2.
 The Lanthanide package provides four coupling schemes for electron states. These schemes are addressed using the
 enumeration class `Coupling`. There is one class for each coupling scheme which acts as a list of state objects:
 
-| coupling                     | coupling object    | state list object  | state object   |
-|------------------------------|--------------------|--------------------|----------------|
-| determinantal product states | `Coupling.Product` | `StateListProduct` | `StateProduct` |
-| SLJM coupling                | `Coupling.SLJM`    | `StateListSLJM`    | `StateSLJM`    |
-| SLJ coupling                 | `Coupling.SLJ`     | `StateListSLJ`     | `StateSLJ`     |
-| intermediate SLJ coupling    | `Coupling.J`       | `StateListJ`       | `StateJ`       |
+| coupling                     | coupling object    | state object   | state list object  |
+|------------------------------|--------------------|----------------|--------------------|
+| determinantal product states | `Coupling.Product` | `StateProduct` | `StateListProduct` |
+| SLJM coupling                | `Coupling.SLJM`    | `StateSLJM`    | `StateListSLJM`    |
+| SLJ coupling                 | `Coupling.SLJ`     | `StateSLJ`     | `StateListSLJ`     |
+| intermediate SLJ coupling    | `Coupling.J`       | `StateJ`       | `StateListJ`       |
 
 State objects provide numerical values in different attributes and two string formatting methods `short()`
 and `long()` which return short and long string representations of the state, respectively. Calling `str(state)`
@@ -220,7 +220,6 @@ with Lanthanides(2) as ion:
         print(state)
 ```
 
-In the following, the state objects are described in more detail, beginning with `Product`:
 The calculation of matrices of tensor operators in the Lanthanide package is carried out in the space of
 determinantal product states. Each electron is described by a 5-tuple of quantum numbers: the shell number $n$, the
 orbital angular momentum $l$, its z-component $m_l$, the spin $s$ and its z-component $m_s$. For lanthanide ions, three
