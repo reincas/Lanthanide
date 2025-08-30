@@ -130,12 +130,12 @@ rank 2 in the orbital angular momentum space and the matrix of the two-electron 
 $(\mathbf{U}_1^{(2)}\cdot\mathbf{U}_2^{(2)})$:
 
 ```
-from lanthanide import Lanthanide, get_matrix
+from lanthanide import Lanthanide, calc_unit
 with Lanthanide(2) as ion:
     k = 2
     q = -1
-    matrix_1 = get_matrix(ion, f"U/a/{k},{q}")
-    matrix_2 = get_matrix(ion, f"UU/b/{k}")
+    matrix_1 = calc_unit(ion, f"U/a/{k},{q}")
+    matrix_2 = calc_unit(ion, f"UU/b/{k}")
 ```
 
 The following table lists all unit tensor operators provided by the Lanthanide package with their respective names:
