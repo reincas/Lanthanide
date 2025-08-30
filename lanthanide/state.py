@@ -398,7 +398,7 @@ class StateJ:
 
         indices = reversed(np.argsort(self.weights))
         return " + ".join(
-            [f"{self.weights[i]:.2f} {self.states[i].short()}" for i in indices if self.weights[i] > min_weight])
+            [f"{self.weights[i]:.2f} {self.states[i].short()}" for i in indices if self.weights[i] >= min_weight])
 
     def __str__(self):
         """ Return a long string representation of the state. """
