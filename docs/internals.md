@@ -227,7 +227,11 @@ phase adjustment of the transformation vectors, which are the columns of the mat
 in the choice of the sign of these vectors, which is used to select the sign which allows the calculation of
 reduced matrix elements inside the SLJ space without reference to the SLJM space.
 
-The method `StateListProduct.to_SLJM(ion)` returns
+The method `StateListProduct.to_SLJM(ion)` returns the state list class `StateListSLJM` which provides a list of
+`StateSLJM` objects representing individual states. The state object acts as a dictionary with symmetry names as
+keys and symmetry objects as values. Symmetry objects are described in more detail below. The following sample code
+generates a `StateListSLJM` object from scratch instead of using the method `Lanthanides.states()`. Note that this
+approach skips the file cache and therefore can take a long time for configurations of 4-10 electrons. 
 
 ```
 from lanthanide import StateListProduct, StateListSLJM, Lanthanide
@@ -235,8 +239,6 @@ from lanthanide import StateListProduct, StateListSLJM, Lanthanide
 ion = Lanthanides(3)
 states = StateListProduct(ion.product)
 states = states.to_SLJM(ion)
-assert isinstance(states, StateListSLJM)
-state = states[2]
 for states in states:
     print(state)
 ```
