@@ -179,6 +179,12 @@ class StateSLJM:
         self.values = list(values)
         self.symmetries = dict((name, SYMMETRY[name](value)) for name, value in zip(SYM_CHAIN_SLJM, self.values))
 
+    def keys(self):
+        """ Generate the symmetry keys of the state in the chain order. """
+
+        for sym in self.sym_chain:
+            yield sym
+
     def short(self):
         """ Return a short string representation of the state. """
 
@@ -275,6 +281,12 @@ class StateSLJ:
         assert len(values) == len(self.sym_chain)
         self.values = list(values)
         self.symmetries = dict((name, SYMMETRY[name](value)) for name, value in zip(self.sym_chain, self.values))
+
+    def keys(self):
+        """ Generate the symmetry keys of the state in the chain order. """
+
+        for sym in self.sym_chain:
+            yield sym
 
     def short(self):
         """ Return a short string representation of the state. """
