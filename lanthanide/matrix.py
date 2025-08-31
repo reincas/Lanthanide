@@ -621,31 +621,34 @@ def build_hamilton(ion, radial: dict, coupling: Coupling):
     return Matrix(ion, array, "H", coupling)
 
 
-def reduced_matrix(ion, name: str, k: int, J: list, transform=None) -> np.ndarray:
-    """ Return a matrix of reduced matrix elements derived from the components of the operator with given name and
-    rank k. The parameter is a list of quantum numbers J of the total angular momentum for all states. If a
-    transformation matrix is given, it is used to transform the operator to an intermediate SLJ coupling. Note
-    that the intermediate coupling must preserve the quantum number J of each state. """
+def reduced_matrix(ion, operator_name: str, coupling=None) -> np.ndarray:
+    """ Return the array of reduced matrix elements of the given operator in SLJ or intermediate SLJ coupling. The
+    name of the operator must contain "{q}" if its rank is not zero. """
 
-    assert 0 <= k <= 2 * ion.l
-    assert isinstance(J, list)
-    if transform is not None:
-        assert isinstance(transform, np.ndarray)
-        assert len(transform.shape) == 2
-        assert transform.shape[0] == transform.shape[1] == len(J)
+    assert coupling is None or coupling in (Coupling.SLJ, Coupling.J)
+
+    # Default coupling scheme is intermediate SLJ
+    coupling = coupling or Coupling.J
+
+    # States in the given coupling scheme, J quantum numbers of all states and number of states
+    states = ion.states(coupling)
+    J = states.J
+    num_states = len(states)
+
+    # Rank of the tensor operator
+    k = decode_matrix(operator_name.format(q=0))[0]
+    if k is None:
+        raise ValueError("Cannot calculate reduced matrix of tensor {name}!")
 
     # Matrix of the potentially non-zero components or the tensor operator of rank k
-    num_states = len(J)
     if k == 0:
-        array = get_matrix(ion, name.format(q=0), Coupling.SLJ).array
+        array = get_matrix(ion, operator_name, Coupling.SLJ).array
     else:
-        array = np.zeros((num_states, num_states), dtype=float)
-        for q in range(-k, k + 1):
-            array += get_matrix(ion, name.format(q=q), Coupling.SLJ).array
+        array = sum(get_matrix(ion, operator_name.format(q=q), Coupling.SLJ).array for q in range(-k, k + 1))
 
     # Transform to intermediate coupling
-    if transform is not None:
-        array = transform.T @ array @ transform
+    if coupling == Coupling.J:
+        array = states.transform.T @ array @ states.transform
 
     def value(i: int, j: int):
         """ Apply the Wigner-Eckart theorem to the given matrix element of array. """

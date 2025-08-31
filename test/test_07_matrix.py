@@ -56,12 +56,13 @@ def run_matrix(num):
 
     states = ion.states(Coupling.SLJ)
     intermediate = states.to_J(energies, transform)
+    ion._state_dict_[Coupling.J.name] = intermediate
 
-    return ion, energies, transform, intermediate
+    return ion, energies, transform
 
 
 def test_matrix():
-    ion, energies, transform, intermediate = run_matrix(2)
+    ion, energies, transform = run_matrix(2)
 
     array = MATRIX @ np.diag(EIGEN) @ MATRIX.T
     matrix = Matrix(ion, array, "test")
@@ -77,14 +78,13 @@ def test_matrix():
 
 
 def test_hamilton():
-    ion, energies, transform, intermediate = run_matrix(2)
+    ion, energies, transform = run_matrix(2)
     assert pytest.approx(energies, abs=1e-5) == ENERGIES_F02
 
 
 def test_reduced():
-    ion, energies, transform, intermediate = run_matrix(2)
-    J = intermediate.J
-    U4 = np.power(reduced_matrix(ion, "ED/4,{q}", 4, J, transform), 2)
+    ion, energies, transform = run_matrix(2)
+    U4 = np.power(reduced_matrix(ion, "ED/4,{q}", Coupling.J), 2)
     assert pytest.approx(U4[:, 2], abs=1e-9) == WEIGHT4
-    U6 = np.power(reduced_matrix(ion, "ED/6,{q}", 6, J, transform), 2)
+    U6 = np.power(reduced_matrix(ion, "ED/6,{q}", Coupling.J), 2)
     assert pytest.approx(U6[:, 3], abs=1e-9) == WEIGHT6

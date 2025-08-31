@@ -238,6 +238,12 @@ class Lanthanide:
 
         return get_matrix(self, name, coupling)
 
+    def reduced(self, name, coupling=None):
+        """ Return array of reduced matrix elements of the given operator in the given coupling scheme
+        (default: J). The name of the operator must contain "{q}" if its rank is not zero. """
+
+        return reduced_matrix(self, name, coupling)
+
     def states(self, coupling=None):
         """ Return StateList object of the given coupling scheme or the one selected when the Lanthanide object
         was initialized. """
@@ -288,13 +294,11 @@ class Lanthanide:
         columns to initial states. """
 
         if not self._reduced_:
-            J = self.intermediate.J
-            transform = self.intermediate.transform
             self._reduced_ = Reduced(
-                U2=np.power(reduced_matrix(self, "ED/2,{q}", 2, J, transform), 2),
-                U4=np.power(reduced_matrix(self, "ED/4,{q}", 4, J, transform), 2),
-                U6=np.power(reduced_matrix(self, "ED/6,{q}", 6, J, transform), 2),
-                LS=np.power(reduced_matrix(self, "MD/{q}", 1, J, transform), 2))
+                U2=np.power(self.reduced("ED/2,{q}"), 2),
+                U4=np.power(self.reduced("ED/4,{q}"), 2),
+                U6=np.power(self.reduced("ED/6,{q}"), 2),
+                LS=np.power(self.reduced("MD/{q}"), 2))
         return self._reduced_
 
     def line_strengths(self, judd_ofelt: dict):
