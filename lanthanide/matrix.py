@@ -550,6 +550,9 @@ class Matrix:
         if coupling == self.coupling:
             return self
 
+        if self.coupling in (Coupling.SLJ, Coupling.J) and coupling in (Coupling.Product, Coupling.SLJM):
+            raise ValueError("Cannot increase the state space!")
+
         # Back-transform to product states
         if self.coupling == Coupling.Product:
             array = self.array
