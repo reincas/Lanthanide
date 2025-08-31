@@ -516,8 +516,9 @@ class Matrix:
         """ Fast diagonalisation algorithm acting inside J spaces only. Return the ordered numpy vector of
         eigenvalues and the 2D numpy array of eigenvectors (columns). """
 
+        # Fast diagonalisation is only available for SLJM or SLJ coupling
         if self.coupling not in (Coupling.SLJM, Coupling.SLJ):
-            raise RuntimeError("Fast diagonalisation is only available for SLJM or SLJ coupling!")
+            return self.diagonalise()
 
         # Initialize eigenvalues and eigenvectors
         states = self.ion.states(self.coupling)
