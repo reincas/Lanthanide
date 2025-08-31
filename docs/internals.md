@@ -233,7 +233,8 @@ different electrons is obtained by ordering $(m_l, m_s)$-tuples for decreasing v
 
 The determinantal product states of a given lanthanide configuration with k electrons in the 4f shell are given by
 all k-combinations of the 14 available electrons. We could thus use `itertools.combinations(range(14), k)` to get
-the list of states. In order to keep the relationship to data in the file cache, we need to asure a defined and fixed order of
+the list of states. In order to keep the relationship to data in the file cache, we need to asure a defined and fixed
+order of
 the states, although the order does not matter physically. The Lanthanide package therefore uses its own function
 `product_states(k)` to determine the list of determinantal product states for a 4f configuration with k electrons.
 Each state is represented by a tuple of indices into the list of different available electrons in standard order:
@@ -328,5 +329,64 @@ with Lanthanide(11) as ion:
 
 ## Matrix class
 
-... to be added ...
+The Lanthanide package encapsulates matrices of tensor operators in `Matrix` objects. The matrices of predefined
+tensor operators in any coupling scheme are provided by the method `matrix()`. Specification of the coupling class
+is optional. Default is the coupling scheme of the `Lanthanide` object. The following sample code gets the
+matrix of the intra-configuration Coulomb interaction of rank 2 in SLJ coupling for the Yb<sup>3+</sup> ion:
+
+```
+from lanthanide import Lanthanide, Coupling
+with Lanthanide(13) as ion:
+    matrix = ion.matrix("H1/2", Coupling.SLJ)
+```
+
+The following table contains all predefined tensor operators the matrices of which can be obtained by the method
+`matrix()` in addition to the unit tensor operators tabulated above:
+
+| name           | operator                                               | parameters                       |
+|----------------|--------------------------------------------------------|----------------------------------|
+| `"UU/{k}"`     | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$              | $k = 0\ldots 2l$                 |  
+| `"TT/{k}"`     | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$              | $k = 0, 1$                       |  
+| `"UT/{k}"`     | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$              | $k = 0, 1$                       |  
+| `"L/{q}"`      | $\mathbf{L}_{q}$                                       | $q = -1, 0, 1$                   |  
+| `"S/{q}"`      | $\mathbf{S}_{q}$                                       | $q = -1, 0, 1$                   |  
+| `"J/{q}"`      | $\mathbf{J}_{q}$                                       | $q = -1, 0, 1$                   |  
+| `"Lz"`         | $\mathbf{L}_{0}$                                       |                                  |  
+| `"Sz"`         | $\mathbf{S}_{0}$                                       |                                  |  
+| `"Jz"`         | $\mathbf{J}_{0}$                                       |                                  |  
+| `"L2"`         | $(\mathbf{L}\cdot\mathbf{L})$                          |                                  |  
+| `"LS"`         | $(\mathbf{L}\cdot\mathbf{S})$                          |                                  |  
+| `"S2"`         | $(\mathbf{S}\cdot\mathbf{S})$                          |                                  |  
+| `"J2"`         | $(\mathbf{J}\cdot\mathbf{J})$                          |                                  |  
+| `"ED/{k},{q}"` | $\mathbf{U}^{(k)}_{q}$                                 | $k = 0\ldots 2l$, $q = -k\ldots +k$ |  
+| `"MD/{q}"`     | $\mathbf{L}_{q} + 2.00231924 * \mathbf{S}_{q}$         | $k = 0\ldots 2l$, $q = -k\ldots +k$ |  
+| `"GR/{d}"`     | $\mathbf{G}(R_{d})$                                    | $d = 3, 5, 7$                    |  
+| `"GG/{d}"`     | $\mathbf{G}(G_{d})$                                    | $d = 2$                          |  
+| `"H1/{k}"`     | $\mathbf{f}_k$                                         | $k = 0\ldots 2l$                 |
+| `"H2"`         | $mathbf{z}$                                            |                                  |
+| `"H3/0"`       | $(\mathbf{L}\cdot\mathbf{L})$                          |                                  |
+| `"H3/1"`       | $\mathbf{G}(R_7)$                                      |                                  |
+| `"H3/2"`       | $\mathbf{G}(G_2)$                                      |                                  |
+| `"H4/{c}"`     | $\mathbf{t}_c$                                         | $c = 1\ldots 9$                  |
+ | `"hss/{k}"`    | $\mathbf{m}_{k,ss}$                                    | $k = 0, 2, 4$                    |
+| `"hsoo/{k}"`   | $\mathbf{m}_{k,soo}$                                   | $k = 0, 2, 4$                    |
+| `"H5/{k}"`     | $\mathbf{m}_k$                                         | $k = 0, 2, 4$                    |
+| `"H5fix"`      | $\mathbf{m}_0 + 0.56 \mathbf{m}_2 + 0.38 \mathbf{m}_4$ |                                  |
+| `"H6/{k}"`     | $\mathbf{p}_k$                                         | $k = 2, 4, 6$                    |
+| `"H6fix"`      | $\mathbf{p}_2 + 0.75 \mathbf{p}_4 + 0.50 \mathbf{p}_6$ |                                  |
+
+The generation of your own `Matrix` object requires a `Lanthanide` object in the first argument `ìon` and a
+2D numpy array in the second argument `array`. This is followed by an optional `name` string and the optional
+`coupling` class (default: `Coupling.Product`) of the given numeric array:
+
+```
+from lanthanide import Lanthanide, Coupling, Matrix
+with Lanthanide(1) as ion:
+    coupling = Coupling.SLJ
+    num = ion.num_states(coupling)
+    array = np.random((num, num), dtype=float)
+    matrix = Matrix(ion, array, "foo", coupling)
+```
+
+
 
