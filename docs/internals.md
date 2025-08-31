@@ -140,8 +140,8 @@ with Lanthanide(2) as ion:
 
 The following table lists all unit tensor operators provided by the Lanthanide package with their respective names:
 
-| name                                 | electrons | tensor operator                                                                                                                     | parameters                         |
-|--------------------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------|------------------------------------|
+| name                                   | electrons | tensor operator                                                                                                                     | parameters                         |
+|----------------------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------|------------------------------------|
 | `"U/a/{k},{q}"`                        | 1         | $\mathrm{U}_{q}^{(k)}$                                                                                                              | $k = 0\ldots2l$, $q = -k\ldots +k$ |
 | `"T/a/{k},{q}"`                        | 1         | $\mathrm{T}_{q}^{(k)}$                                                                                                              | $k = 0, 1$, $q = -k\ldots +k$      |
 | `"UU/a/{k}"`                           | 1         | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$                                                                                           | $k = 0\ldots2l$                    |
