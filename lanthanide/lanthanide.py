@@ -245,6 +245,13 @@ class Lanthanide:
         coupling = coupling or self.coupling
         return self._state_dict_[coupling.name]
 
+    def num_states(self, coupling=None):
+        """ Return number of states in the given coupling scheme or the one selected when the Lanthanide object
+        was initialized. """
+
+        coupling = coupling or self.coupling
+        return len(self._state_dict_[coupling.name])
+
     def set_radial(self, radial):
         """ Store new dictionary of radial integrals and use them to calculate all energy levels and states in
         intermediate coupling. """
@@ -270,7 +277,7 @@ class Lanthanide:
 
         # Build and store the StateListJ object of the electron states in intermediate coupling
         self.intermediate = self.states().to_J(self.energies, transform)
-        self._state_dict_[Coupling.J] = self.intermediate
+        self._state_dict_[Coupling.J.name] = self.intermediate
 
         # Invalidate previously calculated reduced matrix elements
         self._reduced_ = None

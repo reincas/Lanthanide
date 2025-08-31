@@ -28,6 +28,10 @@ def test_lanthanide():
         assert pytest.approx(ion.energies, rel=1e-7) == F02_ENERGIES
         assert isinstance(ion.intermediate, StateListJ)
         assert len(ion.intermediate.states) == 13
+        assert ion.num_states(Coupling.Product) == 91
+        assert ion.num_states(Coupling.SLJM) == 91
+        assert ion.num_states(Coupling.SLJ) == 13
+        assert ion.num_states(Coupling.J) == 13
 
         assert all(isinstance(state, StateJ) for state in ion.intermediate.states)
         state = ion.intermediate.states[7]
