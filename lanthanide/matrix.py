@@ -617,12 +617,15 @@ class Matrix:
         return Matrix(self.ion, array, self.name, coupling)
 
 
-def build_hamilton(ion, radial: dict, coupling: Coupling):
+def build_hamilton(ion, radial: dict, coupling=None):
     """ Build and return the matrix of a perturbation hamiltonian operator as linear combination of the interaction
     hamiltonians and factors specified in the dictionary radial in the given coupling scheme."""
 
-    assert coupling in (Coupling.SLJM, Coupling.SLJ)
+    assert coupling is None or coupling in (Coupling.SLJM, Coupling.SLJ)
     assert isinstance(radial, dict)
+
+    # Default is coupling of lanthanide ion
+    coupling = coupling or ion.coupling
 
     # Initialize empty hamiltonian matrix
     num_states = len(ion.states(coupling))
