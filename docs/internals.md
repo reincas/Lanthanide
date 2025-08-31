@@ -142,16 +142,16 @@ The following table lists all unit tensor operators provided by the Lanthanide p
 
 | name                                 | electrons | tensor operator                                                                                                                     | parameters                         |
 |--------------------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------|------------------------------------|
-| `U/a/{k},{q}`                        | 1         | $\mathrm{U}_{q}^{(k)}$                                                                                                              | $k = 0\ldots2l$, $q = -k\ldots +k$ |
-| `T/a/{k},{q}`                        | 1         | $\mathrm{T}_{q}^{(k)}$                                                                                                              | $k = 0, 1$, $q = -k\ldots +k$      |
-| `UU/a/{k}`                           | 1         | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$                                                                                           | $k = 0\ldots2l$                    |
-| `TT/a/{k}`                           | 1         | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$                                                                                           | $k = 0, 1$                         |
-| `UT/a/{k}`                           | 1         | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$                                                                                           | $k = 0, 1$                         |
-| `UU/b/{k}`                           | 2         | $(\mathbf{U}_1^{(k)}\cdot\mathbf{U}_2^{(k)})$                                                                                       | $k = 0\ldots2l$                    |
-| `TT/b/{k}`                           | 2         | $(\mathbf{T}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                                       | $k = 0, 1$                         |
-| `UT/b/{k}`                           | 2         | $(\mathbf{U}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                                       | $k = 0, 1$                         |
-| `UUTT/b/{ku1},{ku2},{kt1},{kt2},{k}` | 2         | $(\\{\mathbf{U}_1^{(ku_1)}\times\mathbf{U}_2^{(ku_2)}\\}^{(k)} \cdot \\{\mathbf{T}_1^{(kt_1)}\times\mathbf{T}_2^{(kt_2)}\\}^{(k)})$ | $ku_i = 0\ldots2l$, $kt_i = 0, 1$  |
-| `UUU/c/{k1},{k2},{k3}`               | 3         | $(\mathbf{U}_1^{(k_1)}\cdot\mathbf{U}_2^{(k_2)}\cdot\mathbf{U}_2^{(k_3)})$                                                          | $k_i = 0\ldots2l$                  |
+| `"U/a/{k},{q}"`                        | 1         | $\mathrm{U}_{q}^{(k)}$                                                                                                              | $k = 0\ldots2l$, $q = -k\ldots +k$ |
+| `"T/a/{k},{q}"`                        | 1         | $\mathrm{T}_{q}^{(k)}$                                                                                                              | $k = 0, 1$, $q = -k\ldots +k$      |
+| `"UU/a/{k}"`                           | 1         | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$                                                                                           | $k = 0\ldots2l$                    |
+| `"TT/a/{k}"`                           | 1         | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$                                                                                           | $k = 0, 1$                         |
+| `"UT/a/{k}"`                           | 1         | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$                                                                                           | $k = 0, 1$                         |
+| `"UU/b/{k}"`                           | 2         | $(\mathbf{U}_1^{(k)}\cdot\mathbf{U}_2^{(k)})$                                                                                       | $k = 0\ldots2l$                    |
+| `"TT/b/{k}"`                           | 2         | $(\mathbf{T}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                                       | $k = 0, 1$                         |
+| `"UT/b/{k}"`                           | 2         | $(\mathbf{U}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                                       | $k = 0, 1$                         |
+| `"UUTT/b/{ku1},{ku2},{kt1},{kt2},{k}"` | 2         | $(\\{\mathbf{U}_1^{(ku_1)}\times\mathbf{U}_2^{(ku_2)}\\}^{(k)} \cdot \\{\mathbf{T}_1^{(kt_1)}\times\mathbf{T}_2^{(kt_2)}\\}^{(k)})$ | $ku_i = 0\ldots2l$, $kt_i = 0, 1$  |
+| `"UUU/c/{k1},{k2},{k3}"`               | 3         | $(\mathbf{U}_1^{(k_1)}\cdot\mathbf{U}_2^{(k_2)}\cdot\mathbf{U}_2^{(k_3)})$                                                          | $k_i = 0\ldots2l$                  |
 
 Note that the intended way to receive any tensor operator matrix including unit tensor operators is the method
 `Lanthanide.matrix(name, coupling)`. This method is explained below and delivers a `Matrix` object in the given
