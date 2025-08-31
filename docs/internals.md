@@ -359,11 +359,11 @@ The following table contains all predefined tensor operators the matrices of whi
 | `"S2"`         | $(\mathbf{S}\cdot\mathbf{S})$                          |                                     |  
 | `"J2"`         | $(\mathbf{J}\cdot\mathbf{J})$                          |                                     |  
 | `"ED/{k},{q}"` | $\mathbf{U}^{(k)}_{q}$                                 | $k = 0\ldots 2l$, $q = -k\ldots +k$ |  
-| `"MD/{q}"`     | $(\mathbf{L} + g_s\mathbf{S})_{g}$                     | $q = -1, 0, +1$                     |  
+| `"MD/{q}"`     | $(\mathbf{L} + g_s\mathbf{S}_{q})_{q}$                     | $q = -1, 0, +1$                     |  
 | `"GR/{d}"`     | $\mathbf{G}(R_{d})$                                    | $d = 3, 5, 7$                       |  
 | `"GG/{d}"`     | $\mathbf{G}(G_{d})$                                    | $d = 2$                             |  
 | `"H1/{k}"`     | $\mathbf{f}_k$                                         | $k = 0\ldots 2l$                    |
-| `"H2"`         | $mathbf{z}$                                            |                                     |
+| `"H2"`         | $\mathbf{z}$                                           |                                     |
 | `"H3/0"`       | $(\mathbf{L}\cdot\mathbf{L})$                          |                                     |
 | `"H3/1"`       | $\mathbf{G}(R_7)$                                      |                                     |
 | `"H3/2"`       | $\mathbf{G}(G_2)$                                      |                                     |
