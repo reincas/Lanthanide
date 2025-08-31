@@ -404,6 +404,25 @@ with Lanthanide(1) as ion:
     matrix = Matrix(ion, array, "foo", coupling)
 ```
 
-... `build_hamiltonian()` ...
+The function `build_hamilton()` assembles and returns a perturbation hamiltonian in SLJM or SLJ coupling as `Matrix`
+object. It takes all tensor operator matrices given by the keys of the dictionary `radials` which start with the
+capital letter "H" in the given `coupling` and builds a linear combination using the values of the dictionary as
+factors. 
 
-... `reduced_matrix()` / `ion.reduced()` ...
+```
+from lanthanide import Lanthanide, Coupling, build_hamilton
+with Lanthanide(4) as ion:
+    radial = { "H1/2": 68576.05, "H1/4": 49972.76, "H1/6": 32415.29, "H2": 728.18 }
+    H = build_hamilton(ion, radial, Coupling.SLJM)
+```
+
+Reduced matrix elements are available from the method `Lanthanide.reduced()` by giving the `name` of the tensor
+operator and the optional `coupling` scheme, which might be SLJM, SLJ, or intermediate SLJ (default). Note that 
+the name must contain a "{q}" to address the different tensor components if the rank of the tensor is not zero.
+The result is returned as 2D numpy array:
+
+```
+from lanthanide import Lanthanide, Coupling
+with Lanthanide(9) as ion:
+    reduced = ion.reduced("H5/2", Coupling.SLJ)
+```
