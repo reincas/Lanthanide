@@ -237,15 +237,16 @@ class StateListSLJM(StateList):
         self.values = np.array(values)
         self.transform = np.array(transform)
 
-        # List of StateSLJM objects
+        # List of StateSLJM objects and their J quantum numbers
         self.states = [StateSLJM(v) for v in self.values]
+        self.J = np.array([state["J2"].J for state in self.states])
 
         # List of slices for all states with different J quantum number. This is used for the calculation of
         # energy levels from perturbation hamiltonians.
         self.J_slices = []
         i = 0
         for j in range(1, len(self) + 1):
-            if j == len(self) or self[j]["J2"].key != self[i]["J2"].key:
+            if j == len(self) or self.J[j] != self.J[i]:
                 self.J_slices.append((i, j))
                 i = j
 
@@ -335,15 +336,16 @@ class StateListSLJ(StateList):
         self.values = np.array(values)
         self.transform = np.array(transform)
 
-        # List of StateSLJ objects
+        # List of StateSLJ objects and their J quantum numbers
         self.states = [StateSLJ(v) for v in self.values]
+        self.J = np.array([state["J2"].J for state in self.states])
 
         # List of slices for all states with different J quantum number. This is used for the calculation of
         # energy levels from perturbation hamiltonians.
         self.J_slices = []
         i = 0
         for j in range(1, len(self) + 1):
-            if j == len(self) or self[j]["J2"].key != self[i]["J2"].key:
+            if j == len(self) or self.J[j] != self.J[i]:
                 self.J_slices.append((i, j))
                 i = j
 
@@ -423,21 +425,18 @@ class StateListJ(StateList):
         self.energies = energies
         self.transform = transform
 
-        # J quantum numbers of all SLJ states
-        term_J = np.array([state["J2"].J for state in self.slj_states])
-
         # Matrix of weight factors for the SLJ components or each state in intermediate coupling
         weight = np.power(self.transform, 2)
 
         # J quantum number of each state in intermediate coupling is taken from its main SLJ component
-        self.J = [term_J[i] for i in np.argmax(weight, axis=0)]
+        self.J = [self.slj_states.J[i] for i in np.argmax(weight, axis=0)]
 
         # Build the list of StateJ objects
         self.states = []
         for i in range(len(self.J)):
 
             # Indices of all SLJ states with the same quantum number J as the current state
-            indices = np.array(np.argwhere(term_J == self.J[i]).flat)
+            indices = np.array(np.argwhere(self.slj_states.J == self.J[i]).flat)
 
             # Combination vector and SLJ states for the linear combination of the current state
             values = self.transform[indices, i]
