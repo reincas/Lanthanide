@@ -165,7 +165,7 @@ $\langle J_j\parallel \mathbf{U}^{(4)}\parallel J_i \rangle$, and
 $\langle J_j\parallel \mathbf{U}^{(6)}\parallel J_i \rangle$ for electric and
 $\frac{1}{\hbar} \langle J_j\parallel \mathbf{L} + g_s \mathbf{S}\parallel J_i \rangle$
 for magnetic dipole transitions.
-The method `Lanthanide.reduced()` delivers a `Reduced` object, which contains all four squared reduced matrices
+The method `Lanthanide.line_reduced()` delivers a `Reduced` object, which contains all four squared reduced matrices
 as attributes `U2`, `U4`, `U6`, and `LS` as required for the calculation of transition strengths.
 The matrix element for a transition from an initial state `i` to a final state `j` is addressed by `array[j,i]`.
 This code shows the squared elements
@@ -173,7 +173,7 @@ $|\langle J_j\parallel \mathbf{U}^{(4)}\parallel J_0 \rangle|^2$ for transitions
 to all excited states:
 
 ```
-reduced = ion.reduced()
+reduced = ion.line_reduced()
 print(reduced.U4[1:, 0])
 ```
 
