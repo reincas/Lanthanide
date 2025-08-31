@@ -420,21 +420,46 @@ def matrix_elements(ion, operator, cache: dict):
             yield final_index, initial_index, value
 
 
-# This dictionary is used to determine the respective elementary tensor operator class required for the calculation
-# of a unit tensor operator with given name. The final letter in the name indicates if the operator should act on
-# one ("a"), two ("b"), or three ("c") electrons.
+# This dictionary is used to determine the rank, arguments and elementary operator class of all supported
+# unit tensor operators
 OPERATORS = {
-    "Ua": UnitUa,
-    "Ta": UnitTa,
-    "UUa": UnitUUa,
-    "TTa": UnitTTa,
-    "UTa": UnitUTa,
-    "UUb": UnitUUb,
-    "TTb": UnitTTb,
-    "UTb": UnitUTb,
-    "UUTTb": UnitUUTTb,
-    "UUUc": UnitUUUc,
+    "U/a": ("k", ("k", "q"), UnitUa),
+    "T/a": ("k", ("k", "q"), UnitTa),
+    "UU/a": (0, ("k",), UnitUUa),
+    "TT/a": (0, ("k",), UnitTTa),
+    "UT/a": (0, ("k",), UnitUTa),
+    "UU/b": (0, ("k",), UnitUUb),
+    "TT/b": (0, ("k",), UnitTTb),
+    "UT/b": (0, ("k",), UnitUTb),
+    "UUTT/b": (0, ("ku1", "ku2", "kt1", "kt2", "k"), UnitUUTTb),
+    "UUU/c": (0, ("k1", "k2", "k3"), UnitUUUc),
 }
+
+
+def decode_unit(operator_name: str):
+    """ Decode the given operator name string and return rank, arguments dictionary, and class of the corresponding
+    unit tensor operator. """
+
+    assert operator_name.count("/") == 2
+
+    # Extract name of unit tensor operator and its arguments
+    operator, args = operator_name.rsplit("/", maxsplit=1)
+    args = tuple(map(int, args.split(",")))
+    if not operator in OPERATORS:
+        raise ValueError(f"Unknown unit tensor operator: {operator_name}")
+
+    # Get rank, argument names and class of the unit tensor operator
+    rank, keys, operator = OPERATORS[operator]
+    if not len(args) == len(keys):
+        raise ValueError(f"Wrong unit tensor arguments: {operator_name}")
+
+    # Unit tensor operator arguments and rank
+    args = dict(zip(keys, args))
+    if isinstance(rank, str):
+        rank = args[rank]
+
+    # Return rank, arguments dictionary, and class of the unit tensor operator
+    return rank, args, operator
 
 
 def calc_unit(ion, operator_name: str) -> np.ndarray:
@@ -443,10 +468,8 @@ def calc_unit(ion, operator_name: str) -> np.ndarray:
 
     # Extract the parameters from the operator name and initialize the elementary unit tensor operator object which
     # is required for the calculation of matrix elements
-    operator, num, params = operator_name.split("/")
-    operator = OPERATORS[operator + num]
-    params = map(int, params.split(","))
-    operator = operator(*params)
+    rank, args, operator = decode_unit(operator_name)
+    operator = operator(**args)
 
     # Initialize empty matrix and elementary values cache
     N = len(ion.product)

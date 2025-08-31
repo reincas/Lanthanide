@@ -389,37 +389,65 @@ def matrix_H6fix(ion):
 # Module interface
 ##########################################################################
 
-# This dictionary is used to determine the respective function for the calculation of a tensor operator matrix
-# identified by name string.
+# This dictionary is used to determine the rank, arguments, function, and cache flag of all supported tensor operators
 MATRIX = {
-    "UU": matrix_UU,
-    "TT": matrix_TT,
-    "UT": matrix_UT,
-    "L": matrix_L,
-    "S": matrix_S,
-    "J": matrix_J,
-    "ED": matrix_ED,
-    "MD": matrix_MD,
-    "Lz": matrix_Lz,
-    "Sz": matrix_Sz,
-    "Jz": matrix_Jz,
-    "L2": matrix_L2,
-    "S2": matrix_S2,
-    "LS": matrix_LS,
-    "J2": matrix_J2,
-    "GR": matrix_GR,
-    "GG": matrix_GG,
-    "H1": matrix_H1,
-    "H2": matrix_H2,
-    "H3": matrix_H3,
-    "H4": matrix_H4,
-    "hss": matrix_ss,
-    "hsoo": matrix_soo,
-    "H5": matrix_H5,
-    "H5fix": matrix_H5fix,
-    "H6": matrix_H6,
-    "H6fix": matrix_H6fix,
+    "UU": (0, ("k",), matrix_UU, False),
+    "TT": (0, ("k",), matrix_TT, False),
+    "UT": (0, ("k",), matrix_UT, False),
+    "L": (1, ("q",), matrix_L, False),
+    "S": (1, ("q",), matrix_S, False),
+    "J": (1, ("q",), matrix_J, False),
+    "ED": ("k", ("k", "q"), matrix_ED, False),
+    "MD": (1, ("q",), matrix_MD, False),
+    "Lz": (None, (), matrix_Lz, False),
+    "Sz": (None, (), matrix_Sz, False),
+    "Jz": (None, (), matrix_Jz, False),
+    "L2": (0, (), matrix_L2, False),
+    "S2": (0, (), matrix_S2, False),
+    "LS": (0, (), matrix_LS, False),
+    "J2": (0, (), matrix_J2, False),
+    "GR": (0, ("d",), matrix_GR, False),
+    "GG": (0, ("d",), matrix_GG, False),
+    "H1": (0, ("k",), matrix_H1, True),
+    "H2": (0, (), matrix_H2, True),
+    "H3": (0, ("i",), matrix_H3, True),
+    "H4": (0, ("k",), matrix_H4, True),
+    "hss": (0, ("k",), matrix_ss, False),
+    "hsoo": (0, ("k",), matrix_soo, False),
+    "H5": (0, ("k",), matrix_H5, True),
+    "H5fix": (0, (), matrix_H5fix, False),
+    "H6": (0, ("k",), matrix_H6, True),
+    "H6fix": (0, (), matrix_H6fix, False),
 }
+
+
+def decode_matrix(operator_name: str):
+    """ Decode the given operator name string and return rank, arguments dictionary, function of the corresponding
+     tensor operator, and its cache flag. """
+
+    assert operator_name.count("/") < 2
+
+    # Extract name of tensor operator and its arguments
+    if "/" in operator_name:
+        operator, args = operator_name.split("/")
+        args = tuple(map(int, args.split(",")))
+    else:
+        operator, args = operator_name, ()
+    if not operator in MATRIX:
+        raise ValueError(f"Unknown tensor operator: {operator_name}")
+
+    # Get rank, argument names, function of the tensor operator, and its cache flag
+    rank, keys, operator, cached = MATRIX[operator]
+    if not len(args) == len(keys):
+        raise ValueError(f"Wrong tensor arguments: {operator_name}")
+
+    # Tensor operator arguments and rank
+    args = dict(zip(keys, args))
+    if isinstance(rank, str):
+        rank = args[rank]
+
+    # Return rank, arguments, function of the tensor operator, and its cache flag
+    return rank, args, operator, cached
 
 
 class Matrix:
@@ -656,23 +684,17 @@ def get_matrix(ion, name, coupling=None):
     # Coupling scheme of the returned Matrix object
     coupling = coupling or Coupling.Product
 
-    # Tensor name
-    tensor = name if "/" not in name else name.split("/")[0]
+    # Unit tensor operator
+    if name.count("/") == 2:
+        array = get_unit(ion, name)
+        return Matrix(ion, array, name).transform(coupling)
+
+    # Rank, arguments and function of the tensor operator
+    rank, args, operator, cached = decode_matrix(name)
 
     # Build matrix
-    if tensor not in STORE or coupling not in (Coupling.SLJM, Coupling.SLJ) or not hasattr(ion, "vault"):
-        if name.count("/") == 2:
-            array = get_unit(ion, name)
-        else:
-            if "/" in name:
-                main, args = name.split("/")
-            else:
-                main, args = name, ""
-            if main not in MATRIX:
-                raise ValueError(f"Unknown matrix: {name}")
-            args = map(int, args.split(",")) if args else ()
-            array = MATRIX[main](ion, *args).array
-
+    if not cached or coupling not in (Coupling.SLJM, Coupling.SLJ) or not hasattr(ion, "vault"):
+        array = operator(ion, **args).array
         return Matrix(ion, array, name).transform(coupling)
 
     # Get SLJM matrix from HDF5 vault
