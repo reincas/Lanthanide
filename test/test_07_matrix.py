@@ -24,6 +24,9 @@ WEIGHT4 = [0.033471471373506444, 0.23274398860708642, 0.7107571845637194, 0.0164
            0.4963453057444576, 0.0]
 WEIGHT6 = [0.11737443386221942, 0.6591978972155589, 0.303903979802215, 0.0, 0.0, 0.0909492368332769,
            0.005887991636483049, 0.0, 0.0, 0.0, 0.03237457133704324, 0.0, 0.0]
+REDH12 = [0, 0, 0, -0.09256622271389522, 0, 0, 0, -0.04378764103673054, 0, 0, 0, 0.005384598920204938, 0]
+REDH16 = [-0.0007494882534019258, 0, 0, 0, 0, -0.0658613894531618, 0.06990903249054214, 0, 0, 0, 0, 0, 0]
+REDH2 = [0, 0, -4.882742931038221, 0, 0, 0, 0, 0, 0, 0, 0.5105255184602158, 0, 0]
 
 
 class DummyMatrix:
@@ -88,3 +91,9 @@ def test_reduced():
     assert pytest.approx(U4[:, 2], abs=1e-9) == WEIGHT4
     U6 = np.power(reduced_matrix(ion, "ED/6,{q}", Coupling.J), 2)
     assert pytest.approx(U6[:, 3], abs=1e-9) == WEIGHT6
+    red = reduced_matrix(ion, "H1/2", Coupling.J)
+    assert pytest.approx(red[3, :], abs=1e-9) == REDH12
+    red = reduced_matrix(ion, "H1/6", Coupling.J)
+    assert pytest.approx(red[5, :], abs=1e-9) == REDH16
+    red = reduced_matrix(ion, "H2", Coupling.J)
+    assert pytest.approx(red[10, :], abs=1e-9) == REDH2
