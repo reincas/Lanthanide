@@ -579,22 +579,41 @@ class Matrix:
         if coupling == self.coupling:
             return self
 
+        # Increasing the state space is impossible
         if self.coupling in (Coupling.SLJ, Coupling.J) and coupling in (Coupling.Product, Coupling.SLJM):
             raise ValueError("Cannot increase the state space!")
 
-        # Back-transform to product states
-        if self.coupling == Coupling.Product:
-            array = self.array
-        else:
-            transform = self.ion.states(self.coupling).transform
-            array = transform @ self.array @ transform.T
+        # Shortcut to transformation matrices
+        V = lambda coupling: self.ion.states(coupling).transform
 
-        # Transform to desired coupling
-        if coupling != Coupling.Product:
-            transform = self.ion.states(coupling).transform
-            array = transform.T @ array @ transform
+        # Transformation matrix to product state space
+        if coupling == Coupling.Product:
+            transform = V(Coupling.SLJM).T
+
+        # Transformation to SLJM coupling
+        elif coupling == Coupling.SLJM:
+            transform = V(Coupling.SLJM)
+
+        # Transformation to SLJ coupling
+        elif coupling == Coupling.SLJ:
+            if self.coupling == Coupling.Product:
+                transform = V(Coupling.SLJ)
+            elif self.coupling == Coupling.SLJM:
+                transform = V(Coupling.SLJM).T @ V(Coupling.SLJ)
+            else:
+                transform = V(Coupling.J).T
+
+        # Transformation to intermediate SLJ coupling
+        else:
+            if self.coupling == Coupling.Product:
+                transform = V(Coupling.SLJ) @ V(Coupling.J)
+            elif self.coupling == Coupling.SLJM:
+                transform = V(Coupling.SLJM).T @ V(Coupling.SLJ) @ V(Coupling.J)
+            else:
+                transform = V(Coupling.J)
 
         # Return matrix in new coupling scheme
+        array = transform.T @ self.array @ transform
         return Matrix(self.ion, array, self.name, coupling)
 
 
@@ -642,13 +661,13 @@ def reduced_matrix(ion, operator_name: str, coupling=None) -> np.ndarray:
 
     # Matrix of the potentially non-zero components or the tensor operator of rank k
     if k == 0:
-        array = get_matrix(ion, operator_name, Coupling.SLJ).array
+        array = get_matrix(ion, operator_name, coupling).array
     else:
-        array = sum(get_matrix(ion, operator_name.format(q=q), Coupling.SLJ).array for q in range(-k, k + 1))
+        array = sum(get_matrix(ion, operator_name.format(q=q), coupling).array for q in range(-k, k + 1))
 
     # Transform to intermediate coupling
-    if coupling == Coupling.J:
-        array = states.transform.T @ array @ states.transform
+    #if coupling == Coupling.J:
+    #    array = states.transform.T @ array @ states.transform
 
     def value(i: int, j: int):
         """ Apply the Wigner-Eckart theorem to the given matrix element of array. """
