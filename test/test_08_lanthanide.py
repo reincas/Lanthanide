@@ -20,7 +20,7 @@ F02_SMD = [3.36312633e-02, 0.0, 0.0, 1.90612714e-05, 4.89040561e-04, 1.97265651e
 def test_lanthanide():
     with Lanthanide(2) as ion:
         ion.set_radial(RADIAL["Pr3+/ZBLAN"])
-        reduced = ion.reduced().U4[1:, 0]
+        reduced = ion.line_reduced().U4[1:, 0]
         assert pytest.approx(reduced, rel=1e-6) == F02_REDUCED
         assert str(ion) == "Pr3+ (4f2)"
         assert isinstance(ion.coupling, Coupling)

@@ -75,7 +75,7 @@ def show_reduced(ion):
     initial = f"{states[0].short():10s}"
     print(f"  {initial} |  <U2>^2  |  <U4>^2  |  <U6>^2  |  <MD>^2")
     print(57 * "-")
-    reduced = np.array([ion.reduced()[key][:, 0] for key in ("U2", "U4", "U6", "LS")], dtype=float).T
+    reduced = np.array([ion.line_reduced()[key][:, 0] for key in ("U2", "U4", "U6", "LS")], dtype=float).T
     for i in range(1, reduced.shape[0]):
         u2, u4, u6, ls = reduced[i, :]
         print(f"  {states[i].short():10s} | {u2:7.4f}  | {u4:7.4f}  | {u6:7.4f}  | {ls:7.4f}")

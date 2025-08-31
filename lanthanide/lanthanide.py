@@ -282,7 +282,7 @@ class Lanthanide:
         # Invalidate previously calculated reduced matrix elements
         self._reduced_ = None
 
-    def reduced(self):
+    def line_reduced(self):
         """ Calculate and return all reduced matrix elements required for the calculation of line strengths of
         radiative electric or magnetic dipole transitions if they were not yet calculated. Rows refer to final and
         columns to initial states. """
@@ -302,7 +302,7 @@ class Lanthanide:
         transitions. Rows refer to final and columns to initial states. """
 
         # Multiply each matrix column with factor with J of the initial state
-        reduced = self.reduced()
+        reduced = self.line_reduced()
         invJi = np.array([1 / (3 * (2 * j + 1)) for j in self.intermediate.J])
 
         result_ed = (judd_ofelt["JO/2"] * reduced.U2 +
