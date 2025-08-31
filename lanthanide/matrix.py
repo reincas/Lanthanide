@@ -452,6 +452,8 @@ class Matrix:
         if not other:
             return self
         elif isinstance(other, Matrix):
+            if self.ion != other.ion:
+                raise ValueError("Cannot add matrices of different ions!")
             if self.coupling != other.coupling:
                 raise ValueError("Cannot add matrices with different couplings!")
             return Matrix(self.ion, self.array + other.array)
@@ -466,6 +468,8 @@ class Matrix:
         """ Return this - other matrix. """
 
         if isinstance(other, Matrix):
+            if self.ion != other.ion:
+                raise ValueError("Cannot add matrices of different ions!")
             if self.coupling != other.coupling:
                 raise ValueError("Cannot subtract matrices with different couplings!")
             return Matrix(self.ion, self.array - other.array)
@@ -475,6 +479,8 @@ class Matrix:
         """ Return other - this matrix. """
 
         if isinstance(other, Matrix):
+            if self.ion != other.ion:
+                raise ValueError("Cannot add matrices of different ions!")
             if self.coupling != other.coupling:
                 raise ValueError("Cannot subtract matrices with different couplings!")
             return Matrix(self.ion, other.array - self.array)
