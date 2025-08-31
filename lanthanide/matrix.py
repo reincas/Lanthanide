@@ -689,10 +689,6 @@ def reduced_matrix(ion, operator_name: str, coupling=None) -> np.ndarray:
 # HDF5 cache interface
 ##########################################################################
 
-# List of tensor operators which are eventually stored in the file cache
-STORE = ["H1", "H2", "H3", "H4", "H5", "H6"]
-
-
 @lru_cache(maxsize=None)
 def get_matrix(ion, name, coupling=None):
     """ Return a Matrix object of the matrix of the tensor operator with given name and in the given coupling

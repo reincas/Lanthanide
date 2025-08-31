@@ -140,18 +140,18 @@ with Lanthanide(2) as ion:
 
 The following table lists all unit tensor operators provided by the Lanthanide package with their respective names:
 
-| name                                   | electrons | tensor operator                                                                                                                     | parameters                         |
-|----------------------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------|------------------------------------|
-| `"U/a/{k},{q}"`                        | 1         | $\mathrm{U}_{q}^{(k)}$                                                                                                              | $k = 0\ldots2l$, $q = -k\ldots +k$ |
-| `"T/a/{k},{q}"`                        | 1         | $\mathrm{T}_{q}^{(k)}$                                                                                                              | $k = 0, 1$, $q = -k\ldots +k$      |
-| `"UU/a/{k}"`                           | 1         | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$                                                                                           | $k = 0\ldots2l$                    |
-| `"TT/a/{k}"`                           | 1         | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$                                                                                           | $k = 0, 1$                         |
-| `"UT/a/{k}"`                           | 1         | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$                                                                                           | $k = 0, 1$                         |
-| `"UU/b/{k}"`                           | 2         | $(\mathbf{U}_1^{(k)}\cdot\mathbf{U}_2^{(k)})$                                                                                       | $k = 0\ldots2l$                    |
-| `"TT/b/{k}"`                           | 2         | $(\mathbf{T}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                                       | $k = 0, 1$                         |
-| `"UT/b/{k}"`                           | 2         | $(\mathbf{U}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                                       | $k = 0, 1$                         |
-| `"UUTT/b/{ku1},{ku2},{kt1},{kt2},{k}"` | 2         | $(\\{\mathbf{U}_1^{(ku_1)}\times\mathbf{U}_2^{(ku_2)}\\}^{(k)} \cdot \\{\mathbf{T}_1^{(kt_1)}\times\mathbf{T}_2^{(kt_2)}\\}^{(k)})$ | $ku_i = 0\ldots2l$, $kt_i = 0, 1$  |
-| `"UUU/c/{k1},{k2},{k3}"`               | 3         | $(\mathbf{U}_1^{(k_1)}\cdot\mathbf{U}_2^{(k_2)}\cdot\mathbf{U}_2^{(k_3)})$                                                          | $k_i = 0\ldots2l$                  |
+| name                                   | electrons | tensor operator                                                                                                                     | rank | parameters                         |
+|----------------------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------|------|------------------------------------|
+| `"U/a/{k},{q}"`                        | 1         | $\mathrm{U}_{q}^{(k)}$                                                                                                              | $k$  | $k = 0\ldots2l$, $q = -k\ldots +k$ |
+| `"T/a/{k},{q}"`                        | 1         | $\mathrm{T}_{q}^{(k)}$                                                                                                              | $k$  | $k = 0, 1$, $q = -k\ldots +k$      |
+| `"UU/a/{k}"`                           | 1         | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$                                                                                           | 0    | $k = 0\ldots2l$                    |
+| `"TT/a/{k}"`                           | 1         | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$                                                                                           | 0    | $k = 0, 1$                         |
+| `"UT/a/{k}"`                           | 1         | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$                                                                                           | 0    | $k = 0, 1$                         |
+| `"UU/b/{k}"`                           | 2         | $(\mathbf{U}_1^{(k)}\cdot\mathbf{U}_2^{(k)})$                                                                                       | 0    | $k = 0\ldots2l$                    |
+| `"TT/b/{k}"`                           | 2         | $(\mathbf{T}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                                       | 0    | $k = 0, 1$                         |
+| `"UT/b/{k}"`                           | 2         | $(\mathbf{U}_1^{(k)}\cdot\mathbf{T}_2^{(k)})$                                                                                       | 0    | $k = 0, 1$                         |
+| `"UUTT/b/{ku1},{ku2},{kt1},{kt2},{k}"` | 2         | $(\\{\mathbf{U}_1^{(ku_1)}\times\mathbf{U}_2^{(ku_2)}\\}^{(k)} \cdot \\{\mathbf{T}_1^{(kt_1)}\times\mathbf{T}_2^{(kt_2)}\\}^{(k)})$ | 0    | $ku_i = 0\ldots2l$, $kt_i = 0, 1$  |
+| `"UUU/c/{k1},{k2},{k3}"`               | 3         | $(\mathbf{U}_1^{(k_1)}\cdot\mathbf{U}_2^{(k_2)}\cdot\mathbf{U}_2^{(k_3)})$                                                          | 0    | $k_i = 0\ldots2l$                  |
 
 Note that the intended way to receive any tensor operator matrix including unit tensor operators is the method
 `Lanthanide.matrix(name, coupling)`. This method is explained below and delivers a `Matrix` object in the given
@@ -330,9 +330,10 @@ with Lanthanide(11) as ion:
 ## Matrix class
 
 The Lanthanide package encapsulates matrices of tensor operators in `Matrix` objects. The matrices of predefined
-tensor operators in any coupling scheme are provided by the method `matrix()`. Specification of the coupling class
-is optional. Default is the coupling scheme of the `Lanthanide` object. The following sample code gets the
-matrix of the intra-configuration Coulomb interaction of rank 2 in SLJ coupling for the Yb<sup>3+</sup> ion:
+tensor operators in any coupling scheme are provided by the method `Lanthanide.matrix()`. Specification of the
+coupling class is optional. Default is the coupling scheme of the `Lanthanide` object. The following sample code
+gets the matrix of the intra-configuration Coulomb interaction of rank 2 in SLJ coupling for the Yb<sup>3+</sup>
+ion:
 
 ```
 from lanthanide import Lanthanide, Coupling
@@ -340,40 +341,40 @@ with Lanthanide(13) as ion:
     matrix = ion.matrix("H1/2", Coupling.SLJ)
 ```
 
-The following table contains all predefined tensor operators the matrices of which can be obtained by the method
-`matrix()` in addition to the unit tensor operators tabulated above:
+In addition to the unit tensor operators tabulated above, the following table contains all predefined tensor
+operators the matrices of which can be obtained by the method `Lanthanide.matrix()`:
 
-| name           | operator                                               | parameters                          |
-|----------------|--------------------------------------------------------|-------------------------------------|
-| `"UU/{k}"`     | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$              | $k = 0\ldots 2l$                    |  
-| `"TT/{k}"`     | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$              | $k = 0, 1$                          |  
-| `"UT/{k}"`     | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$              | $k = 0, 1$                          |  
-| `"L/{q}"`      | $\mathbf{L}_{q}$                                       | $q = -1, 0, +1$                     |  
-| `"S/{q}"`      | $\mathbf{S}_{q}$                                       | $q = -1, 0, +1$                     |  
-| `"J/{q}"`      | $\mathbf{J}_{q}$                                       | $q = -1, 0, +1$                     |  
-| `"Lz"`         | $\mathbf{L}_{0}$                                       |                                     |  
-| `"Sz"`         | $\mathbf{S}_{0}$                                       |                                     |  
-| `"Jz"`         | $\mathbf{J}_{0}$                                       |                                     |  
-| `"L2"`         | $(\mathbf{L}\cdot\mathbf{L})$                          |                                     |  
-| `"LS"`         | $(\mathbf{L}\cdot\mathbf{S})$                          |                                     |  
-| `"S2"`         | $(\mathbf{S}\cdot\mathbf{S})$                          |                                     |  
-| `"J2"`         | $(\mathbf{J}\cdot\mathbf{J})$                          |                                     |  
-| `"ED/{k},{q}"` | $\mathbf{U}^{(k)}_{q}$                                 | $k = 0\ldots 2l$, $q = -k\ldots +k$ |  
-| `"MD/{q}"`     | $\mathbf{L}\_{q} + g\_s\mathbf{S}\_{q}$                | $q = -1, 0, +1$                     |  
-| `"GR/{d}"`     | $\mathbf{G}(R_{d})$                                    | $d = 3, 5, 7$                       |  
-| `"GG/{d}"`     | $\mathbf{G}(G_{d})$                                    | $d = 2$                             |  
-| `"H1/{k}"`     | $\mathbf{f}_k$                                         | $k = 0\ldots 2l$                    |
-| `"H2"`         | $\mathbf{z}$                                           |                                     |
-| `"H3/0"`       | $(\mathbf{L}\cdot\mathbf{L})$                          |                                     |
-| `"H3/1"`       | $\mathbf{G}(R_7)$                                      |                                     |
-| `"H3/2"`       | $\mathbf{G}(G_2)$                                      |                                     |
-| `"H4/{c}"`     | $\mathbf{t}_c$                                         | $c = 1\ldots 9$                     |
-| `"hss/{k}"`    | $\mathbf{m}_{k,ss}$                                    | $k = 0, 2, 4$                       |
-| `"hsoo/{k}"`   | $\mathbf{m}_{k,soo}$                                   | $k = 0, 2, 4$                       |
-| `"H5/{k}"`     | $\mathbf{m}_k$                                         | $k = 0, 2, 4$                       |
-| `"H5fix"`      | $\mathbf{m}_0 + 0.56 \mathbf{m}_2 + 0.38 \mathbf{m}_4$ |                                     |
-| `"H6/{k}"`     | $\mathbf{p}_k$                                         | $k = 2, 4, 6$                       |
-| `"H6fix"`      | $\mathbf{p}_2 + 0.75 \mathbf{p}_4 + 0.50 \mathbf{p}_6$ |                                     |
+| name           | operator                                               | rank | parameters                          |
+|----------------|--------------------------------------------------------|------|-------------------------------------|
+| `"UU/{k}"`     | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$              | 0    | $k = 0\ldots 2l$                    |  
+| `"TT/{k}"`     | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$              | 0    | $k = 0, 1$                          |  
+| `"UT/{k}"`     | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$              | 0    | $k = 0, 1$                          |  
+| `"L/{q}"`      | $\mathbf{L}_{q}$                                       | 1    | $q = -1, 0, +1$                     |  
+| `"S/{q}"`      | $\mathbf{S}_{q}$                                       | 1    | $q = -1, 0, +1$                     |  
+| `"J/{q}"`      | $\mathbf{J}_{q}$                                       | 1    | $q = -1, 0, +1$                     |  
+| `"Lz"`         | $\mathbf{L}_{0}$                                       |      |                                     |  
+| `"Sz"`         | $\mathbf{S}_{0}$                                       |      |                                     |  
+| `"Jz"`         | $\mathbf{J}_{0}$                                       |      |                                     |  
+| `"L2"`         | $(\mathbf{L}\cdot\mathbf{L})$                          | 0    |                                     |  
+| `"LS"`         | $(\mathbf{L}\cdot\mathbf{S})$                          | 0    |                                     |  
+| `"S2"`         | $(\mathbf{S}\cdot\mathbf{S})$                          | 0    |                                     |  
+| `"J2"`         | $(\mathbf{J}\cdot\mathbf{J})$                          | 0    |                                     |  
+| `"ED/{k},{q}"` | $\mathbf{U}^{(k)}_{q}$                                 | $k$  | $k = 0\ldots 2l$, $q = -k\ldots +k$ |  
+| `"MD/{q}"`     | $\mathbf{L}\_{q} + g\_s\mathbf{S}\_{q}$                | 1    | $q = -1, 0, +1$                     |  
+| `"GR/{d}"`     | $\mathbf{G}(R_{d})$                                    | 0    | $d = 3, 5, 7$                       |  
+| `"GG/{d}"`     | $\mathbf{G}(G_{d})$                                    | 0    | $d = 2$                             |  
+| `"H1/{k}"`     | $\mathbf{f}_k$                                         | 0    | $k = 0\ldots 2l$                    |
+| `"H2"`         | $\mathbf{z}$                                           | 0    |                                     |
+| `"H3/0"`       | $(\mathbf{L}\cdot\mathbf{L})$                          | 0    |                                     |
+| `"H3/1"`       | $\mathbf{G}(R_7)$                                      | 0    |                                     |
+| `"H3/2"`       | $\mathbf{G}(G_2)$                                      | 0    |                                     |
+| `"H4/{c}"`     | $\mathbf{t}_c$                                         | 0    | $c = 1\ldots 9$                     |
+| `"hss/{k}"`    | $\mathbf{m}_{k,ss}$                                    | 0    | $k = 0, 2, 4$                       |
+| `"hsoo/{k}"`   | $\mathbf{m}_{k,soo}$                                   | 0    | $k = 0, 2, 4$                       |
+| `"H5/{k}"`     | $\mathbf{m}_k$                                         | 0    | $k = 0, 2, 4$                       |
+| `"H5fix"`      | $\mathbf{m}_0 + 0.56 \mathbf{m}_2 + 0.38 \mathbf{m}_4$ | 0    |                                     |
+| `"H6/{k}"`     | $\mathbf{p}_k$                                         | 0    | $k = 2, 4, 6$                       |
+| `"H6fix"`      | $\mathbf{p}_2 + 0.75 \mathbf{p}_4 + 0.50 \mathbf{p}_6$ | 0    |                                     |
 
 The `Matrix` objects support basic arithmetic operations to build linear combinations of them:
 
@@ -407,7 +408,7 @@ with Lanthanide(1) as ion:
 The function `build_hamilton()` assembles and returns a perturbation hamiltonian in SLJM or SLJ coupling as `Matrix`
 object. It takes all tensor operator matrices given by the keys of the dictionary `radials` which start with the
 capital letter "H" in the given `coupling` and builds a linear combination using the values of the dictionary as
-factors. 
+factors.
 
 ```
 from lanthanide import Lanthanide, Coupling, build_hamilton
@@ -417,7 +418,7 @@ with Lanthanide(4) as ion:
 ```
 
 Reduced matrix elements are available from the method `Lanthanide.reduced()` by giving the `name` of the tensor
-operator and the optional `coupling` scheme, which might be SLJM, SLJ, or intermediate SLJ (default). Note that 
+operator and the optional `coupling` scheme, which might be SLJM, SLJ, or intermediate SLJ (default). Note that
 the name must contain a "{q}" to address the different tensor components if the rank of the tensor is not zero.
 The result is returned as 2D numpy array:
 
