@@ -404,5 +404,6 @@ with Lanthanide(1) as ion:
     matrix = Matrix(ion, array, "foo", coupling)
 ```
 
+... `build_hamiltonian()` ...
 
-
+... `reduced_matrix()` / `ion.reduced()` ...
