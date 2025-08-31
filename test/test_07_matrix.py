@@ -27,7 +27,14 @@ WEIGHT6 = [0.11737443386221942, 0.6591978972155589, 0.303903979802215, 0.0, 0.0,
 REDH12 = [0, 0, 0, -0.09256622271389522, 0, 0, 0, -0.04378764103673054, 0, 0, 0, 0.005384598920204938, 0]
 REDH16 = [-0.0007494882534019258, 0, 0, 0, 0, -0.0658613894531618, 0.06990903249054214, 0, 0, 0, 0, 0, 0]
 REDH2 = [0, 0, -4.882742931038221, 0, 0, 0, 0, 0, 0, 0, 0.5105255184602158, 0, 0]
-
+REDH3 = [0, 0, 0, 0, 0, -9.878179134281773e-33, -2.2997047323199953e-33, 1.4404590304834598e-31,
+         -2.5445423023613995e-18, -1.0147245635276235e-32, -5.315068581563589e-16, -7.420369617991846e-16,
+         -5.729396997429248e-16, 2.2360679774997894, -2.7005322956408437e-16, 3.471125772152828e-17,
+         7.919381992920967e-17, 3.6040284143277693e-17, 1.3233533810636782e-16, 3.6971448061602215e-16,
+         0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+         0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+         0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+         0.0, 0.0, 0.0, 0.0, 0.0]
 
 class DummyMatrix:
     def __init__(self, array):
@@ -88,12 +95,15 @@ def test_hamilton():
 def test_reduced():
     ion, energies, transform = run_matrix(2)
     U4 = np.power(reduced_matrix(ion, "ED/4,{q}", Coupling.J), 2)
-    assert pytest.approx(U4[:, 2], abs=1e-9) == WEIGHT4
+    assert pytest.approx(U4[:, 2], rel=1e-9) == WEIGHT4
     U6 = np.power(reduced_matrix(ion, "ED/6,{q}", Coupling.J), 2)
-    assert pytest.approx(U6[:, 3], abs=1e-9) == WEIGHT6
+    assert pytest.approx(U6[:, 3], rel=1e-9) == WEIGHT6
     red = reduced_matrix(ion, "H1/2", Coupling.J)
-    assert pytest.approx(red[3, :], abs=1e-9) == REDH12
+    assert pytest.approx(red[3, :], rel=1e-9) == REDH12
     red = reduced_matrix(ion, "H1/6", Coupling.J)
-    assert pytest.approx(red[5, :], abs=1e-9) == REDH16
+    assert pytest.approx(red[5, :], rel=1e-9) == REDH16
     red = reduced_matrix(ion, "H2", Coupling.J)
-    assert pytest.approx(red[10, :], abs=1e-9) == REDH2
+    assert pytest.approx(red[10, :], rel=1e-9) == REDH2
+    red = reduced_matrix(ion, "H3/2", Coupling.SLJM)
+    assert pytest.approx(red[:, 13], rel=1e-9) == REDH3
+    #print(", ".join(map(str, red[:, 13])))

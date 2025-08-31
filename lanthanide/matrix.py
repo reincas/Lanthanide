@@ -647,7 +647,7 @@ def reduced_matrix(ion, operator_name: str, coupling=None) -> np.ndarray:
     """ Return the array of reduced matrix elements of the given operator in SLJ or intermediate SLJ coupling. The
     name of the operator must contain "{q}" if its rank is not zero. """
 
-    assert coupling is None or coupling in (Coupling.SLJ, Coupling.J)
+    assert coupling is None or coupling in (Coupling.SLJM, Coupling.SLJ, Coupling.J)
 
     # Default coupling scheme is intermediate SLJ
     coupling = coupling or Coupling.J
@@ -667,10 +667,6 @@ def reduced_matrix(ion, operator_name: str, coupling=None) -> np.ndarray:
         array = get_matrix(ion, operator_name, coupling).array
     else:
         array = sum(get_matrix(ion, operator_name.format(q=q), coupling).array for q in range(-k, k + 1))
-
-    # Transform to intermediate coupling
-    #if coupling == Coupling.J:
-    #    array = states.transform.T @ array @ states.transform
 
     def value(i: int, j: int):
         """ Apply the Wigner-Eckart theorem to the given matrix element of array. """
