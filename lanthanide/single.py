@@ -573,8 +573,7 @@ def init_single(vault, group_name, states):
             print("Vault single done.")
 
         # HDF5 single group
-        else:
-            group = vault[group_name]
+        group = vault[group_name]
 
     # Return an interface object supporting the calculation of the matrices of tensor operators in the determinantal
     # product space of the given configuration
