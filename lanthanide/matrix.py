@@ -359,7 +359,7 @@ def matrix_H5fix(ion):
 def matrix_H6(ion, k: int):
     """ Return the matrix of the perturbation hamiltonian H6/k in determinantal product state coupling. """
 
-    assert 0 < k <= 2 * ion.l
+    assert 0 <= k <= 2 * ion.l
     assert k % 2 == 0
 
     l = ion.l
