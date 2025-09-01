@@ -20,29 +20,29 @@ import numpy as np
 
 from lanthanide import Lanthanide, Coupling, wigner6j
 
-JUDD_24 = {
-    "hss/0": (2, 2, {
+REFERENCE = {
+    "hss/0": (2, 2, { # Table I in [24]
         "3P 3P": -12,
         "3P 3F": (8 / np.sqrt(3)) * 3,
         "3F 3F": (4 * np.sqrt(14) / 3) * -1,
         "3F 3H": (8 * np.sqrt(11 / 2) / 3) * 2,
         "3H 3H": (4 * np.sqrt(143) / 3) * 1,
     }),
-    "hss/2": (2, 2, {
+    "hss/2": (2, 2, { # Table I in [24]
         "3P 3P": -24,
         "3P 3F": (8 / np.sqrt(3)) * 1,
         "3F 3F": (4 * np.sqrt(14) / 3) * 8,
         "3F 3H": (8 * np.sqrt(11 / 2) / 3) * -23 / 11,
         "3H 3H": (4 * np.sqrt(143) / 3) * -34 / 11,
     }),
-    "hss/4": (2, 2, {
+    "hss/4": (2, 2, { # Table I in [24]
         "3P 3P": -300 / 11,
         "3P 3F": (8 / np.sqrt(3)) * -100 / 11,
         "3F 3F": (4 * np.sqrt(14) / 3) * -200 / 11,
         "3F 3H": (8 * np.sqrt(11 / 2) / 3) * -325 / 121,
         "3H 3H": (4 * np.sqrt(143) / 3) * - 1325 / 1573,
     }),
-    "hsoo/0": (2, 1, {
+    "hsoo/0": (2, 1, { # Table II in [24]
         "1S 3P": 6,
         "3P 3P": -36,
         "3P 1D": -math.sqrt(2 / 15) * 27,
@@ -53,7 +53,7 @@ JUDD_24 = {
         "3H 3H": 8 / math.sqrt(55) * -132,
         "3H 1I": math.sqrt(26) * -5,
     }),
-    "hsoo/2": (2, 1, {
+    "hsoo/2": (2, 1, { # Table II in [24]
         "1S 3P": 2,
         "3P 3P": -72,
         "3P 1D": -math.sqrt(2 / 15) * 14,
@@ -64,7 +64,7 @@ JUDD_24 = {
         "3H 3H": 8 / math.sqrt(55) * 23,
         "3H 1I": math.sqrt(26) * -30 / 11,
     }),
-    "hsoo/4": (2, 1, {
+    "hsoo/4": (2, 1, { # Table II in [24]
         "1S 3P": 10 / 11,
         "3P 3P": -900 / 11,
         "3P 1D": -math.sqrt(2 / 15) * 115 / 11,
@@ -75,7 +75,7 @@ JUDD_24 = {
         "3H 3H": 8 / math.sqrt(55) * 130 / 11,
         "3H 1I": math.sqrt(26) * -375 / 1573,
     }),
-    "H6/0": (2, 1, {
+    "H6/0": (2, 1, { # Table VII in [24]
         "1S 3P": -2,
         "3P 3P": -1,
         "3P 1D": math.sqrt(15 / 2) * 1,
@@ -86,7 +86,7 @@ JUDD_24 = {
         "3H 3H": math.sqrt(55) * -1,
         "3H 1I": math.sqrt(13 / 2) * 1,
     }),
-    "H6/2": (2, 1, {
+    "H6/2": (2, 1, { # Table VII in [24]
         "1S 3P": -105 / 225,
         "3P 3P": -45 / 225,
         "3P 1D": math.sqrt(15 / 2) * 32 / 225,
@@ -97,7 +97,7 @@ JUDD_24 = {
         "3H 3H": math.sqrt(55) * 25 / 225,
         "3H 1I": math.sqrt(13 / 2) * 0 / 225,
     }),
-    "H6/4": (2, 1, {
+    "H6/4": (2, 1, { # Table VII in [24]
         "1S 3P": -231 / 1089,
         "3P 3P": -33 / 1089,
         "3P 1D": math.sqrt(15 / 2) * -33 / 1089,
@@ -108,7 +108,7 @@ JUDD_24 = {
         "3H 3H": math.sqrt(55) * 51 / 1089,
         "3H 1I": math.sqrt(13 / 2) * -21 / 1089,
     }),
-    "H6/6": (2, 1, {
+    "H6/6": (2, 1, { # Table VII in [24]
         "1S 3P": -429 * 25 / 184041,
         "3P 3P": 1287 * 25 / 184041,
         "3P 1D": math.sqrt(15 / 2) * -286 * 25 / 184041,
@@ -122,16 +122,16 @@ JUDD_24 = {
 }
 
 
-def run_hss_judd(name):
-    assert name in JUDD_24.keys()
+def run_judd(name):
+    assert name in REFERENCE.keys()
 
-    num, t, judd = JUDD_24[name]
+    num, t, judd = REFERENCE[name]
 
     with Lanthanide(num) as ion:
         states = ion.states(Coupling.SLJ)
         array = ion.matrix(name, Coupling.SLJ).array
         for i in range(array.shape[0]):
-            for j in range(array.shape[1]):
+            for j in range(i + 1):
                 Sa = states[i]["S2"].S
                 La = states[i]["L2"].L
                 Ja = states[i]["J2"].J
@@ -178,5 +178,5 @@ def run_hss_judd(name):
 
 
 def test_judd_24():
-    for name in JUDD_24:
-        run_hss_judd(name)
+    for name in REFERENCE:
+        run_judd(name)
