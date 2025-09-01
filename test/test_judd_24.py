@@ -4,7 +4,7 @@
 # This program is free software under the terms of the MIT license.      #
 ##########################################################################
 #
-# Compare 2nd order spin-spin (H5), spin-other-orbit (H5) and
+# Compare 1st order spin-spin and spin-other-orbit (H5) and 2nd order
 # spin-orbit (H6) interactions from [24] for the f2 configuration with
 # results from the Lanthanide package.
 #
