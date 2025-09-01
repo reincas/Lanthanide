@@ -644,10 +644,10 @@ def build_hamilton(ion, radial: dict, coupling=None):
 
 
 def reduced_matrix(ion, operator_name: str, coupling=None) -> np.ndarray:
-    """ Return the array of reduced matrix elements of the given operator in SLJM, SLJ or intermediate SLJ
-    coupling. The name of the operator must contain "{q}" if its rank is not zero. """
+    """ Return the array of reduced matrix elements of the given operator in SLJ or intermediate SLJ coupling. The
+    name of the operator must contain "{q}" if its rank is not zero. """
 
-    assert coupling is None or coupling in (Coupling.SLJM, Coupling.SLJ, Coupling.J)
+    assert coupling is None or coupling in (Coupling.SLJ, Coupling.J)
 
     # Default coupling scheme is intermediate SLJ
     coupling = coupling or Coupling.J

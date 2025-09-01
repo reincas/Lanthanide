@@ -418,9 +418,9 @@ with Lanthanide(4) as ion:
 ```
 
 Reduced matrix elements are available from the method `Lanthanide.reduced()` by giving the `name` of the tensor
-operator and the optional `coupling` scheme, which might be SLJM, SLJ, or intermediate SLJ (default). Note that
-the name must contain a "{q}" to address the different tensor components if the rank of the tensor is not zero.
-The result is returned as 2D numpy array:
+operator and the optional `coupling` scheme, which might be SLJ or intermediate SLJ (default). Note that the name
+must contain a "{q}" to address the different tensor components if the rank of the tensor is not zero. The result
+is returned as 2D numpy array:
 
 ```
 from lanthanide import Lanthanide, Coupling
