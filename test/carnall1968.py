@@ -9,6 +9,11 @@
 # Levels in the Trivalent Lanthanide Aquo Ions". This dataset is ideal
 # for testing calculated matrix elements of "H1", "H2", and "H3".
 #
+# Each dataset besides a set of radial integrals contains a list of J
+# quantum numbers (double value for even number of electrons) and
+# a list of energies. Some datasets also contain squared reduced matrix
+# elements of U(2), U(4), and U(6) for GSA transitions.
+#
 # A dataset with item "blocking" contains false radial parameters.
 #
 # An optional "correct" items contains corrections which need to be

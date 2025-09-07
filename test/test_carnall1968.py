@@ -4,6 +4,15 @@
 # This program is free software under the terms of the MIT license.      #
 ##########################################################################
 #
+# Compare calculated matrix elements of "H1", "H2", and "H3" and squared
+# reduced matrix elements of the unit tensor operator of GSA transitions
+# with measured and calculated spectroscopic data on all lanthanide ions
+# with 2-12 electrons from the Carnall 1968 paper series "Electronic
+# Energy Levels in the Trivalent Lanthanide Aquo Ions".
+#
+# Some corrections had to be applied to the published data to correct
+# typos or incorrect results.
+#
 ##########################################################################
 
 import math
