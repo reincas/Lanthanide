@@ -11,7 +11,7 @@ import h5py
 
 from .unit import ORBITAL, SPIN, LEN_SHELL, product_states, init_unit
 from .single import init_single
-from .matrix import build_hamilton, reduced_matrix, get_matrix, init_matrix
+from .matrix import normalise_radial, build_hamilton, reduced_matrix, get_matrix, init_matrix
 from .state import Coupling, init_states
 
 # Folder with cache files is located in the installation directory of the lanthanide package
@@ -259,8 +259,8 @@ class Lanthanide:
         return len(self._state_dict_[coupling.name])
 
     def set_radial(self, radial):
-        """ Store new dictionary of radial integrals and use them to calculate all energy levels and states in
-        intermediate coupling. """
+        """ Normalise and store new dictionary of radial integrals and use them to calculate all energy levels and
+        states in intermediate coupling. """
 
         assert isinstance(radial, dict)
 
@@ -269,7 +269,7 @@ class Lanthanide:
             return
 
         # Store radial integrals and use them to build the full perturbation hamiltonian
-        self.radial = radial
+        self.radial = normalise_radial(radial)
         self.hamilton = build_hamilton(self, self.radial, self.coupling)
 
         # Diagonalise the hamiltonian matrix and get energies and intermediate coupling vectors
@@ -277,8 +277,8 @@ class Lanthanide:
         self.energies, transform = self.hamilton.fast_diagonalise()
 
         # Adjust the energy level of the ground state
-        self.energies -= self.energies[0]
         if "base" in self.radial:
+            self.energies -= self.energies[0]
             self.energies += self.radial["base"]
 
         # Build and store the StateListJ object of the electron states in intermediate coupling

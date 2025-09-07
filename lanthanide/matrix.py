@@ -617,6 +617,86 @@ class Matrix:
         return Matrix(self.ion, array, self.name, coupling)
 
 
+def normalise_radial(radial):
+    """ Convert an alternative parameter set into the standard set of radial integrals "H1"-"H6". """
+
+    # Get keys and initialize the normalised set.
+    keys = list(radial.keys())
+    new_radial = {}
+
+    # No conversion for parameter "base"
+    if "base" in keys:
+        new_radial["base"] = radial["base"]
+        keys.remove("base")
+
+    # No conversion for standard parameters
+    for key in list(keys):
+        if key[:2] in ("H1", "H2", "H3", "H4", "H5", "H6"):
+            new_radial[key] = radial[key]
+            keys.remove(key)
+
+    # Rename "F^i" to the respective "H1/k" parameter, convert "F_i" and "P_i" to "H1/k" and "H6/k", respectively
+    for key in list(keys):
+        if key[:3] in ("F_0", "F^0", "F^2", "F^4", "F^6"):
+            new_radial[f"H1/{key[-1:]}"] = radial[key]
+        elif key == "F_2":
+            new_radial[f"H1/2"] = radial[key] * 225
+        elif key == "F_4":
+            new_radial[f"H1/4"] = radial[key] * 1089
+        elif key == "F_6":
+            new_radial[f"H1/6"] = radial[key] * 184041 / 25
+        elif key == "P_2":
+            new_radial[f"H6/2"] = radial[key] * 225
+        elif key == "P_4":
+            new_radial[f"H6/4"] = radial[key] * 1089
+        elif key == "P_6":
+            new_radial[f"H6/6"] = radial[key] * 184041 / 25
+        else:
+            continue
+        del radial[key]
+
+    # The "E^i" parameters need a linear transformation to "H1/k". "E^0" or "H1/0" can be used as an alternative
+    # to "base" to shift the whole energy level spectrum
+    if "E^1" in keys:
+
+        # Build transformation matrix
+        A = np.array([[1, 9 / 7, 0, 0],
+                      [0, 1 / 42, 143 / 42, 11 / 42],
+                      [0, 1 / 77, -130 / 77, 4 / 77],
+                      [0, 1 / 462, 5 / 66, -1 / 66]])
+        A[1, :] *= 225
+        A[2, :] *= 1089
+        A[3, :] *= 184041 / 25
+
+        # With offset parameter
+        if "E^0" in keys:
+            F0, F2, F4, F6 = A @ np.array([radial[f"E^{i}"] for i in range(4)])
+            for i in range(4):
+                keys.remove(f"E^{i}")
+
+        # Without offset parameter
+        else:
+            F0 = None
+            A = A[1:, 1:]
+            F2, F4, F6 = A @ np.array([radial[f"E^{i}"] for i in range(1, 4)])
+            for i in range(1, 4):
+                keys.remove(f"E^{i}")
+
+        # Store the converted parameters
+        if F0 is not None:
+            new_radial[f"H1/0"] = F0
+        new_radial[f"H1/2"] = F2
+        new_radial[f"H1/4"] = F4
+        new_radial[f"H1/6"] = F6
+
+    # There should be no remaining parameters
+    if len(keys) != 0:
+        raise ValueError(f"Unknown radial integrals: {", ".join(keys)}!")
+
+    # Return normalised set of radial integrals
+    return new_radial
+
+
 def build_hamilton(ion, radial: dict, coupling=None):
     """ Build and return the matrix of a perturbation hamiltonian operator as linear combination of the interaction
     hamiltonians and factors specified in the dictionary radial in the given coupling scheme."""
