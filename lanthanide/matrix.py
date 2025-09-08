@@ -635,22 +635,22 @@ def normalise_radial(radial):
             new_radial[key] = radial[key]
             keys.remove(key)
 
-    # Rename "F^i" to the respective "H1/k" parameter, convert "F_i" and "P_i" to "H1/k" and "H6/k", respectively
+    # Convert "F_k" and "P_k" to "H1/k" and "H6/k", respectively
     for key in list(keys):
-        if key[:3] in ("F_0", "F^0", "F^2", "F^4", "F^6"):
-            new_radial[f"H1/{key[-1:]}"] = radial[key]
+        if key == "F_0":
+            new_radial["H1/0"] = radial[key]
         elif key == "F_2":
-            new_radial[f"H1/2"] = radial[key] * 225
+            new_radial["H1/2"] = radial[key] * 225
         elif key == "F_4":
-            new_radial[f"H1/4"] = radial[key] * 1089
+            new_radial["H1/4"] = radial[key] * 1089
         elif key == "F_6":
-            new_radial[f"H1/6"] = radial[key] * 184041 / 25
+            new_radial["H1/6"] = radial[key] * 184041 / 25
         elif key == "P_2":
-            new_radial[f"H6/2"] = radial[key] * 225
+            new_radial["H6/2"] = radial[key] * 225
         elif key == "P_4":
-            new_radial[f"H6/4"] = radial[key] * 1089
+            new_radial["H6/4"] = radial[key] * 1089
         elif key == "P_6":
-            new_radial[f"H6/6"] = radial[key] * 184041 / 25
+            new_radial["H6/6"] = radial[key] * 184041 / 25
         else:
             continue
         del radial[key]

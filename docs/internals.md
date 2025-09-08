@@ -427,3 +427,17 @@ from lanthanide import Lanthanide, Coupling
 with Lanthanide(9) as ion:
     reduced = ion.reduced("H5/2", Coupling.SLJ)
 ```
+
+## Alternative parameter sets
+
+The Lanthanide package supports some definitions of radial parameters which are often found in older literature. They 
+are automatically converted into the standard set when you use them in your dictionary of radial integrals. The current
+dictionary in the attribute `ion.radial` contains the converted values.
+
+The radial integrals $F_0$, $F_2$, $F_4$, and $F_6$ with sub-script instead of super-script, were used in the past to
+avoid fractional coefficients in the numeric calculations. You can specify them using the keys `F_0`, `F_2`, `F_4`,
+and `F_6`. The same holds for $P_2$, $P_4$, and $P_6$ which you can use with the keys `P_2`, `P_4`, and `P_6`.
+
+The 1st order Coulomb interaction parameters $E^0$, $E^1$, $E^2$, and $E^3$ are somewhat different, because each of
+them is a linear combination of the standard set $F^0$, $F^2$, $F^4$, and $F^6$. You can use them with the keys `E^0`,
+`E^1`, `E^2`, and `E^3`.
