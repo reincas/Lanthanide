@@ -20,7 +20,7 @@ import numpy as np
 import pytest
 
 from lanthanide import Lanthanide, Coupling, HalfInt
-from carnall1968 import SOURCES, RADIAL
+from basic import SOURCES, RADIAL
 
 
 def correct(name, data, corrections):
