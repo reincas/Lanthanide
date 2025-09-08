@@ -411,7 +411,7 @@ MATRIX = {
     "H1": (0, ("k",), matrix_H1, True),
     "H2": (0, (), matrix_H2, True),
     "H3": (0, ("i",), matrix_H3, True),
-    "H4": (0, ("k",), matrix_H4, True),
+    "H4": (0, ("c",), matrix_H4, True),
     "hss": (0, ("k",), matrix_ss, False),
     "hsoo": (0, ("k",), matrix_soo, False),
     "H5": (0, ("k",), matrix_H5, True),
