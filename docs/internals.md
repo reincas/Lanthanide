@@ -323,7 +323,25 @@ of all states:
 ```
 from lanthanide import Lanthanide, Coupling
 with Lanthanide(11) as ion:
-    states = ion.states(Coupling.J)
+    states = ion.intermediate
+    for states in states:
+        print(state.long(min_weight=0.05))
+```
+
+The state object `StateJM` keeps a linear combination of all SLJM states, although one J value usually dominates.
+The attribute `values` contains the respective factors, `weights` the squared factors, `states` the full list of
+`StateSLJM` objects, and `energy` the energy of the state. The short string representation of a state in intermediate
+coupling is that of its SLJM component with largest weight. Note that this can result in more than one state with
+exactly the same label. The long representation of a state lists the SLJM components with their weight in descending
+order. In order to limit the length of the representation strings, the method `StateJM.long()` may be called with an
+optional argument `min_weight` to include only SLJM components with at least the given weight in the representation
+string. The following sample code takes the intermediate SLJM states of Pr<sup>3+</sup> and prints long string
+representations of all states:
+
+```
+from lanthanide import Lanthanide, Coupling
+with Lanthanide(11, coupling.SLJM) as ion:
+    states = ion.intermediate
     for states in states:
         print(state.long(min_weight=0.05))
 ```
