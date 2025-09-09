@@ -33,16 +33,7 @@ def correct(name, data, corrections):
         data[index] = new_value
 
 
-@pytest.mark.parametrize("name", [key for key in RADIAL if "blocking" not in RADIAL[key]])
-def test_basic(name):
-    # Select data set
-    assert name in RADIAL
-    data = RADIAL[name]
-
-    # Test source link
-    assert "source" in data
-    assert data["source"] in SOURCES
-
+def run_basic(data):
     # Data correction list
     corrections = data.get("correct", [])
 
@@ -51,10 +42,20 @@ def test_basic(name):
     num = data["num"]
 
     # Get, correct, and sort energy levels
-    assert "energies" in data
-    assert isinstance(data["energies"], list)
-    energies = list(data["energies"])
-    correct("energies", energies, corrections)
+    if "energies" in data:
+        assert isinstance(data["energies"], list)
+        energies = list(data["energies"])
+        correct("energies", energies, corrections)
+    else:
+        assert "energies/meas" in data
+        assert isinstance(data["energies/meas"], list)
+        assert "energies/meas-calc" in data
+        assert isinstance(data["energies/meas-calc"], list)
+        meas = list(data["energies/meas"])
+        correct("energies/meas", meas, corrections)
+        diff = list(data["energies/meas-calc"])
+        correct("energies/meas-calc", diff, corrections)
+        energies = [m - d for m, d in zip(meas, diff)]
     indices = np.argsort(energies)
     energies = sorted(map(float, energies))
 
@@ -124,5 +125,19 @@ def test_basic(name):
                     calc = f"{level}: {reduced.U2[0, i]:.4f} {reduced.U4[0, i]:.4f} {reduced.U6[0, i]:.4f}"
                     print(f"*** | level {i} | ref {ref} | calc {calc} ***")
 
-        #print(f"===> {name} mean energy dev. == {mean:.1f} cm^-1")
+        # print(f"===> {name} mean energy dev. == {mean:.1f} cm^-1")
     assert success
+
+
+@pytest.mark.parametrize("name", [key for key in RADIAL if "blocking" not in RADIAL[key]])
+def test_basic(name):
+    # Select data set
+    assert name in RADIAL
+    data = RADIAL[name]
+
+    # Test source link
+    assert "source" in data
+    assert data["source"] in SOURCES
+
+    # Run test
+    run_basic(data)
