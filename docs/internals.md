@@ -210,6 +210,7 @@ enumeration class `Coupling`. There is one class for each coupling scheme which 
 | SLJM coupling                | `Coupling.SLJM`    | `StateSLJM`    | `StateListSLJM`    |
 | SLJ coupling                 | `Coupling.SLJ`     | `StateSLJ`     | `StateListSLJ`     |
 | intermediate SLJ coupling    | `Coupling.J`       | `StateJ`       | `StateListJ`       |
+| intermediate SLJM coupling   | `Coupling.JM`      | `StateJM`      | `StateListJM`      |
 
 State objects provide numerical values in different attributes and two string formatting methods `short()`
 and `long()` which return short and long string representations of the state, respectively. Calling `str(state)`
