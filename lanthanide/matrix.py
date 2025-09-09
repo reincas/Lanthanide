@@ -386,6 +386,27 @@ def matrix_H6fix(ion):
 
 
 ##########################################################################
+# Crystal field tensor operator
+##########################################################################
+
+def matrix_Hcf(ion, k: int, q: int):
+    """ Return the matrix of the component q of the Coulomb tensor operator of rank k in determinantal product state
+    which is used as crystal field hamiltonian. """
+
+    assert 0 <= k <= 2 * ion.l
+    assert q >= 0
+
+    l = ion.l
+    ck = -(2 * l + 1) * wigner3j(l, k, l, 0, 0, 0)
+    #return ck * get_matrix(ion, f"U/a/{k},{q}")
+    if q == 0:
+        return ck * get_matrix(ion, f"U/a/{k},{q}")
+    if q % 2 == 0:
+        return ck * (get_matrix(ion, f"U/a/{k},{q}") + get_matrix(ion, f"U/a/{k},{-q}"))
+    return ck * (get_matrix(ion, f"U/a/{k},{q}") - get_matrix(ion, f"U/a/{k},{-q}"))
+
+
+##########################################################################
 # Module interface
 ##########################################################################
 
@@ -418,6 +439,7 @@ MATRIX = {
     "H5fix": (0, (), matrix_H5fix, False),
     "H6": (0, ("k",), matrix_H6, True),
     "H6fix": (0, (), matrix_H6fix, False),
+    "Hcf": ("k", ("k", "q"), matrix_Hcf, False),
 }
 
 
@@ -517,7 +539,7 @@ class Matrix:
     def __mul__(self, other):
         """ Return this matrix multiplied by a real factor. """
 
-        if isinstance(other, (float, int)):
+        if isinstance(other, (complex, float, int)):
             return Matrix(self.ion, self.array * other)
         return NotImplemented
 
@@ -631,7 +653,7 @@ def normalise_radial(radial):
 
     # No conversion for standard parameters
     for key in list(keys):
-        if key[:2] in ("H1", "H2", "H3", "H4", "H5", "H6"):
+        if key[:2] in ("H1", "H2", "H3", "H4", "H5", "H6") or key[:3] == "Hcf":
             new_radial[key] = radial[key]
             keys.remove(key)
 
@@ -717,7 +739,7 @@ def build_hamilton(ion, radial: dict, coupling=None):
             continue
         if name[:1] != "H":
             continue
-        array += radial[name] * get_matrix(ion, name, coupling).array
+        array = array + radial[name] * get_matrix(ion, name, coupling).array
 
     # Return the total hamiltonian as Matrix object in the given coupling scheme
     return Matrix(ion, array, "H", coupling)

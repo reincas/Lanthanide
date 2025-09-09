@@ -1,4 +1,4 @@
-# Lanthanide 0.9.1
+# Lanthanide 0.9.2
 
 This is a Python 3 package to calculate the energy levels of multi-electron systems
 populating the 4f configuration, which means the lanthanide or rare-earth ions from
@@ -155,6 +155,13 @@ radial parameters:
 from lanthanide import RADIAL
 ion.set_radial(RADIAL["Pr3+/ZBLAN"])
 ```
+
+## Crystal field splitting
+
+When initialized with `Coupling.SLJM`, a `Lanthanide` object expects radial integrals including crystal field
+parameters `Hcf/{k},{q}` with the rank $k=2,4,6$ and $q=0\ldots k$. 
+
+## Radiative transitions
 
 For radiative transitions inside the 4f configuration of Lanthanides only electric and magnetic
 dipole moments are relevant.

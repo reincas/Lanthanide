@@ -272,9 +272,12 @@ class Lanthanide:
         self.radial = normalise_radial(radial)
         self.hamilton = build_hamilton(self, self.radial, self.coupling)
 
-        # Diagonalise the hamiltonian matrix and get energies and intermediate coupling vectors
-        # self.energies, transform = self.hamilton.diagonalize()
-        self.energies, transform = self.hamilton.fast_diagonalise()
+        # Diagonalise the hamiltonian matrix and get energies and intermediate coupling vectors. The crystal field
+        # hamiltonians require SLJM coupling and release the J degeneracy. Full diagonalisation is thus required then.
+        if self.coupling == Coupling.SLJ:
+            self.energies, transform = self.hamilton.fast_diagonalise()
+        else:
+            self.energies, transform = self.hamilton.diagonalise()
 
         # Adjust the energy level of the ground state
         if "base" in self.radial:
@@ -282,8 +285,12 @@ class Lanthanide:
             self.energies += self.radial["base"]
 
         # Build and store the StateListJ object of the electron states in intermediate coupling
-        self.intermediate = self.states().to_J(self.energies, transform)
-        self._state_dict_[Coupling.J.name] = self.intermediate
+        if self.coupling == Coupling.SLJ:
+            self.intermediate = self.states().to_J(self.energies, transform)
+            self._state_dict_[Coupling.J.name] = self.intermediate
+        else:
+            self.intermediate = self.states().to_JM(self.energies, transform)
+            self._state_dict_[Coupling.JM.name] = self.intermediate
 
         # Invalidate previously calculated reduced matrix elements
         self._reduced_ = None
