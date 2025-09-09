@@ -3,6 +3,13 @@
 # <reinhard.caspary@phoenixd.uni-hannover.de>                            #
 # This program is free software under the terms of the MIT license.      #
 ##########################################################################
+#
+# Calculated energy levels in Carnalls papers from 1969 and 1970 on
+# Pr3+:LaF3 and Tm3+:LaF3 with parameters H1,2,3 and H1,2,3,5,6.
+#
+# Several typos in paper [25] had to be corrected.
+#
+##########################################################################
 
 SOURCES = {
     "[25]": {
@@ -51,10 +58,10 @@ RADIAL = {
             [200, 2363, 4487, 5215, 6568, 7031, 10001, 17047, 20927, 21514, 21514, 22746, 46986],
         "energies/meas-calc":
             [-21, -54, -6.3, 24, -6.6, -7.3, -5.6, 13, 7.6, -3.6, -5.2, 4.4, 5.6],
-        "correct":{
+        "correct": {
             ("energies/meas-calc", 1, -54, 54),
             ("energies/meas-calc", 7, 13, 4.4),  # 1D2 <-> 3P2
-            ("energies/meas-calc", 11, 4.4, 13), # 1D2 <-> 3P2
+            ("energies/meas-calc", 11, 4.4, 13),  # 1D2 <-> 3P2
         },
         "source": "[25]",
         "table": "II"
@@ -83,11 +90,11 @@ RADIAL = {
             [100, 5858, 8336, 12711, 14559, 15173, 21352, 28061, 34886, 35572, 36559, 38344],
         "energies/meas-calc":
             [-6.7, 9.2, 1.8, 4.4, -3.4, -2.1, -4.2, -0.8, 0.25, 0.16, -0.08, 1.4],
-        "correct":{
+        "correct": {
             ("energies/meas", 8, 34886, 34866),
             ("energies/meas", 9, 35572, 35604),  # calc instead of meas (wrong column)
-            ("energies/meas-calc", 1, 9.2, 4.4), # Classic Tm3+ problem 3F4 <-> 3H4
-            ("energies/meas-calc", 3, 4.4, 9.2), # Classic Tm3+ problem 3F4 <-> 3H4
+            ("energies/meas-calc", 1, 9.2, 4.4),  # Classic Tm3+ problem 3F4 <-> 3H4
+            ("energies/meas-calc", 3, 4.4, 9.2),  # Classic Tm3+ problem 3F4 <-> 3H4
         },
         "source": "[25]",
         "table": "II"
