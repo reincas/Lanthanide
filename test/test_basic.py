@@ -34,7 +34,7 @@ def correct(name, data, corrections):
 
 
 @pytest.mark.parametrize("name", [key for key in RADIAL if "blocking" not in RADIAL[key]])
-def test_carnall1968(name):
+def test_basic(name):
     # Select data set
     assert name in RADIAL
     data = RADIAL[name]
