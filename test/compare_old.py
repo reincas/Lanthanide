@@ -6,6 +6,8 @@
 #
 # Compare matrices from the old Lanthanide-0.3 code with new ones.
 #
+# Result: for all configurations there is a 0.3 % deviation for H6/4.
+#
 ##########################################################################
 
 import pickle
