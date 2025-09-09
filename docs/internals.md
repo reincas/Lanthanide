@@ -363,37 +363,38 @@ with Lanthanide(13) as ion:
 In addition to the unit tensor operators tabulated above, the following table contains all predefined tensor
 operators the matrices of which can be obtained by the method `Lanthanide.matrix()`:
 
-| name           | operator                                               | rank | parameters                          |
-|----------------|--------------------------------------------------------|------|-------------------------------------|
-| `"UU/{k}"`     | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$              | 0    | $k = 0\ldots 2l$                    |  
-| `"TT/{k}"`     | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$              | 0    | $k = 0, 1$                          |  
-| `"UT/{k}"`     | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$              | 0    | $k = 0, 1$                          |  
-| `"L/{q}"`      | $\mathbf{L}_{q}$                                       | 1    | $q = -1, 0, +1$                     |  
-| `"S/{q}"`      | $\mathbf{S}_{q}$                                       | 1    | $q = -1, 0, +1$                     |  
-| `"J/{q}"`      | $\mathbf{J}_{q}$                                       | 1    | $q = -1, 0, +1$                     |  
-| `"Lz"`         | $\mathbf{L}_{0}$                                       |      |                                     |  
-| `"Sz"`         | $\mathbf{S}_{0}$                                       |      |                                     |  
-| `"Jz"`         | $\mathbf{J}_{0}$                                       |      |                                     |  
-| `"L2"`         | $(\mathbf{L}\cdot\mathbf{L})$                          | 0    |                                     |  
-| `"LS"`         | $(\mathbf{L}\cdot\mathbf{S})$                          | 0    |                                     |  
-| `"S2"`         | $(\mathbf{S}\cdot\mathbf{S})$                          | 0    |                                     |  
-| `"J2"`         | $(\mathbf{J}\cdot\mathbf{J})$                          | 0    |                                     |  
-| `"ED/{k},{q}"` | $\mathbf{U}^{(k)}_{q}$                                 | $k$  | $k = 0\ldots 2l$, $q = -k\ldots +k$ |  
-| `"MD/{q}"`     | $\mathbf{L}\_{q} + g\_s\mathbf{S}\_{q}$                | 1    | $q = -1, 0, +1$                     |  
-| `"GR/{d}"`     | $\mathbf{G}(R_{d})$                                    | 0    | $d = 3, 5, 7$                       |  
-| `"GG/{d}"`     | $\mathbf{G}(G_{d})$                                    | 0    | $d = 2$                             |  
-| `"H1/{k}"`     | $\mathbf{f}_k$                                         | 0    | $k = 0\ldots 2l$                    |
-| `"H2"`         | $\mathbf{z}$                                           | 0    |                                     |
-| `"H3/0"`       | $(\mathbf{L}\cdot\mathbf{L})$                          | 0    |                                     |
-| `"H3/1"`       | $\mathbf{G}(R_7)$                                      | 0    |                                     |
-| `"H3/2"`       | $\mathbf{G}(G_2)$                                      | 0    |                                     |
-| `"H4/{c}"`     | $\mathbf{t}_c$                                         | 0    | $c = 1\ldots 9$                     |
-| `"hss/{k}"`    | $\mathbf{m}_{k,ss}$                                    | 0    | $k = 0, 2, 4$                       |
-| `"hsoo/{k}"`   | $\mathbf{m}_{k,soo}$                                   | 0    | $k = 0, 2, 4$                       |
-| `"H5/{k}"`     | $\mathbf{m}_k$                                         | 0    | $k = 0, 2, 4$                       |
-| `"H5fix"`      | $\mathbf{m}_0 + 0.56 \mathbf{m}_2 + 0.38 \mathbf{m}_4$ | 0    |                                     |
-| `"H6/{k}"`     | $\mathbf{p}_k$                                         | 0    | $k = 2, 4, 6$                       |
-| `"H6fix"`      | $\mathbf{p}_2 + 0.75 \mathbf{p}_4 + 0.50 \mathbf{p}_6$ | 0    |                                     |
+| name            | operator                                               | rank | parameters                         |
+|-----------------|--------------------------------------------------------|------|------------------------------------|
+| `"UU/{k}"`      | $(\mathbf{U}^{(k)}\cdot\mathbf{U}^{(k)})$              | 0    | $k = 0\ldots 2l$                   |  
+| `"TT/{k}"`      | $(\mathbf{T}^{(k)}\cdot\mathbf{T}^{(k)})$              | 0    | $k = 0, 1$                         |  
+| `"UT/{k}"`      | $(\mathbf{U}^{(k)}\cdot\mathbf{T}^{(k)})$              | 0    | $k = 0, 1$                         |  
+| `"L/{q}"`       | $\mathbf{L}_{q}$                                       | 1    | $q = -1, 0, +1$                    |  
+| `"S/{q}"`       | $\mathbf{S}_{q}$                                       | 1    | $q = -1, 0, +1$                    |  
+| `"J/{q}"`       | $\mathbf{J}_{q}$                                       | 1    | $q = -1, 0, +1$                    |  
+| `"Lz"`          | $\mathbf{L}_{0}$                                       |      |                                    |  
+| `"Sz"`          | $\mathbf{S}_{0}$                                       |      |                                    |  
+| `"Jz"`          | $\mathbf{J}_{0}$                                       |      |                                    |  
+| `"L2"`          | $(\mathbf{L}\cdot\mathbf{L})$                          | 0    |                                    |  
+| `"LS"`          | $(\mathbf{L}\cdot\mathbf{S})$                          | 0    |                                    |  
+| `"S2"`          | $(\mathbf{S}\cdot\mathbf{S})$                          | 0    |                                    |  
+| `"J2"`          | $(\mathbf{J}\cdot\mathbf{J})$                          | 0    |                                    |  
+| `"ED/{k},{q}"`  | $\mathbf{U}^{(k)}_{q}$                                 | $k$  | $k = 0\ldots 2l$, $q = -k\ldots +k$ |  
+| `"MD/{q}"`      | $\mathbf{L}\_{q} + g\_s\mathbf{S}\_{q}$                | 1    | $q = -1, 0, +1$                    |  
+| `"GR/{d}"`      | $\mathbf{G}(R_{d})$                                    | 0    | $d = 3, 5, 7$                      |  
+| `"GG/{d}"`      | $\mathbf{G}(G_{d})$                                    | 0    | $d = 2$                            |  
+| `"H1/{k}"`      | $\mathbf{f}_k$                                         | 0    | $k = 0\ldots 2l$                   |
+| `"H2"`          | $\mathbf{z}$                                           | 0    |                                    |
+| `"H3/0"`        | $(\mathbf{L}\cdot\mathbf{L})$                          | 0    |                                    |
+| `"H3/1"`        | $\mathbf{G}(R_7)$                                      | 0    |                                    |
+| `"H3/2"`        | $\mathbf{G}(G_2)$                                      | 0    |                                    |
+| `"H4/{c}"`      | $\mathbf{t}_c$                                         | 0    | $c = 1\ldots 9$                    |
+| `"hss/{k}"`     | $\mathbf{m}_{k,ss}$                                    | 0    | $k = 0, 2, 4$                      |
+| `"hsoo/{k}"`    | $\mathbf{m}_{k,soo}$                                   | 0    | $k = 0, 2, 4$                      |
+| `"H5/{k}"`      | $\mathbf{m}_k$                                         | 0    | $k = 0, 2, 4$                      |
+| `"H5fix"`       | $\mathbf{m}_0 + 0.56 \mathbf{m}_2 + 0.38 \mathbf{m}_4$ | 0    |                                    |
+| `"H6/{k}"`      | $\mathbf{p}_k$                                         | 0    | $k = 2, 4, 6$                      |
+| `"H6fix"`       | $\mathbf{p}_2 + 0.75 \mathbf{p}_4 + 0.50 \mathbf{p}_6$ | 0    |                                    |
+| `"Hcf/{k},{q}"` | $\mathbf{C}^{(k)}_{q}$                                 | $k$  | $k = 0\ldots 2l$, $q = 0\ldots k$  |  
 
 The `Matrix` objects support basic arithmetic operations to build linear combinations of them:
 
