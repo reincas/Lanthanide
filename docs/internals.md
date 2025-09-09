@@ -396,7 +396,7 @@ operators the matrices of which can be obtained by the method `Lanthanide.matrix
 | `"H6fix"`       | $\mathbf{p}_2 + 0.75 \mathbf{p}_4 + 0.50 \mathbf{p}_6$ | 0    |                                    |
 | `"Hcf/{k},{q}"` | $\mathbf{C}^{(k)}_{q}$                                 | $k$  | $k = 0\ldots 2l$, $q = 0\ldots k$  |  
 
-The `Matrix` objects support basic arithmetic operations to build linear combinations of them:
+The `Matrix` objects support basic arithmetic operations to build real and complex linear combinations of them:
 
 ```
 from lanthanide import Lanthanide

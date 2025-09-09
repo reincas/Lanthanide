@@ -398,7 +398,7 @@ def matrix_Hcf(ion, k: int, q: int):
 
     l = ion.l
     ck = -(2 * l + 1) * wigner3j(l, k, l, 0, 0, 0)
-    #return ck * get_matrix(ion, f"U/a/{k},{q}")
+    # return ck * get_matrix(ion, f"U/a/{k},{q}")
     if q == 0:
         return ck * get_matrix(ion, f"U/a/{k},{q}")
     if q % 2 == 0:
@@ -601,20 +601,24 @@ class Matrix:
         if coupling == self.coupling:
             return self
 
-        # Increasing the state space is impossible
-        if self.coupling in (Coupling.SLJ, Coupling.J) and coupling in (Coupling.Product, Coupling.SLJM):
-            raise ValueError("Cannot increase the state space!")
-
         # Shortcut to transformation matrices
         V = lambda coupling: self.ion.states(coupling).transform
 
         # Transformation matrix to product state space
         if coupling == Coupling.Product:
-            transform = V(Coupling.SLJM).T
+            if self.coupling == Coupling.SLJM:
+                transform = V(Coupling.SLJM).T
+            else:
+                raise ValueError(
+                    f"Matrix transformation from {self.coupling.name} space to {coupling.name} space not supported!")
 
         # Transformation to SLJM coupling
         elif coupling == Coupling.SLJM:
-            transform = V(Coupling.SLJM)
+            if self.coupling == Coupling.Product:
+                transform = V(Coupling.SLJM)
+            else:
+                raise ValueError(
+                    f"Matrix transformation from {self.coupling.name} space to {coupling.name} space not supported!")
 
         # Transformation to SLJ coupling
         elif coupling == Coupling.SLJ:
@@ -622,17 +626,37 @@ class Matrix:
                 transform = V(Coupling.SLJ)
             elif self.coupling == Coupling.SLJM:
                 transform = V(Coupling.SLJM).T @ V(Coupling.SLJ)
-            else:
+            elif self.coupling == Coupling.SLJ:
                 transform = V(Coupling.J).T
+            else:
+                raise ValueError(
+                    f"Matrix transformation from {self.coupling.name} space to {coupling.name} space not supported!")
 
         # Transformation to intermediate SLJ coupling
-        else:
+        elif coupling == Coupling.J:
             if self.coupling == Coupling.Product:
                 transform = V(Coupling.SLJ) @ V(Coupling.J)
             elif self.coupling == Coupling.SLJM:
                 transform = V(Coupling.SLJM).T @ V(Coupling.SLJ) @ V(Coupling.J)
-            else:
+            elif self.coupling == Coupling.SLJ:
                 transform = V(Coupling.J)
+            else:
+                raise ValueError(
+                    f"Matrix transformation from {self.coupling.name} space to {coupling.name} space not supported!")
+
+        # Transformation to intermediate SLJM coupling
+        elif coupling == Coupling.JM:
+            if self.coupling == Coupling.Product:
+                transform = V(Coupling.SLJM) @ V(Coupling.JM)
+            elif self.coupling == Coupling.SLJM:
+                transform = V(Coupling.JM)
+            else:
+                raise ValueError(
+                    f"Matrix transformation from {self.coupling.name} space to {coupling.name} space not supported!")
+
+        else:
+            raise ValueError(
+                f"Matrix transformation from {self.coupling.name} space to {coupling.name} space not supported!")
 
         # Return matrix in new coupling scheme
         array = transform.T @ self.array @ transform
