@@ -4,7 +4,7 @@
 # This program is free software under the terms of the MIT license.      #
 ##########################################################################
 #
-# Measured and calculated spectroscopic data on all lanthanide ions
+# Fitted and calculated spectroscopic data on all lanthanide ions
 # with 2-12 electrons from Carnalls 1968 paper series "Electronic Energy
 # Levels in the Trivalent Lanthanide Aquo Ions". This dataset is ideal
 # for testing calculated matrix elements of "H1", "H2", and "H3".
