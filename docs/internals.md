@@ -434,7 +434,7 @@ The Lanthanide package supports some definitions of radial parameters which are 
 are automatically converted into the standard set when you use them in your dictionary of radial integrals. The
 attribute `ion.radial` always contains the standard set of converted values.
 
-The radial integrals $F_0$, $F_2$, $F_4$, and $F_6$ with sub-script instead of super-script, were used in the past to
+The radial integrals $F_0$, $F_2$, $F_4$, and $F_6$ with sub-script instead of super-script were used in the past to
 avoid fractional coefficients in the numeric calculations. You can specify them using the keys `F_0`, `F_2`, `F_4`,
 and `F_6`. The same holds for $P_2$, $P_4$, and $P_6$ which you can use with the keys `P_2`, `P_4`, and `P_6`.
 
