@@ -653,7 +653,7 @@ def normalise_radial(radial):
             new_radial["H6/6"] = radial[key] * 184041 / 25
         else:
             continue
-        del radial[key]
+        keys.remove(key)
 
     # The "E^i" parameters need a linear transformation to "H1/k". "E^0" or "H1/0" can be used as an alternative
     # to "base" to shift the whole energy level spectrum
