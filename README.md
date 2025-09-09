@@ -100,27 +100,20 @@ $$
 E = h c k
 $$
 
-You may choose operation in either the SLJM or the SLJ space. The latter is of special importance for
-Lanthanides in glasses where the Stark splitting cannot be resolved and thus the magnetic quantum number
-M of the total angular momentum does not matter. Operation in the SLJ space is much faster. Select your choice by
+You may choose operation in either the SLJ or the SLJM space. The latter is used to calculate the Stark splitting
+and slows down the calculations significantly, see the section on crystal fields below. In SLJ coupling the quantum
+number J of the total angular momentum is a good quantum number and the magnetic quantum number M of the total
+angular momentum does not matter. Select SLJ coupling and initialize the Lanthanide ion by giving the number of
+4f electrons in the range from 1 to 13:
 
 ```
 coupling = Coupling.SLJ
-```
-
-and initialize the Lanthanide ion by giving the number of 4f electrons in the range from 1 to 13:
-
-```
 ion = Lanthanide(2, coupling, radial)
 print(ion)
 ```
 
 If not specified, the default coupling is SLJ and the default radial parameters are those given by Carnall
 for LaF<sub>3</sub>.
-
-**Note**: _Although the following examples should also work in SLJM coupling, this mode is not thoroughly tested
-in this early state of the software.
-I've also not implemented the crystal field operator yet, which will require SLJM coupling._
 
 The Lanthanide object builds the matrix of the total perturbation Hamiltonian and diagonalises it, which results
 in the energy level and the SLJ composition of each state in intermediate coupling.
@@ -158,8 +151,21 @@ ion.set_radial(RADIAL["Pr3+/ZBLAN"])
 
 ## Crystal field splitting
 
-When initialized with `Coupling.SLJM`, a `Lanthanide` object expects radial integrals including crystal field
-parameters `Hcf/{k},{q}` with the rank $k=2,4,6$ and $q=0\ldots k$. 
+The calculation of a full lanthanide spectrum including the Stark splitting is supported by the Lanthanide package.
+This mode is switched on by using `Coupling.SLJM`:
+
+```
+ion = Lanthanide(2, Coupling.SLJM, radial)
+```
+
+The `Lanthanide` object now supports real or complex crystal field parameters `Hcf/{k},{q}` with the rank $k=2,4,6$
+and $q=0\ldots k$ besides the usual radial parameters in the `radial` dictionary. The set of none-zero parameters
+is determined by the site symmetry of the lanthanide ion. Crystal field interactions release the J degeneracy of the
+free ion hamiltonian. Diagonalisation of the full hamiltonian including crystal field matrices takes place in the
+full state space and is thus much slower than in SLJ coupling.
+
+States in intermediate SLJM coupling are linear combinations of all SLJM states, but they are typically dominated by 
+components with one J value.
 
 ## Radiative transitions
 

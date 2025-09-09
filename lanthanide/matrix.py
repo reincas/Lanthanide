@@ -739,6 +739,8 @@ def build_hamilton(ion, radial: dict, coupling=None):
             continue
         if name[:1] != "H":
             continue
+        if name[:3] == "Hcf" and coupling != Coupling.SLJM:
+            raise ValueError("Crystal field interaction requires SLJM coupling!")
         array = array + radial[name] * get_matrix(ion, name, coupling).array
 
     # Return the total hamiltonian as Matrix object in the given coupling scheme
