@@ -229,8 +229,9 @@ class Lanthanide:
         return False
 
     def close(self):
-        """ Close the cache file. """
+        """ Clear the matrix memory cache and close the cache file. """
 
+        get_matrix.cache_clear()
         self.vault.close()
 
     def matrix(self, name, coupling=None):
