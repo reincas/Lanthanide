@@ -36,7 +36,7 @@ def test_lanthanide():
         assert all(isinstance(state, StateJ) for state in ion.intermediate.states)
         state = ion.intermediate.states[7]
         assert pytest.approx(state.energy, rel=1e-7) == 17022.73705
-        assert list(np.round(state.weights, 5)) ==[0.8986, 0.02108, 0.08032]
+        assert list(np.round(state.weights, 5)) ==[0.8986, 0.08032, 0.02108]
 
         judd_ofelt = {"JO/2": 1.981, "JO/4": 4.645, "JO/6": 6.972}
         strength = ion.line_strengths(judd_ofelt)

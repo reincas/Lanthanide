@@ -387,13 +387,17 @@ class StateJ:
         # Energy level of the state
         self.energy = energy
 
+        # Sort states by weight
+        weights = np.abs(values * values.conjugate())
+        indices = list(reversed(np.argsort(weights)))
+
         # Linear combination vector and weight factor vector
-        self.values = values
-        self.weights = np.abs(values * values.conjugate())
+        self.values = values[indices]
+        self.weights = weights[indices]
         assert abs(sum(self.weights) - 1.0) < 1e-7
 
         # The state in intermediate coupling is a linear combination of this list of related SLJ states
-        self.states = states
+        self.states = [states[i] for i in indices]
 
         # Common quantum number J of the total angular momentum of all related SLJ states
         self.J = self.states[0]["J2"].J
@@ -401,14 +405,13 @@ class StateJ:
     def short(self):
         """ Return a short string representation of the state. """
 
-        return self.states[np.argmax(self.weights)].short()
+        return self.states[0].short()
 
     def long(self, min_weight=0.0):
         """ Return a long string representation of the state. """
 
-        indices = reversed(np.argsort(self.weights))
-        return " + ".join(
-            [f"{self.weights[i]:.2f} {self.states[i].short()}" for i in indices if self.weights[i] >= min_weight])
+        indices = [i for i in range(len(self.states)) if self.weights[i] >= min_weight]
+        return " + ".join([f"{self.weights[i]:.2f} {self.states[i].short()}" for i in indices])
 
     def __str__(self):
         """ Return a long string representation of the state. """
@@ -478,25 +481,28 @@ class StateJM:
         # Energy level of the state
         self.energy = energy
 
+        # Sort states by weight
+        weights = np.abs(values * values.conjugate())
+        indices = list(reversed(np.argsort(weights)))
+
         # Linear combination vector and weight factor vector
-        self.values = values
-        self.weights = np.abs(values * values.conjugate())
+        self.values = values[indices]
+        self.weights = weights[indices]
         assert abs(sum(self.weights) - 1.0) < 1e-7
 
         # The state in intermediate coupling is a linear combination of this list of related SLJM states
-        self.states = states
+        self.states = [states[i] for i in indices]
 
     def short(self):
         """ Return a short string representation of the state. """
 
-        return self.states[np.argmax(self.weights)].short()
+        return self.states[0].short()
 
     def long(self, min_weight=0.0):
         """ Return a long string representation of the state. """
 
-        indices = reversed(np.argsort(self.weights))
-        return " + ".join(
-            [f"{self.weights[i]:.2f} {self.states[i].short()}" for i in indices if self.weights[i] >= min_weight])
+        indices = [i for i in range(len(self.states)) if self.weights[i] >= min_weight]
+        return " + ".join([f"{self.weights[i]:.2f} {self.states[i].short()}" for i in indices])
 
     def __str__(self):
         """ Return a long string representation of the state. """
