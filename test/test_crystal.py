@@ -16,6 +16,7 @@
 
 import re
 import numpy as np
+import pytest
 
 from lanthanide import Lanthanide, Coupling, HalfInt
 from test_basic import correct
@@ -36,7 +37,7 @@ def split_term(term):
     return S, L, J, serial
 
 
-def run_crystal(data, show=False):
+def run_crystal(data, maxdev, show=False):
 
     # Data correction list
     corrections = data.get("correct", [])
@@ -79,48 +80,57 @@ def run_crystal(data, show=False):
     with Lanthanide(num, radial=radial, coupling=coupling) as ion:
 
         # Equalise energy offset
-        diffs = []
-        for i, state in enumerate(ion.intermediate):
+        dev = []
+        for i in range(len(energies)):
             if num % 2 == 0:
-                diffs.append(state.energy - energies[i])
+                state = ion.intermediate[i]
             else:
-                diffs.append(state.energy - energies[i // 2])
-        radial["base"] -= sum(diffs) / len(diffs)
+                state = ion.intermediate[2 * i]
+            dev.append(state.energy - energies[i])
+        radial["base"] -= sum(dev) / len(dev)
         ion.set_radial(radial)
 
         # Compare energy levels
-        for i, state in enumerate(ion.intermediate):
+        dev = []
+        for i in range(len(energies)):
             if num % 2 == 0:
-                ii = i
+                state = ion.intermediate[i]
             else:
-                if i % 2 != 0:
-                    continue
-                ii = i // 2
-            energy_ref = energies[ii]
-            state_ref = terms[ii]
+                state = ion.intermediate[2 * i]
+            energy_ref = energies[i]
+            state_ref = terms[i]
             energy_calc = state.energy
             state_calc = state.long(min_weight=0.01)
             diff = energy_calc - energy_ref
+            dev.append(diff * diff)
             if show:
-                print(f"{ii:3d}  /  ref {energy_ref:6.0f} | {state_ref:16s} >   /{diff:6.0f}/   calc {energy_calc:6.0f} | {state_calc} >")
+                print(f"{i:3d}  /  ref {energy_ref:6.0f} | {state_ref:16s} >   /{diff:6.0f}/   calc {energy_calc:6.0f} | {state_calc} >")
 
             # Compare term assignments
             state_ref = set(term.strip() for term in state_ref.split(","))
             state_calc = set()
-            i = 0
+            j = 0
             while len(state_calc) < len(state_ref):
-                state_calc.add(state.states[i].short().split("[")[0].split("(")[0])
-                i += 1
+                state_calc.add(state.states[j].short().split("[")[0].split("(")[0])
+                j += 1
             if state_ref != state_calc:
-                print(f"*** {state_ref} != {state_calc} ***")
+                print(f'("terms", {list(indices).index(i)}, "{state_ref.pop()}", "{state_calc.pop()}"),')
                 success = False
-            if abs(diff) > 3.5:
-                success = False
-                print(f'("energies", {list(indices).index(ii)}, {energy_ref:.0f}, {energy_ref:.0f}{diff:+.0f}),')
+        dev = np.sqrt(sum(dev)) / len(dev)
+        if show:
+            print(f"rms deviation: {dev:.1f} cm-1")
+        assert dev <= maxdev
     assert success
 
-# @pytest.mark.parametrize("name", [key for key in RADIAL if "blocking" not in RADIAL[key]])
-def atest_crystal(name):
+@pytest.mark.parametrize("name", [key for key in RADIAL if "blocking" not in RADIAL[key]])
+def test_crystal(name):
+    maxdev = {
+        "Pr3+:LaF3": 1.2,
+        "Nd3+:LaF3": 0.5,
+        "Er3+:LaF3": 3.8,
+        "Tm3+:LaF3": 11.0,
+    }[name]
+
     # Select data set
     assert name in RADIAL
     data = RADIAL[name]
@@ -130,7 +140,4 @@ def atest_crystal(name):
     assert data["source"] in SOURCES
 
     # Run test
-    run_crystal(data)
-
-#atest_crystal("Pr3+:LaF3")
-atest_crystal("Nd3+:LaF3")
+    run_crystal(data, maxdev)
