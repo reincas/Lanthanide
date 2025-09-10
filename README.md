@@ -162,10 +162,9 @@ The `Lanthanide` object now supports real or complex crystal field parameters `H
 and $q=0\ldots k$ besides the usual radial parameters in the `radial` dictionary. The set of none-zero parameters
 is determined by the site symmetry of the lanthanide ion. Note that crystal field interactions release the J degeneracy
 of the free ion hamiltonian. Diagonalisation of the full hamiltonian including crystal field matrices takes place in
-the full state space and is thus much slower than in SLJ coupling.
-
-States in intermediate SLJM coupling are linear combinations of all SLJM states, but they are typically dominated by 
-components with one J value.
+the full state space and is thus much slower than in SLJ coupling. States in intermediate SLJM coupling are linear
+combinations of all SLJM states, although usually a small number of dominant SLJM states determines the character
+of an intermediate state.
 
 ## Radiative transitions
 
