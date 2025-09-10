@@ -16,7 +16,7 @@
 #
 # A dataset with item "blocking" contains false radial parameters.
 #
-# An optional "correct" items contains corrections which need to be
+# Optional "correct" items contain corrections which need to be
 # applied to the published data to correct typos or incorrect results.
 #
 ##########################################################################

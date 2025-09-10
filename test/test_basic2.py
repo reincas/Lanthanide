@@ -14,7 +14,7 @@
 import pytest
 
 from test_basic import run_basic
-from basic2 import SOURCES, RADIAL
+from data_basic2 import SOURCES, RADIAL
 
 
 @pytest.mark.parametrize("name", [key for key in RADIAL if "blocking" not in RADIAL[key]])

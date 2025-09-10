@@ -57,12 +57,8 @@ def column_to_list(input_string, name=None):
 
 a = """
 """
-b = """
-"""
-c = """
-"""
 
 column_to_list(a)
-column_to_list(b)
-table_to_columns(c)
+#column_to_list(b)
+#table_to_columns(c)
 

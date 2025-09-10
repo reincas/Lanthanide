@@ -14,7 +14,7 @@ import itertools
 import pytest
 
 from lanthanide import Lanthanide, Coupling
-from triple import SOURCES, STATES, TRIPLE
+from data_triple import SOURCES, STATES, TRIPLE
 
 
 @pytest.mark.parametrize("data_key", TRIPLE.keys())

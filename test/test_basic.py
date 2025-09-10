@@ -20,7 +20,7 @@ import numpy as np
 import pytest
 
 from lanthanide import Lanthanide, Coupling, HalfInt
-from basic import SOURCES, RADIAL
+from data_basic import SOURCES, RADIAL
 
 
 def correct(name, data, corrections):
@@ -29,7 +29,7 @@ def correct(name, data, corrections):
     for key, index, old_value, new_value in corrections:
         if key != name:
             continue
-        assert data[index] == old_value
+        assert data[index] == old_value, f"{data[index]} != {old_value}"
         data[index] = new_value
 
 

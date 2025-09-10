@@ -17,7 +17,7 @@ import itertools
 import pytest
 
 from lanthanide import Lanthanide, Coupling, wigner6j
-from magnetic import SOURCES, MAGNETIC
+from data_magnetic import SOURCES, MAGNETIC
 
 
 @pytest.mark.parametrize("data_key", MAGNETIC.keys())
