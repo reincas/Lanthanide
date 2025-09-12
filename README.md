@@ -300,7 +300,7 @@ The Lanthanide package uses an additional cache for perturbation hamiltonians.
 To accelerate energy level fits of radial parameters,
 these matrices are kept in the memory after their first retrival from the cache file.
 There is also a cache for the reduced transition matrix elements.
-Consecutive calls of `Lanthanide.reduced()` will deliver the same object until a new set of radial parameters
+Consecutive calls of `Lanthanide.line_reduced()` will deliver the same object until a new set of radial parameters
 is applied via `Lanthanide.set_radial()`.
 
 ## Usage examples
