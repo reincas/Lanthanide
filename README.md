@@ -53,7 +53,7 @@ In the order of their relative magnitude they are:
    The Lanthanide package uses the keys `"H6/2"`, `"H6/4"`, and `"H6/6"` for radial parameters and angular matrices.
 
 The first order perturbations are interactions inside the 4f configuration, while second order perturbations
-take interactions with all other configuration into account. They are treated by effective operators
+take interactions with all other configurations into account. They are treated by effective operators
 mathematically operating inside the 4f configuration.
 
 ## Installation
