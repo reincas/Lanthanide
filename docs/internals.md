@@ -138,7 +138,9 @@ with Lanthanide(2) as ion:
     matrix_2 = get_unit(ion, f"UU/b/{k}")
 ```
 
-The following table lists all unit tensor operators provided by the Lanthanide package with their respective names:
+The following table lists all unit tensor operators provided by the Lanthanide package with their respective names,
+where $\mathrm{u}_{q}^{(k)}$ is the unit tensor operator of rank $k$ in the space of orbital angular momentum and
+$\mathrm{t}_{q}^{(k)}$ in the spin space:  
 
 | name                                   | tensor operator                                                                                                                                                 | rank | parameters                         |
 |----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|------|------------------------------------|
