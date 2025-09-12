@@ -411,7 +411,7 @@ with Lanthanide(3) as ion:
 
 A `Matrix` object can be transformed to a different coupling scheme, using its method `transform(coupling)`. Calling
 the method `diagonalise()` on a symmetric matrix delivers the vector of eigenvalues and the array of eigenvectors
-(columns). If the coupling scheme of the matrix is SLJM or SLJ, the method `fast_diagonalise()` provides a faster
+(columns). If the coupling scheme of the matrix is SLJ, the method `fast_diagonalise()` provides a faster
 means of diagonalising the matrix utilizing the sorted J spaces of these coupling schemes.
 
 The generation of your own `Matrix` object from a given 2D numpy array requires a `Lanthanide` object in the first
