@@ -5,7 +5,7 @@ attic/
 .test.py
 private/
 storage/
-.extra/
+extra/
 NielsonKoster/
 .lanthanide/vaults/
 
