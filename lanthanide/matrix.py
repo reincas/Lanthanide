@@ -737,7 +737,7 @@ def normalise_radial(radial):
 
     # There should be no remaining parameters
     if len(keys) != 0:
-        raise ValueError(f"Unknown radial integrals: {", ".join(keys)}!")
+        raise ValueError(f"Unknown radial integrals: {', '.join(keys)}!")
 
     # Return normalised set of radial integrals
     return new_radial
