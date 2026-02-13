@@ -318,5 +318,5 @@ This is free software under the MIT License.
 
 ## Reference
 
-[1] Reinhard Caspary: "Applied Rare-Earth Spectroscopy for Fiber Laser Optimization", doctoral dissertation, Shaker,
-Aachen, 2002
+[1] Reinhard Caspary: "Applied Rare-Earth Spectroscopy for Fiber Laser Optimization", doctoral dissertation at
+Technische Universität Braunschweig, published with Shaker, Aachen, 2002
