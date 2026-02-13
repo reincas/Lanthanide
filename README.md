@@ -5,7 +5,8 @@ populating the 4f configuration, which means the lanthanide or rare-earth ions f
 Ce<sup>3+</sup> (4f<sup>1</sup>) to Yb<sup>3+</sup> (4f<sup>13</sup>). The
 calculation is based on Racahs single electron unit tensor operators as developed
 in my PhD thesis [1]. You find a copy of the [thesis](docs/Dissertation.pdf) and
-[corrections](docs/errata5.pdf) in the folder `docs`.
+[corrections](docs/errata5.pdf) in the folder `docs` and the original version of the software in
+the repository [Lanthanide-0.3](https://github.com/reincas/Lanthanide-0.3).
 
 The matrix elements are calculated in the space of determinantal product
 states and then transformed to the SLJM space using the chain of operators:
