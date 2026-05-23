@@ -1,7 +1,12 @@
 # 🚨 Depreciation Notice
 
 **This project is no longer actively maintained.** It has been superseded by
-[YALIP](https://github.com/reincas/yalip).
+[YALIP](https://github.com/reincas/yalip), which is based on the operator matrices
+from the [AMELI](https://zenodo.org/communities/ameli) repository calculated and stored
+using exact arithmetic.
+YALIP provides access to floating point representations of all AMELI matrices and basis states, it calculates energy
+levels in intermediate coupling and radiative transition properties, and it fits radial integrals and Judd-Ofelt
+parameters to measured absorption spectra.
 
 All users are recommended to migrate to the new package, as this repository will not
 receive further updates, bug fixes, or security patches.
