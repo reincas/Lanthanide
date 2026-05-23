@@ -1,4 +1,13 @@
-# Lanthanide 0.9.5
+# 🚨 Depreciation Notice
+
+**This project is no longer actively maintained.** It has been superseded by
+[YALIP](https://github.com/reincas/yalip).
+
+All users are recommended to migrate to the new package, as this repository will not
+receive further updates, bug fixes, or security patches.
+---
+
+# Lanthanide 0.9.6
 
 This is a Python 3 package to calculate the energy levels of multi-electron systems
 populating the 4f configuration, which means the lanthanide or rare-earth ions from
