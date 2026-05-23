@@ -5,6 +5,7 @@
 
 All users are recommended to migrate to the new package, as this repository will not
 receive further updates, bug fixes, or security patches.
+
 ---
 
 # Lanthanide 0.9.6
